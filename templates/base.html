@@ -1,0 +1,16 @@
+<!DOCTYPE html><html>
+<head>
+ <title>{% block title %}Apprende{% endblock %}</title>
+ {% load static %}
+ <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+ <!-- Contenido específico de cada página -->
+ {% block content %}
+ {% endblock %}
+ <!-- Pie de página -->
+ <footer>
+ <p>&copy; Apprende</p>
+ </footer>
+</body>
+</html>
