@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ asignatura.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ asignatura.nombre }}</h2>
+    <hr>
+    <p>{{ asignatura.curso }}</p>
+
+    {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+        <a href="{% url 'asignatura:editar_asignatura' asignatura.pk %}" class="btn btn-secondary">Editar Asignatura</a>
+    {% endif %}
+
+    <a href="{% url 'asignatura:lista_asignaturas' %}" class="btn btn-link mt-3">Volver a la Lista de Asignaturas</a>
+</div>
+{% endblock %}
