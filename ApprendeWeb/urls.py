@@ -22,6 +22,7 @@ from django.conf.urls.static import static #Importamos la función static de dja
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('usuarios.urls', namespace='usuarios')),
+    path('curso/', include('curso.urls', namespace='curso')),
 ]
 
 if settings.DEBUG:

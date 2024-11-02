@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Cursos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Lista de Cursos</h2>
+    {% if request.user.is_authenticated %}
+        {% if request.user.perfil.rol == 'administrador' %}
+            <a href="{% url 'curso:crear_curso' %}" class="btn btn-success mb-3">Crear Curso </a>
+        {% endif %}
+    {% endif %}
+    {% for curso in cursos %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ curso.nombre }}</h5>
+                <p class="card-text">{{ curso.sala|truncatechars:100 }}</p>
+                <a href="{% url 'curso:detalle_curso' curso.pk %}" class="btn btn-primary">editar</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No hay cursos disponibles.</p>
+    {% endfor %}
+    {{ request.user.perfil.rol }}
+</div>
+{% endblock %}

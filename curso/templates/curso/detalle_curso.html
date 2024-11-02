@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ curso.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ curso.nombre }}</h2>
+    <hr>
+    <p>{{ curso.sala }}</p>
+
+    {% if request.user.is_authenticated and request.user == curso.autor or request.user.perfil.rol == 'administrador' %}
+        <a href="{% url 'curso:editar_curso' curso.pk %}" class="btn btn-secondary">Editar Curso</a>
+    {% endif %}
+
+    <a href="{% url 'curso:lista_cursos' %}" class="btn btn-link mt-3">Volver a la Lista de Cursos</a>
+</div>
+{% endblock %}

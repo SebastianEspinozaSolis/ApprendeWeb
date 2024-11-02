@@ -33,13 +33,13 @@ def login_view(request):#Vista para el inicio de sesión
             login(request, usuario)#Iniciamos sesión
             perfil = Perfil.objects.get(user=usuario)
             if perfil.rol == 'administrador':
-                return redirect('blog:crear_articulo')
+                return redirect('curso:crear_curso')
             elif perfil.rol == 'profesor':
-                return redirect('galeria:lista_imagenes')
+                return redirect('curso:lista_cursos')
             elif perfil.rol == 'apoderado':
-                return redirect('galeria:lista_imagenes')
+                return redirect('curso:lista_cursos')
             else:
-                return redirect('blog:lista_articulos')
+                return redirect('curso:lista_cursos')
         else:
             messages.error(request, 'Nombre de usuario o contraseña incorrectos.')
     return render(request, 'usuarios/login.html')
