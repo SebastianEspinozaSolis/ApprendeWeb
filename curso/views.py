@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Curso
 from .forms import CursoForm
 from django.contrib.auth.decorators import login_required
+from asignatura.models import Asignatura
+from evaluacion.models import Evaluacion
 
 @login_required
 def lista_cursos(request):
@@ -10,7 +12,13 @@ def lista_cursos(request):
 @login_required
 def detalle_curso(request, pk):
     curso = get_object_or_404(Curso, pk=pk)
-    return render(request, 'curso/detalle_curso.html', {'curso': curso})
+    asignaturas = Asignatura.objects.filter(curso=curso).select_related('curso')
+    evaluaciones = Evaluacion.objects.filter(asignatura__curso=curso).order_by('fecha')  # Obtener evaluaciones relacionadas al curso
+    return render(request, 'curso/detalle_curso.html', {
+        'curso': curso,
+        'asignaturas': asignaturas,
+        'evaluaciones': evaluaciones,  # Pasar evaluaciones al contexto
+    })
 
 @login_required
 def crear_curso(request):

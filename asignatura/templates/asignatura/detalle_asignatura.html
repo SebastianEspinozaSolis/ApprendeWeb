@@ -1,17 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ asignatura.nombre }}{% endblock %}
+{% block title %}Detalles de {{ asignatura.nombre }}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>{{ asignatura.nombre }}</h2>
-    <hr>
-    <p>{{ asignatura.curso }}</p>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{{ asignatura.nombre }}</h2>
+            <p>Curso: {{ asignatura.curso.nombre }}</p>
+            <hr>
 
-    {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
-        <a href="{% url 'asignatura:editar_asignatura' asignatura.pk %}" class="btn btn-secondary">Editar Asignatura</a>
-    {% endif %}
-
-    <a href="{% url 'asignatura:lista_asignaturas' %}" class="btn btn-link mt-3">Volver a la Lista de Asignaturas</a>
+            <h5>Evaluaciones</h5>
+            {% if evaluaciones %}
+                <ul class="list-group">
+                    {% for evaluacion in evaluaciones %}
+                        <li class="list-group-item">
+                            <h5>{{ evaluacion.nombre }}</h5>
+                            <p>Descripción: {{ evaluacion.descripcion }}</p>
+                            <p>Fecha: {{ evaluacion.fecha }}</p>
+                            <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary">Ver Detalles</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay evaluaciones disponibles para esta asignatura.</p>
+            {% endif %}
+            <hr>
+            <a href="{% url 'evaluacion:crear_evaluacion' %}?asignatura_id={{ asignatura.id }}" class="btn btn-success">Añadir Evaluación</a>
+            <hr>
+            <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-secondary">Volver a la Lista de Asignaturas del Curso</a>
+        </div>
+    </div>
 </div>
 {% endblock %}

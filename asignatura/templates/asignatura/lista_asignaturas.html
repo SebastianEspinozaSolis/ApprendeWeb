@@ -1,26 +1,31 @@
 {% extends 'base.html' %}
 
-{% block title %}Asignatura{% endblock %}
+{% block title %}Asignaturas{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <h2>Lista de Asignaturas</h2>
-    {% if request.user.is_authenticated %}
-        {% if request.user.perfil.rol == 'administrador' %}
-            <a href="{% url 'asignatura:crear_asignatura' %}" class="btn btn-success mb-3">Crear Asignatura </a>
-        {% endif %}
+
+    {% if curso %}
+        <h4>Asignaturas de {{ curso.nombre }}</h4>
     {% endif %}
+
+    {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+        <a href="{% url 'asignatura:crear_asignatura' curso.id %}" class="btn btn-success mb-3">Crear Asignatura</a>
+    {% endif %}
+
     {% for asignatura in asignaturas %}
         <div class="card mb-3">
             <div class="card-body">
                 <h5 class="card-title">{{ asignatura.nombre }}</h5>
-                <p>{{ asignatura.curso }}</p>
-                <a href="{% url 'asignatura:detalle_asignatura' asignatura.pk %}" class="btn btn-primary">editar</a>
+                <p>Curso: {{ asignatura.curso }}</p>
+                <a href="{% url 'asignatura:detalle_asignatura' asignatura.pk %}" class="btn btn-primary">Ver Detalles</a>
             </div>
         </div>
     {% empty %}
         <p>No hay asignaturas disponibles.</p>
     {% endfor %}
-    {{ request.user.perfil.rol }}
+    
+    <a href="{% url 'curso:lista_cursos' %}" class="btn btn-secondary mt-3">Volver a Cursos</a>
 </div>
 {% endblock %}

@@ -1,30 +1,30 @@
 {% extends 'base.html' %}
 
-{% block title %}Crear Evaluacion{% endblock %}
+{% block title %}Crear Evaluación{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Crear Nuevo Evaluacion</h2>
+    <h2>Crear Nueva Evaluación</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
         <div class="form-group">
-            <label for="id_titulo">Nombre:</label>
+            <label for="id_nombre">Nombre:</label>
             {{ form.nombre.errors }}
             {{ form.nombre }}
         </div>
         <div class="form-group">
-            <label for="id_titulo">Descripcion:</label>
+            <label for="id_descripcion">Descripción:</label>
             {{ form.descripcion.errors }}
             {{ form.descripcion }}
         </div>
         <div class="form-group">
-            <label for="id_titulo">Fecha:</label>
+            <label for="id_fecha">Fecha:</label>
             {{ form.fecha.errors }}
             {{ form.fecha }}
         </div>
         <div class="form-group">
-            <label for="id_curso">Curso:</label>
+            <label for="id_asignatura">Asignatura:</label>
             {{ form.asignatura.errors }}
             {{ form.asignatura }} 
         </div>

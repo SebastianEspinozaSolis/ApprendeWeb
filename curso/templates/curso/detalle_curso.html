@@ -4,13 +4,54 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>{{ curso.nombre }}</h2>
-    <hr>
-    <p>{{ curso.sala }}</p>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{{ curso.nombre }}</h2>
+            <hr>
+            <p class="card-text">Sala: {{ curso.sala }}</p>
+            <hr>
+            <h5>Asignaturas</h5>
+            {% if asignaturas %}
+                <ul class="list-group">
+                    {% for asignatura in asignaturas %}
+                        <li class="list-group-item">
+                            <h5>{{ asignatura.nombre }}</h5>
+                            <p>Curso: {{ asignatura.curso }}</p>
+                            <a href="{% url 'asignatura:detalle_asignatura' asignatura.pk %}" class="btn btn-primary">Ver Detalles</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay asignaturas disponibles para este curso.</p>
+            {% endif %}
+            <hr>
 
-    {% if request.user.is_authenticated and request.user == curso.autor or request.user.perfil.rol == 'administrador' %}
-        <a href="{% url 'curso:editar_curso' curso.pk %}" class="btn btn-secondary">Editar Curso</a>
-    {% endif %}
+            <!-- Sección para mostrar evaluaciones cercanas -->
+            <h5>Evaluaciones Cercanas</h5>
+            {% if evaluaciones %}
+                <ul class="list-group">
+                    {% for evaluacion in evaluaciones %}
+                        <li class="list-group-item">
+                            <h6>{{ evaluacion.nombre }}</h6>
+                            <p>Descripción: {{ evaluacion.descripcion }}</p>
+                            <p>Fecha: {{ evaluacion.fecha }}</p>
+                            <p>Asignatura: {{ evaluacion.asignatura.nombre }}</p>
+                            <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary">Ver Detalles</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay evaluaciones cercanas para este curso.</p>
+            {% endif %}
+
+            <hr>
+            <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-info mt-3">Modificar Asignaturas de este Curso</a>
+            <hr>
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+                <a href="{% url 'curso:editar_curso' curso.pk %}" class="btn btn-secondary">Editar Curso</a>
+            {% endif %}
+        </div>
+    </div>
 
     <a href="{% url 'curso:lista_cursos' %}" class="btn btn-link mt-3">Volver a la Lista de Cursos</a>
 </div>

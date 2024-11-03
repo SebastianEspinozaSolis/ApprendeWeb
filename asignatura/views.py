@@ -2,28 +2,49 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Asignatura
 from .forms import AsignaturaForm
 from django.contrib.auth.decorators import login_required
+from curso.models import Curso
+from evaluacion.models import Evaluacion
 
 @login_required
-def lista_asignaturas(request):
+def lista_asignaturas(request, curso_id=None):
     asignaturas = Asignatura.objects.all().order_by('-nombre')
-    return render(request, 'asignatura/lista_asignaturas.html', {'asignaturas': asignaturas})
+    curso = None  # Variable para el curso específico
+    if curso_id:
+        curso = get_object_or_404(Curso, pk=curso_id)  # Obtén el curso específico
+        asignaturas = asignaturas.filter(curso=curso)  # Filtra las asignaturas por curso
+    return render(request, 'asignatura/lista_asignaturas.html', {
+        'asignaturas': asignaturas,
+        'curso': curso,
+    })
 @login_required
 def detalle_asignatura(request, pk):
     asignatura = get_object_or_404(Asignatura, pk=pk)
-    return render(request, 'asignatura/detalle_asignatura.html', {'asignatura': asignatura})
+    curso = asignatura.curso  # Obtener el curso de la asignatura
+    evaluaciones = Evaluacion.objects.filter(asignatura=asignatura)  # Obtener evaluaciones de la asignatura
+    return render(request, 'asignatura/detalle_asignatura.html', {
+        'asignatura': asignatura,
+        'curso': curso,
+        'evaluaciones': evaluaciones,
+    })
 
 @login_required
-def crear_asignatura(request):
+def crear_asignatura(request, curso_id=None):
+    curso = None
+    if curso_id:
+        curso = get_object_or_404(Curso, pk=curso_id)
+
     if request.user.perfil.rol in ['profesor', 'administrador']:
         if request.method == 'POST':
             form = AsignaturaForm(request.POST)
             if form.is_valid():
                 asignatura = form.save(commit=False)
+                if curso:
+                    asignatura.curso = curso
                 asignatura.save()
                 return redirect('asignatura:detalle_asignatura', pk=asignatura.pk)
         else:
-            form = AsignaturaForm()
-        return render(request, 'asignatura/crear_asignatura.html', {'form': form})
+            form = AsignaturaForm(initial={'curso': curso} if curso else {})
+        return render(request, 'asignatura/crear_asignatura.html', {'form': form, 'curso': curso})
     else:
         return redirect('asignatura:lista_asignaturas')
 

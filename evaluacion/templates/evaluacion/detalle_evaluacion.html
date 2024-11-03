@@ -1,19 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ evaluacion.nombre }}{% endblock %}
+{% block title %}Detalles de {{ evaluacion.nombre }}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>{{ evaluacion.nombre }}</h2>
-    <hr>
-    <p>{{ evaluacion.descripcion }}</p>
-    <p>{{ evaluacion.fecha }}</p>
-    <p>{{ evaluacion.asignatura }}</p>
-
-    {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
-        <a href="{% url 'evaluacion:editar_evaluacion' evaluacion.pk %}" class="btn btn-secondary">Editar Evaluacion</a>
-    {% endif %}
-
-    <a href="{% url 'evaluacion:lista_evaluaciones' %}" class="btn btn-link mt-3">Volver a la Lista de Evaluacion</a>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{{ evaluacion.nombre }}</h2>
+            <p>Descripción: {{ evaluacion.descripcion }}</p>
+            <p>Fecha: {{ evaluacion.fecha }}</p>
+            <p>Asignatura: {{ evaluacion.asignatura.nombre }}</p>
+            
+            <hr>
+            <a href="{% url 'asignatura:detalle_asignatura' evaluacion.asignatura.pk %}" class="btn btn-secondary">Volver a Asignatura</a>
+            <a href="{% url 'evaluacion:editar_evaluacion' evaluacion.pk %}" class="btn btn-warning">Editar Evaluación</a>
+            <a href="{% url 'curso:detalle_curso' curso.id %}" class="btn btn-secondary">Volver al Curso</a>
+        </div>
+    </div>
 </div>
 {% endblock %}

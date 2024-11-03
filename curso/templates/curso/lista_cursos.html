@@ -15,7 +15,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ curso.nombre }}</h5>
                 <p class="card-text">{{ curso.sala|truncatechars:100 }}</p>
-                <a href="{% url 'curso:detalle_curso' curso.pk %}" class="btn btn-primary">editar</a>
+                <a href="{% url 'curso:detalle_curso' curso.pk %}" class="btn btn-primary">ver detalles</a>
             </div>
         </div>
     {% empty %}
