@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ calificacion.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ calificacion.calificacion }}</h2>
+    <hr>
+    <p>{{ calificacion.asignatura }}</p>
+
+    {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+        <a href="{% url 'calificacion:editar_calificacion' calificacion.pk %}" class="btn btn-secondary">Editar Calificacion</a>
+    {% endif %}
+
+    <a href="{% url 'calificacion:lista_calificaciones' %}" class="btn btn-link mt-3">Volver a la Lista de Calificaciones</a>
+</div>
+{% endblock %}

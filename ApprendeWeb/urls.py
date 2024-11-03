@@ -25,6 +25,7 @@ urlpatterns = [
     path('curso/', include('curso.urls', namespace='curso')),
     path('asignatura/', include('asignatura.urls', namespace='asignatura')),
     path('evaluacion/', include('evaluacion.urls', namespace='evaluacion')),
+    path('calificacion/', include('calificacion.urls', namespace='calificacion')),
 ]
 
 if settings.DEBUG:
