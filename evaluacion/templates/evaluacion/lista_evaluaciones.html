@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Evaluacion{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Lista de Evaluacion</h2>
+    {% if request.user.is_authenticated %}
+        {% if request.user.perfil.rol == 'administrador' %}
+            <a href="{% url 'evaluacion:crear_evaluacion' %}" class="btn btn-success mb-3">Crear Evaluacion </a>
+        {% endif %}
+    {% endif %}
+    {% for evaluacion in evaluaciones %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">{{ evaluacion.nombre }}</h5>
+                <p>{{ evaluacion.descripcion }}</p>
+                <p>{{ evaluacion.fecha }}</p>
+                <p>{{ evaluacion.asignatura }}</p>
+                <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary">editar</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No hay evaluaciones disponibles.</p>
+    {% endfor %}
+    {{ request.user.perfil.rol }}
+</div>
+{% endblock %}
