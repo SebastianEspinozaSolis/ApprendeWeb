@@ -40,3 +40,5 @@ class Alumno(models.Model):
 class Profesor(models.Model):
     perfil = models.OneToOneField(Perfil, on_delete=models.CASCADE)
     especialidad = models.CharField(max_length=100, null=True, blank=True)  # Ejemplo de campo específico
+    def __str__(self):
+        return f"nombre: {self.perfil.nombre} - rut: {self.perfil.rut} - especialidad: {self.especialidad}"

@@ -47,7 +47,6 @@ def crear_asignatura(request, curso_id=None):
         return render(request, 'asignatura/crear_asignatura.html', {'form': form, 'curso': curso})
     else:
         return redirect('asignatura:lista_asignaturas')
-
 @login_required
 def editar_asignatura(request, pk):
     asignatura = get_object_or_404(Asignatura, pk=pk)

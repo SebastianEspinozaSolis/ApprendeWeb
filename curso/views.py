@@ -4,6 +4,7 @@ from .forms import CursoForm
 from django.contrib.auth.decorators import login_required
 from asignatura.models import Asignatura
 from evaluacion.models import Evaluacion
+from usuarios.models import Profesor
 
 @login_required
 def lista_cursos(request):
@@ -13,11 +14,13 @@ def lista_cursos(request):
 def detalle_curso(request, pk):
     curso = get_object_or_404(Curso, pk=pk)
     asignaturas = Asignatura.objects.filter(curso=curso).select_related('curso')
-    evaluaciones = Evaluacion.objects.filter(asignatura__curso=curso).order_by('fecha')  # Obtener evaluaciones relacionadas al curso
+    evaluaciones = Evaluacion.objects.filter(asignatura__curso=curso).order_by('fecha') 
+    profesores = Profesor.objects.filter(asignatura__curso=curso).order_by('especialidad') 
     return render(request, 'curso/detalle_curso.html', {
         'curso': curso,
         'asignaturas': asignaturas,
-        'evaluaciones': evaluaciones,  # Pasar evaluaciones al contexto
+        'evaluaciones': evaluaciones,  
+        'profesores': profesores,
     })
 
 @login_required
