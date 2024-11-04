@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Usuarios{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Lista de Usuarios</h2>
+    
+    <form method="GET" action="{% url 'usuarios:lista_usuarios' %}">
+        <label for="rol">Filtrar por rol:</label>
+        <select name="rol" id="rol" onchange="this.form.submit()">
+            <option value="">Todos</option>
+            <option value="administrador" {% if request.GET.rol == 'administrador' %}selected{% endif %}>Administrador</option>
+            <option value="profesor" {% if request.GET.rol == 'profesor' %}selected{% endif %}>Profesor</option>
+            <option value="apoderado" {% if request.GET.rol == 'apoderado' %}selected{% endif %}>Apoderado</option>
+            <option value="alumno" {% if request.GET.rol == 'alumno' %}selected{% endif %}>Alumno</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </form>
+    
+    <div class="row mt-4">
+        {% for usuario in usuarios %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ usuario.user.username }}</h5>
+                    <p class="card-text">
+                        <strong>Rol:</strong> {{ usuario.rol }}<br>
+                        <strong>Nombre Completo:</strong> {{ usuario.nombre }}<br>
+                        <strong>RUT:</strong> {{ usuario.rut }}<br>
+                        <strong>Fecha de Nacimiento:</strong> {{ usuario.fecha_nacimiento }}<br>
+                        <strong>Sexo:</strong> {{ usuario.sexo }}<br>
+                    </p>
+                    <a href="{% url 'usuarios:editar_usuario' usuario.id %}" class="btn btn-warning">Editar</a>
+                    <a href="{% url 'usuarios:detalle_usuario' usuario.id %}" class="btn btn-info">Detalles</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning" role="alert">
+                No hay usuarios disponibles.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
