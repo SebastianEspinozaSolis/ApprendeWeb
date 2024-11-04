@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'asignatura',
     'evaluacion',
     'calificacion',
+    'jefatura',
 ]
 
 MIDDLEWARE = [

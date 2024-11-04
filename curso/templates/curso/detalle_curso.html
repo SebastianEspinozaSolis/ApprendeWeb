@@ -10,6 +10,15 @@
             <hr>
             <p class="card-text">Sala: {{ curso.sala }}</p>
             <hr>
+            {% if jefatura %}
+                <h5>Jefatura</h5>
+                <p>Profesor: {{ jefatura.profesor.perfil.nombre }}</p>
+                <p>Correo del profesor: {{ jefatura.profesor.perfil.user.email }}</p>
+                <a href="{% url 'jefatura:editar_jefatura' jefatura.pk %}" class="btn btn-secondary">Editar</a>
+            {% else %}
+                <a href="{% url 'jefatura:crear_jefatura' %}?curso_id={{ curso.id }}" class="btn btn-success">Añadir Jefatura</a>
+            {% endif %}
+            <hr>
             <h5>Asignaturas</h5>
             {% if asignaturas %}
                 <ul class="list-group">

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Jefatura{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Editar Jefatura</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        {% if form.instance.curso %}
+            <input type="hidden" name="curso_id" value="{{ form.instance.curso.id }}">
+        {% endif %}
+        
+        <div class="form-group">
+            <label for="id_curso">Curso:</label>
+            {{ form.curso.errors }}
+            {{ form.curso }}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_profesor">Profesor:</label>
+            {{ form.profesor.errors }}
+            {{ form.profesor }}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </form>
+</div>
+{% endblock %}
+

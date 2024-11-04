@@ -26,6 +26,6 @@
         <p>No hay asignaturas disponibles.</p>
     {% endfor %}
     
-    <a href="{% url 'curso:lista_cursos' %}" class="btn btn-secondary mt-3">Volver a Cursos</a>
+    <a href="{% url 'curso:detalle_curso' curso.id %}" class="btn btn-secondary mt-3">Volver a Curso</a>
 </div>
 {% endblock %}
