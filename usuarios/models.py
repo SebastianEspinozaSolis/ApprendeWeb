@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User #Importamos el modelo User de la app auth
 from curso.models import Curso
+from datetime import date
 # Create your models here.
 
 class Perfil(models.Model):
@@ -21,6 +22,15 @@ class Perfil(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.rol}"
+    def calcular_edad(self):
+        if self.fecha_nacimiento is None:
+            return "Fecha no disponible"
+        
+        hoy = date.today()
+        edad = hoy.year - self.fecha_nacimiento.year
+        if (hoy.month, hoy.day) < (self.fecha_nacimiento.month, self.fecha_nacimiento.day):
+            edad -= 1
+        return edad
 class Administrador(models.Model):
     perfil = models.OneToOneField(Perfil, on_delete=models.CASCADE)
     cargo = models.CharField(max_length=100, null=True, blank=True)  # Nombre del usuario

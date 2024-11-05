@@ -88,7 +88,7 @@ def crear_profesor(request, user_id):
             profesor.perfil = perfil  # Asignamos el perfil al profesor
             profesor.save()
             messages.success(request, 'Profesor creado exitosamente.')
-            return redirect('usuarios:login')
+            return redirect('usuarios:lista_usuarios')
     else:
         form = ProfesorForm()
 
@@ -104,7 +104,7 @@ def crear_apoderado(request, user_id):
             apoderado.perfil = perfil  # Asignamos el perfil al apoderado
             apoderado.save()
             messages.success(request, 'Apoderado creado exitosamente.')
-            return redirect('usuarios:login')  # Redirige a login o a otra página según prefieras
+            return redirect('usuarios:lista_usuarios')  # Redirige a login o a otra página según prefieras
     else:
         form = ApoderadoForm()
 
@@ -120,11 +120,12 @@ def crear_alumno(request, user_id):
             alumno.perfil = perfil  # Asignamos el perfil al alumno
             alumno.save()
             messages.success(request, 'Alumno creado exitosamente.')
-            return redirect('usuarios:login')  # Redirige a login o a otra página según prefieras
+            return redirect('usuarios:lista_usuarios')  # Redirige a login o a otra página según prefieras
     else:
         form = AlumnoForm()
 
     return render(request, 'usuarios/crear_alumno.html', {'form': form})
+
 def lista_usuarios(request):
     rol_filtrado = request.GET.get('rol', None)  # Obtener el rol filtrado de la URL
     if rol_filtrado:
@@ -133,7 +134,7 @@ def lista_usuarios(request):
         usuarios = Perfil.objects.all()  # Obtener todos los usuarios si no se filtra
 
     return render(request, 'usuarios/lista_usuarios.html', {'usuarios': usuarios})
-
+@login_required
 def editar_usuario(request, user_id):
     perfil = get_object_or_404(Perfil, id=user_id)
     if request.method == 'POST':
@@ -144,15 +145,16 @@ def editar_usuario(request, user_id):
     else:
         form = EditarForm(instance=perfil)
     return render(request, 'usuarios/editar_usuario.html', {'form': form})
-
+@login_required
 def detalle_usuario(request, pk):
     perfil = get_object_or_404(Perfil, pk=pk)
-
+    edad = perfil.calcular_edad()
     # Intenta obtener las instancias de los roles
     administrador = Administrador.objects.filter(perfil=perfil).first()
     apoderado = Apoderado.objects.filter(perfil=perfil).first()
     alumno = Alumno.objects.filter(perfil=perfil).first()
     profesor = Profesor.objects.filter(perfil=perfil).first()
+    
 
     return render(request, 'usuarios/detalle_usuario.html', {
         'perfil': perfil,
@@ -160,4 +162,5 @@ def detalle_usuario(request, pk):
         'alumno': alumno,
         'apoderado': apoderado,
         'profesor': profesor,
+        'edad': edad,
     })

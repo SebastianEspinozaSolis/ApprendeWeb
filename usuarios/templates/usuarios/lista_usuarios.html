@@ -16,6 +16,7 @@
             <option value="alumno" {% if request.GET.rol == 'alumno' %}selected{% endif %}>Alumno</option>
         </select>
         <button type="submit" class="btn btn-primary">Filtrar</button>
+        <a href="{% url 'usuarios:registro' %}" class="btn btn-success">Crear Nuevo Usuario</a>
     </form>
     
     <div class="row mt-4">
@@ -29,6 +30,7 @@
                         <strong>Nombre Completo:</strong> {{ usuario.nombre }}<br>
                         <strong>RUT:</strong> {{ usuario.rut }}<br>
                         <strong>Fecha de Nacimiento:</strong> {{ usuario.fecha_nacimiento }}<br>
+                        <strong>Edad:</strong> {{ usuario.calcular_edad }}<br>
                         <strong>Sexo:</strong> {{ usuario.sexo }}<br>
                     </p>
                     <a href="{% url 'usuarios:editar_usuario' usuario.id %}" class="btn btn-warning">Editar</a>

@@ -23,10 +23,13 @@
                     {% if user.is_authenticated %}
                         {% if user.perfil.rol == 'administrador' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:login' %}">Blog</a>
+                            <a class="nav-link" href="{% url 'curso:lista_cursos' %}">Cursos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:login' %}">Galería</a>
+                            <a class="nav-link" href="{% url 'jefatura:lista_jefaturas' %}">Jefaturas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'usuarios:lista_usuarios' %}">Usuarios</a>
                         </li>
                         {% elif user.perfil.rol == 'profesor' %}
                         <li class="nav-item">
