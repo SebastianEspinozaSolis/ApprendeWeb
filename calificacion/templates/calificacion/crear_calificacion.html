@@ -1,24 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %}Crear Calificacion{% endblock %}
+{% block title %}Crear Calificaciones{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Crear Nueva Calificacion</h2>
+    <h2>Crear Calificaciones para Evaluación: {{ evaluacion.nombre }}</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.non_field_errors }}
-        <div class="form-group">
-            <label for="id_titulo">Calificacion:</label>
-            {{ form.calificacion.errors }}
-            {{ form.calificacion }}
-        </div>
-        <div class="form-group">
-            <label for="id_curso">Asignatura:</label>
-            {{ form.asignatura.errors }}
-            {{ form.asignatura }} 
-        </div>
-        <button type="submit" class="btn btn-primary">Crear</button>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Alumno</th>
+                    <th>Calificación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alumno in alumnos %}
+                <tr>
+                    <td>{{ alumno.perfil.nombre }}</td>
+                    <td>
+                        <input type="number" name="calificacion_{{ alumno.id }}" step="0.1" min="0" max="7" required>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2">No hay alumnos disponibles para esta evaluación.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Guardar Calificaciones</button>
     </form>
 </div>
 {% endblock %}

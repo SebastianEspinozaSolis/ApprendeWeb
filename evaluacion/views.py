@@ -3,6 +3,7 @@ from .models import Evaluacion
 from .forms import EvaluacionForm
 from django.contrib.auth.decorators import login_required
 from asignatura.models import Asignatura
+from calificacion.models import Calificacion
 
 @login_required
 def lista_evaluaciones(request, asignatura_id=None):
@@ -16,10 +17,12 @@ def detalle_evaluacion(request, pk):
     evaluacion = get_object_or_404(Evaluacion, pk=pk)
     asignatura = evaluacion.asignatura  # Obtener la asignatura relacionada
     curso = evaluacion.asignatura.curso
+    calificaciones = Calificacion.objects.filter(evaluacion=evaluacion)
     return render(request, 'evaluacion/detalle_evaluacion.html', {
         'evaluacion': evaluacion,
         'asignatura': asignatura,  
         'curso':curso,
+        'calificaciones':calificaciones,
     })
 
 @login_required
