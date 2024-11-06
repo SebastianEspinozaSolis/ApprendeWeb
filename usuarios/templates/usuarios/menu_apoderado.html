@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Menú Apoderado{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Bienvenido, {{ usuario.perfil.nombre }} (Apoderado)</h2>
+    <p class="lead mb-5">Aquí puedes gestionar los alumnos a tu cargo.</p>
+
+    <div class="row">
+        <!-- Cards para alumnos -->
+        <div class="col-md-12 mb-4">
+            <h3>Alumnos a tu cargo</h3>
+            {% if alumnos %}
+                <div class="row">
+                    {% for alumno in alumnos %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ alumno.perfil.nombre }}</h5>
+                                <p class="card-text">Curso: {{ alumno.curso.nombre }}</p>
+                                <p class="card-text">RUT: {{ alumno.perfil.rut }}</p>
+                                <a href="{% url 'usuarios:detalle_alumno' alumno.id %}" class="btn btn-primary">Ver detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No tienes alumnos asignados.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}
