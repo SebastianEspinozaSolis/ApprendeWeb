@@ -56,7 +56,7 @@ def login_view(request):
             elif perfil.rol == 'apoderado':
                 return redirect('usuarios:menu_apoderado')
             else:
-                return redirect('curso:lista_cursos')
+                return redirect('usuarios:menu_alumno')
         else:
             messages.error(request, 'Nombre de usuario o contraseña incorrectos.')
     return render(request, 'usuarios/login.html')
@@ -201,9 +201,16 @@ def menu_apoderado(request):
 @login_required
 def menu_alumno(request):
     usuario = request.user
+    try:
+        alumno = Alumno.objects.get(perfil=usuario.perfil)  # Obtener el alumno asociado al perfil del usuario
+    except Alumno.DoesNotExist:
+        alumno = None  # Si no existe el alumno para el usuario
+
     return render(request, 'usuarios/menu_alumno.html', {
-        'usuario': usuario, 
+        'usuario': usuario,
+        'alumno': alumno,  # Pasamos el objeto alumno a la plantilla
     })
+
 @login_required
 def detalle_alumno(request, id):
     # Obtener el alumno correspondiente

@@ -17,5 +17,6 @@ urlpatterns = [
     path('menu/administrador/', views.menu_administrador, name='menu_administrador'),
     path('menu/profesor/', views.menu_profesor, name='menu_profesor'),
     path('menu_apoderado/', views.menu_apoderado, name='menu_apoderado'),
+    path('menu_alumno/', views.menu_alumno, name='menu_alumno'),
     path('alumno/<int:id>/', views.detalle_alumno, name='detalle_alumno'),
 ]
