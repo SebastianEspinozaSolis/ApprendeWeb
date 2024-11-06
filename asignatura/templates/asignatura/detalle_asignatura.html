@@ -30,9 +30,11 @@
             <hr>
             <a href="{% url 'evaluacion:crear_evaluacion' %}?asignatura_id={{ asignatura.id }}" class="btn btn-success">Añadir Evaluación</a>
             <hr>
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
             <a href="{% url 'asignatura:editar_asignatura' asignatura.pk %}" class="btn btn-warning">Editar Asignatura</a>
             <hr>
             <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-secondary">Volver a la Lista de Asignaturas del Curso</a>
+            {% endif %}
         </div>
     </div>
 </div>

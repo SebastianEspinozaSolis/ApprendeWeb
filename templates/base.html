@@ -13,7 +13,19 @@
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'usuarios:login' %}">Apprende</a>
+            {% if user.is_authenticated %}
+                {% if user.perfil.rol == 'administrador' %}
+                    <a class="navbar-brand" href="{% url 'usuarios:menu_administrador' %}">Apprende</a>
+                {% elif user.perfil.rol == 'profesor' %}
+                    <a class="navbar-brand" href="{% url 'usuarios:menu_profesor' %}">Apprende</a>
+                {% elif user.perfil.rol == 'apoderado' %}
+                    <a class="navbar-brand" href="{% url 'usuarios:login' %}">Apprende</a>
+                {% elif user.perfil.rol == 'alumno' %}
+                    <a class="navbar-brand" href="{% url 'usuarios:login' %}">Apprende</a>
+                {% endif %}
+            {% else %}
+                <a class="navbar-brand" href="{% url 'usuarios:login' %}">Apprende</a>
+            {% endif %}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContenido" aria-controls="navbarContenido" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -33,10 +45,7 @@
                         </li>
                         {% elif user.perfil.rol == 'profesor' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:login' %}">Blog</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:login' %}">Galería</a>
+                            <a class="nav-link" href="{% url 'usuarios:menu_profesor' %}">Menu Profesor</a>
                         </li>
                         {% elif user.perfil.rol == 'apoderado' %}
                         <li class="nav-item">

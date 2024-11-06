@@ -8,16 +8,18 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Perfil, Administrador,Alumno,Apoderado,Profesor
 from django.shortcuts import get_object_or_404
+from asignatura.models import Asignatura
+from jefatura.models import Jefatura
 
 
 def registro(request):
     if request.method == 'POST':
         form = RegistroForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)  # No guardamos aún para asignar la contraseña
-            user.set_password(form.cleaned_data['password'])  # Encriptamos la contraseña con el método set_password, clean_data para obtener los datos limpios del formulario
-            user.save()#Guardamos el usuario
-            # Asignamos el rol al perfil
+            user = form.save(commit=False)  
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            # Asignamos datos al perfil
             user.perfil.rol = form.cleaned_data['rol']
             user.perfil.nombre = form.cleaned_data['nombre']
             user.perfil.rut = form.cleaned_data['rut']
@@ -37,16 +39,16 @@ def registro(request):
         form = RegistroForm()
     return render(request, 'usuarios/registro.html', {'form': form})
 
-def login_view(request):#Vista para el inicio de sesión
+def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
-        usuario = authenticate(request, username=username, password=password)#Autenticamos al usuario con las credenciales
+        usuario = authenticate(request, username=username, password=password)
         if usuario is not None:
-            login(request, usuario)#Iniciamos sesión
+            login(request, usuario)
             perfil = Perfil.objects.get(user=usuario)
             if perfil.rol == 'administrador':
-                return redirect('curso:crear_curso')
+                return redirect('usuarios:menu_administrador')
             elif perfil.rol == 'profesor':
                 return redirect('curso:lista_cursos')
             elif perfil.rol == 'apoderado':
@@ -63,29 +65,29 @@ def logout_view(request):
     return redirect('usuarios:login')
 
 def crear_administrador(request, user_id):
-    perfil = Perfil.objects.get(id=user_id)  # Cambié la forma de obtener el perfil directamente
+    perfil = Perfil.objects.get(id=user_id)
 
     if request.method == 'POST':
         form = AdministradorForm(request.POST)
         if form.is_valid():
             administrador = form.save(commit=False)
-            administrador.perfil = perfil  # Asignamos el perfil al administrador
+            administrador.perfil = perfil 
             administrador.save()
             messages.success(request, 'Administrador creado exitosamente.')
-            return redirect('usuarios:login')  # Redirige a login o a otra página según prefieras
+            return redirect('usuarios:login')  
     else:
         form = AdministradorForm()
 
     return render(request, 'usuarios/crear_administrador.html', {'form': form})
 
 def crear_profesor(request, user_id):
-    perfil = Perfil.objects.get(id=user_id)  # Aquí también cambié la forma de obtener el perfil
+    perfil = Perfil.objects.get(id=user_id) 
 
     if request.method == 'POST':
         form = ProfesorForm(request.POST)
         if form.is_valid():
             profesor = form.save(commit=False)
-            profesor.perfil = perfil  # Asignamos el perfil al profesor
+            profesor.perfil = perfil 
             profesor.save()
             messages.success(request, 'Profesor creado exitosamente.')
             return redirect('usuarios:lista_usuarios')
@@ -101,10 +103,10 @@ def crear_apoderado(request, user_id):
         form = ApoderadoForm(request.POST)
         if form.is_valid():
             apoderado = form.save(commit=False)
-            apoderado.perfil = perfil  # Asignamos el perfil al apoderado
+            apoderado.perfil = perfil  
             apoderado.save()
             messages.success(request, 'Apoderado creado exitosamente.')
-            return redirect('usuarios:lista_usuarios')  # Redirige a login o a otra página según prefieras
+            return redirect('usuarios:lista_usuarios')  
     else:
         form = ApoderadoForm()
 
@@ -117,10 +119,10 @@ def crear_alumno(request, user_id):
         form = AlumnoForm(request.POST)
         if form.is_valid():
             alumno = form.save(commit=False)
-            alumno.perfil = perfil  # Asignamos el perfil al alumno
+            alumno.perfil = perfil  
             alumno.save()
             messages.success(request, 'Alumno creado exitosamente.')
-            return redirect('usuarios:lista_usuarios')  # Redirige a login o a otra página según prefieras
+            return redirect('usuarios:lista_usuarios')  
     else:
         form = AlumnoForm()
 
@@ -141,7 +143,7 @@ def editar_usuario(request, user_id):
         form = EditarForm(request.POST, instance=perfil)
         if form.is_valid():
             form.save()
-            return redirect('usuarios:lista_usuarios')  # Redirige a la lista de usuarios
+            return redirect('usuarios:lista_usuarios') 
     else:
         form = EditarForm(instance=perfil)
     return render(request, 'usuarios/editar_usuario.html', {'form': form})
@@ -149,7 +151,6 @@ def editar_usuario(request, user_id):
 def detalle_usuario(request, pk):
     perfil = get_object_or_404(Perfil, pk=pk)
     edad = perfil.calcular_edad()
-    # Intenta obtener las instancias de los roles
     administrador = Administrador.objects.filter(perfil=perfil).first()
     apoderado = Apoderado.objects.filter(perfil=perfil).first()
     alumno = Alumno.objects.filter(perfil=perfil).first()
@@ -163,4 +164,36 @@ def detalle_usuario(request, pk):
         'apoderado': apoderado,
         'profesor': profesor,
         'edad': edad,
+    })
+
+@login_required
+def menu_administrador(request):
+    usuario = request.user
+    return render(request, 'usuarios/menu_administrador.html', {
+        'usuario': usuario, 
+    })
+
+@login_required
+def menu_profesor(request):
+    usuario = request.user
+    asignaturas = Asignatura.objects.filter(profesor=usuario.perfil.profesor)
+    jefatura = usuario.perfil.profesor.jefatura
+    return render(request, 'usuarios/menu_profesor.html', {
+        'usuario': usuario, 
+        'asignaturas': asignaturas,
+        'jefatura': jefatura,
+    })
+
+@login_required
+def menu_apoderado(request):
+    usuario = request.user
+    return render(request, 'usuarios/menu_apoderado.html', {
+        'usuario': usuario, 
+    })
+
+@login_required
+def menu_alumno(request):
+    usuario = request.user
+    return render(request, 'usuarios/menu_alumno.html', {
+        'usuario': usuario, 
     })

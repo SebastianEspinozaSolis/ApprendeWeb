@@ -39,7 +39,9 @@
             <hr>
             <a href="{% url 'asignatura:detalle_asignatura' evaluacion.asignatura.pk %}" class="btn btn-secondary">Volver a Asignatura</a>
             <a href="{% url 'evaluacion:editar_evaluacion' evaluacion.pk %}" class="btn btn-warning">Editar Evaluación</a>
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
             <a href="{% url 'curso:detalle_curso' curso.id %}" class="btn btn-secondary">Volver al Curso</a>
+            {% endif %}
         </div>
     </div>
 </div>

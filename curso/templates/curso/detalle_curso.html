@@ -14,9 +14,13 @@
                 <h5>Jefatura</h5>
                 <p>Profesor: {{ jefatura.profesor.perfil.nombre }}</p>
                 <p>Correo del profesor: {{ jefatura.profesor.perfil.user.email }}</p>
-                <a href="{% url 'jefatura:editar_jefatura' jefatura.pk %}" class="btn btn-secondary">Editar</a>
+                {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+                    <a href="{% url 'jefatura:editar_jefatura' jefatura.pk %}" class="btn btn-secondary">Editar</a>
+                {% endif %}
             {% else %}
-                <a href="{% url 'jefatura:crear_jefatura' %}?curso_id={{ curso.id }}" class="btn btn-success">Añadir Jefatura</a>
+                {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+                    <a href="{% url 'jefatura:crear_jefatura' %}?curso_id={{ curso.id }}" class="btn btn-success">Añadir Jefatura</a>
+                {% endif %}
             {% endif %}
             <hr>
             <h5>Asignaturas</h5>
@@ -69,7 +73,35 @@
             {% endif %}
 
             <hr>
-            <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-info mt-3">Modificar Asignaturas de este Curso</a>
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+                <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-info mt-3">Modificar Asignaturas de este Curso</a>
+            {% endif %}
+
+            {% if request.user.perfil.rol == 'profesor' %}
+            <!-- Lista de alumnos con datos de apoderado -->
+            <h4>Apoderado</h4>
+            {% if alumnos %}
+            <ul class="list-group">
+                {% for alumno in alumnos %}
+                <li class="list-group-item">
+                    <h5>{{ alumno.perfil.nombre }}</h5>
+                    <!-- Datos del apoderado -->
+                    {% if alumno.apoderado %}
+                        <h6>Apoderado</h6>
+                        <p>Nombre: {{ alumno.apoderado.perfil.nombre }}</p>
+                        <p>Correo: {{ alumno.apoderado.perfil.user.email }}</p>
+                        <p>Teléfono: {{ alumno.apoderado.telefono }}</p>
+                    {% else %}
+                        <p>No tiene apoderado asignado.</p>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+                <p>No hay alumnos en este curso.</p>
+            {% endif %}
+            {% endif %}
+
             <hr>
             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
                 <a href="{% url 'curso:editar_curso' curso.pk %}" class="btn btn-secondary">Editar Curso</a>
@@ -77,6 +109,11 @@
         </div>
     </div>
 
-    <a href="{% url 'curso:lista_cursos' %}" class="btn btn-link mt-3">Volver a la Lista de Cursos</a>
+    {% if request.user.is_authenticated %}
+        {% if request.user.perfil.rol == 'administrador' %}
+            <a href="{% url 'curso:lista_cursos' %}" class="btn btn-link mt-3">Volver a la Lista de Cursos</a>
+        {% endif %}
+    {% endif %}
+    
 </div>
 {% endblock %}

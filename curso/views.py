@@ -4,7 +4,7 @@ from .forms import CursoForm
 from django.contrib.auth.decorators import login_required
 from asignatura.models import Asignatura
 from evaluacion.models import Evaluacion
-from usuarios.models import Profesor
+from usuarios.models import Profesor, Alumno, Apoderado
 from jefatura.models import Jefatura
 @login_required
 def lista_cursos(request):
@@ -17,12 +17,16 @@ def detalle_curso(request, pk):
     evaluaciones = Evaluacion.objects.filter(asignatura__curso=curso).order_by('fecha') 
     profesores = Profesor.objects.filter(asignatura__curso=curso).order_by('especialidad')
     jefatura = Jefatura.objects.filter(curso=curso).first() 
+    alumnos = Alumno.objects.filter(curso=curso)
+    apoderados = Apoderado.objects.filter(alumno__in=alumnos)
     return render(request, 'curso/detalle_curso.html', {
         'curso': curso,
         'asignaturas': asignaturas,
         'evaluaciones': evaluaciones,  
         'profesores': profesores,
         'jefatura': jefatura,
+        'alumnos': alumnos,
+        'apoderados': apoderados,
     })
 
 @login_required
