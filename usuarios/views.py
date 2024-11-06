@@ -9,7 +9,9 @@ from django.contrib.auth.decorators import login_required
 from .models import Perfil, Administrador,Alumno,Apoderado,Profesor
 from django.shortcuts import get_object_or_404
 from asignatura.models import Asignatura
-from jefatura.models import Jefatura
+from calificacion.models import Calificacion
+from evaluacion.models import Evaluacion
+
 
 
 def registro(request):
@@ -50,9 +52,9 @@ def login_view(request):
             if perfil.rol == 'administrador':
                 return redirect('usuarios:menu_administrador')
             elif perfil.rol == 'profesor':
-                return redirect('curso:lista_cursos')
+                return redirect('usuarios:menu_profesor')
             elif perfil.rol == 'apoderado':
-                return redirect('curso:lista_cursos')
+                return redirect('usuarios:menu_apoderado')
             else:
                 return redirect('curso:lista_cursos')
         else:
@@ -186,9 +188,14 @@ def menu_profesor(request):
 
 @login_required
 def menu_apoderado(request):
+    # Obtiene el apoderado relacionado con el usuario logueado
     usuario = request.user
+    apoderado = usuario.perfil.apoderado  # Relación del apoderado con el perfil del usuario
+    alumnos = apoderado.alumno_set.all()  # Obtiene todos los alumnos asociados al apoderado
+    
     return render(request, 'usuarios/menu_apoderado.html', {
-        'usuario': usuario, 
+        'usuario': usuario,  # Información del usuario logueado
+        'alumnos': alumnos,  # Alumnos a cargo del apoderado
     })
 
 @login_required
@@ -196,4 +203,20 @@ def menu_alumno(request):
     usuario = request.user
     return render(request, 'usuarios/menu_alumno.html', {
         'usuario': usuario, 
+    })
+@login_required
+def detalle_alumno(request, id):
+    # Obtener el alumno correspondiente
+    alumno = get_object_or_404(Alumno, id=id)
+
+    # Obtener las calificaciones del alumno en las evaluaciones disponibles
+    calificaciones = Calificacion.objects.filter(alumno=alumno)
+
+    # Si quieres mostrar las evaluaciones, puedes filtrarlas también
+    evaluaciones = Evaluacion.objects.filter(asignatura__curso=alumno.curso)
+
+    return render(request, 'usuarios/detalle_alumno.html', {
+        'alumno': alumno,
+        'calificaciones': calificaciones,
+        'evaluaciones': evaluaciones,
     })

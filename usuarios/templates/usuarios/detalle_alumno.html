@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalles de Alumno{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detalles del Alumno: {{ alumno.perfil.nombre }}</h2>
+    
+    <p><strong>Curso:</strong> {{ alumno.curso.nombre }}</p>
+    <p><strong>RUT:</strong> {{ alumno.perfil.rut }}</p>
+
+    <a href="{% url 'curso:detalle_curso' alumno.curso.id %}" class="btn btn-secondary mt-2">Ver detalles del curso</a>
+
+    <h3 class="mt-4">Calificaciones</h3>
+    {% if calificaciones %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Evaluación</th>
+                    <th>Calificación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for calificacion in calificaciones %}
+                <tr>
+                    <td>{{ calificacion.evaluacion.nombre }}</td>
+                    <td>{{ calificacion.calificacion }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay calificaciones disponibles para este alumno.</p>
+    {% endif %}
+
+    <h3 class="mt-4">Evaluaciones</h3>
+    {% if evaluaciones %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Asignatura</th>
+                    <th>Evaluación</th>
+                    <th>Fecha de Evaluación</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for evaluacion in evaluaciones %}
+                <tr>
+                    <td>{{ evaluacion.asignatura.nombre }}</td>
+                    <td>{{ evaluacion.nombre }}</td>
+                    <td>{{ evaluacion.fecha }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay evaluaciones disponibles para este curso.</p>
+    {% endif %}
+</div>
+{% endblock %}

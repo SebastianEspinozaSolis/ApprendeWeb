@@ -19,7 +19,7 @@
                 {% elif user.perfil.rol == 'profesor' %}
                     <a class="navbar-brand" href="{% url 'usuarios:menu_profesor' %}">Apprende</a>
                 {% elif user.perfil.rol == 'apoderado' %}
-                    <a class="navbar-brand" href="{% url 'usuarios:login' %}">Apprende</a>
+                    <a class="navbar-brand" href="{% url 'usuarios:menu_apoderado' %}">Apprende</a>
                 {% elif user.perfil.rol == 'alumno' %}
                     <a class="navbar-brand" href="{% url 'usuarios:login' %}">Apprende</a>
                 {% endif %}
@@ -49,10 +49,10 @@
                         </li>
                         {% elif user.perfil.rol == 'apoderado' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:login' %}">Blog</a>
+                            <a class="nav-link" href="{% url 'usuarios:menu_apoderado' %}">Menu Apoderado</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:login' %}">Galería</a>
+                            <a class="nav-link" href="">Aviso proximamente</a>
                         </li>
                         {% elif user.perfil.rol == 'alumno' %}
                         <li class="nav-item">

@@ -20,7 +20,9 @@
                             <h5>{{ evaluacion.nombre }}</h5>
                             <p>Descripción: {{ evaluacion.descripcion }}</p>
                             <p>Fecha: {{ evaluacion.fecha }}</p>
+                            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' or request.user.perfil.rol == 'profesor' %}
                             <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary">Ver Detalles</a>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>
@@ -28,7 +30,9 @@
                 <p>No hay evaluaciones disponibles para esta asignatura.</p>
             {% endif %}
             <hr>
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' or request.user.perfil.rol == 'profesor' %}
             <a href="{% url 'evaluacion:crear_evaluacion' %}?asignatura_id={{ asignatura.id }}" class="btn btn-success">Añadir Evaluación</a>
+            {% endif %}
             <hr>
             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
             <a href="{% url 'asignatura:editar_asignatura' asignatura.pk %}" class="btn btn-warning">Editar Asignatura</a>
