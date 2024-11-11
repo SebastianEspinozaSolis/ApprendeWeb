@@ -179,7 +179,7 @@ def menu_administrador(request):
 def menu_profesor(request):
     usuario = request.user
     asignaturas = Asignatura.objects.filter(profesor=usuario.perfil.profesor)
-    jefatura = usuario.perfil.profesor.jefatura
+    jefatura = getattr(usuario.perfil.profesor, 'jefatura', None)
     return render(request, 'usuarios/menu_profesor.html', {
         'usuario': usuario, 
         'asignaturas': asignaturas,
