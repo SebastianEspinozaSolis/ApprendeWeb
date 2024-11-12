@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Crear Jefatura{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Crear Jefatura</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-group">
+            <label for="id_curso">Curso:</label>
+            {{ form.curso.errors }}
+            {{ form.curso }}
+        </div>
+        <div class="form-group">
+            <label for="id_profesor">Profesor:</label>
+            {{ form.profesor.errors }}
+            {{ form.profesor }}
+        </div>
+        <button type="submit" class="btn btn-primary">Crear Jefatura</button>
+    </form>
+</div>
+{% endblock %}

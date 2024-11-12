@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Menú Administrador{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Bienvenido, {{ user.perfil.nombre }} (Administrador)</h2>
+    <p class="lead mb-5">Desde aquí puedes gestionar los cursos, usuarios, y más. Elige una opción a continuación para comenzar.</p>
+
+    <div class="row">
+        <!-- Card para gestionar cursos -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Gestionar Cursos</h5>
+                    <p class="card-text">Aquí puedes crear, editar y ver cursos disponibles para los estudiantes con sus derivados.</p>
+                    <a href="{% url 'curso:lista_cursos' %}" class="btn btn-primary">Ver Cursos</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card para gestionar usuarios -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Gestionar Usuarios</h5>
+                    <p class="card-text">Administra todos los usuarios, entre los que son alumnos, profesores, apoderados o administradores.</p>
+                    <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-success">Ver Usuarios</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card para gestionar jefaturas -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Gestionar Jefaturas</h5>
+                    <p class="card-text">Administra las jefaturas de los diferentes cursos y profesores.</p>
+                    <a href="{% url 'jefatura:lista_jefaturas' %}" class="btn btn-warning">Ver Jefaturas</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>proximamente avisos</p>
+</div>
+{% endblock %}

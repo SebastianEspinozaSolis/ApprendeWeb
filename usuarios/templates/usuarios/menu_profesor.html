@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Menú Profesor{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Bienvenido, {{ user.perfil.nombre }} (Profesor)</h2>
+    <p class="lead mb-5">Desde aquí puedes gestionar tus asignaturas y jefatura, así como otras opciones disponibles.</p>
+
+    <div class="row">
+        <!-- Cards para asignaturas -->
+        <div class="col-md-12 mb-4">
+            <h3>Asignaturas</h3>
+            {% if asignaturas %}
+                <div class="row">
+                    {% for asignatura in asignaturas %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ asignatura.nombre }}</h5>
+                                <p class="card-text">Curso: {{ asignatura.curso }}</p>
+                                <a href="{% url 'asignatura:detalle_asignatura' asignatura.id %}" class="btn btn-primary">Ver detalles</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No tienes asignaturas asignadas.</p>
+            {% endif %}
+        </div>
+
+        <!-- Card para jefatura, visible solo si el profesor tiene jefatura -->
+        {% if jefatura %}
+            <div class="col-md-12 mb-4">
+                <h3>Jefatura</h3>
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ jefatura.curso.nombre }}</h5>
+                        <p class="card-text">Este es el curso al que estás asignado como jefe de curso.</p>
+                        {% if jefatura.curso %}
+                            <a href="{% url 'curso:detalle_curso' jefatura.curso.id %}" class="btn btn-primary">Ver detalles del curso</a>
+                        {% else %}
+                            <p>No hay curso asignado a esta jefatura.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-md-12 mb-4">
+                <p>No tienes jefaturas asignadas.</p>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Jefaturas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Lista de Jefaturas</h2>
+    <a href="{% url 'jefatura:crear_jefatura' %}" class="btn btn-primary mb-3">Crear Nueva Jefatura</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Curso</th>
+                <th>Profesor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for jefatura in jefaturas %}
+            <tr>
+                <td>{{ jefatura.curso.nombre }}</td>
+                <td>{{ jefatura.profesor.perfil.nombre }}</td>  
+                <td>
+                    <a href="{% url 'jefatura:editar_jefatura' jefatura.pk %}" class="btn btn-secondary">Editar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No hay jefaturas registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

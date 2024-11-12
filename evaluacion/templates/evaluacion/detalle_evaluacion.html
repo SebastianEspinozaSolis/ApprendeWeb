@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalles de {{ evaluacion.nombre }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">{{ evaluacion.nombre }}</h2>
+            <p>Descripción: {{ evaluacion.descripcion }}</p>
+            <p>Fecha: {{ evaluacion.fecha }}</p>
+            <p>Asignatura: {{ evaluacion.asignatura.nombre }}</p>
+            
+            <!-- Mostrar calificaciones asociadas a la evaluación -->
+            <h3 class="mt-4">Calificaciones</h3>
+            {% if calificaciones %}
+            <table class="table table-striped mt-2">
+                <thead>
+                    <tr>
+                        <th>Alumno</th>
+                        <th>Calificación</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for calificacion in calificaciones %}
+                    <tr>
+                        <td>{{ calificacion.alumno.perfil.nombre }}</td>
+                        <td>{{ calificacion.calificacion }}</td>
+                        <td>
+                            <a href="{% url 'calificacion:editar_calificacion' calificacion.pk %}" class="btn btn-primary btn-sm">Editar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+        <a href="{% url 'calificacion:crear_calificacion' %}?evaluacion_id={{ evaluacion.id }}" class="btn btn-success">Crear Calificaciones</a>
+        {% endif %}
+            <hr>
+            <a href="{% url 'asignatura:detalle_asignatura' evaluacion.asignatura.pk %}" class="btn btn-secondary">Volver a Asignatura</a>
+            <a href="{% url 'evaluacion:editar_evaluacion' evaluacion.pk %}" class="btn btn-warning">Editar Evaluación</a>
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+            <a href="{% url 'curso:detalle_curso' curso.id %}" class="btn btn-secondary">Volver al Curso</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

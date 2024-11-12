@@ -1,0 +1,9 @@
+body {
+    background: linear-gradient(to right, #ffffff, #cbd1cb) !important; /* Fondo degradado */
+    color: #333; /* Color de texto oscuro */
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con opacidad */
+    color: #333; /* Color de texto oscuro para la tarjeta */
+}
