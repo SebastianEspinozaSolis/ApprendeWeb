@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle del Aviso{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Detalle del Aviso</h2>
+
+    <div class="mb-4">
+        <h3>{{ aviso.titulo }}</h3>
+        <p>{{ aviso.descripcion }}</p>
+        <p><strong>Fecha de creación:</strong> {{ aviso.fecha_creacion }}</p>
+        <p><strong>Creado por:</strong> {{ aviso.creador.nombre }}</p>
+    </div>
+
+    <a href="{% url 'avisos:editar_aviso' aviso.id %}" class="btn btn-warning">Editar Aviso</a>
+
+    <a href="{% url 'avisos:lista_avisos' %}" class="btn btn-secondary mt-3">Volver a la lista de avisos</a>
+</div>
+{% endblock %}

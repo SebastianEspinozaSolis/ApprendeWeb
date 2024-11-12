@@ -40,7 +40,17 @@
                 </div>
             </div>
         </div>
+
+        <!-- Card para gestionar avisos -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Gestionar Avisos</h5>
+                    <p class="card-text">Envía notificaciones a los Apoderados por medio de los cursos.</p>
+                    <a href="{% url 'avisos:lista_avisos' %}" class="btn btn-info">Ver Avisos</a>
+                </div>
+            </div>
+        </div>
     </div>
-    <p>proximamente avisos</p>
 </div>
 {% endblock %}

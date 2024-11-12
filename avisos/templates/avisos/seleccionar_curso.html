@@ -1,0 +1,20 @@
+<!-- seleccionar_curso.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Seleccionar Curso</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="curso">Selecciona un curso:</label>
+            <select name="curso" id="curso" class="form-control">
+                {% for curso in cursos %}
+                    <option value="{{ curso.id }}">{{ curso.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Seleccionar Curso</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+<!-- crear_aviso.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Crear Aviso para el curso {{ curso_seleccionado.nombre }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Formulario de Aviso -->
+        <div class="form-group">
+            <label for="titulo">Título del Aviso:</label>
+            {{ aviso_form.titulo }}  <!-- Muestra el campo de título -->
+        </div>
+
+        <div class="form-group">
+            <label for="descripcion">Descripción del Aviso:</label>
+            {{ aviso_form.descripcion }}  <!-- Muestra el campo de descripción -->
+        </div>
+
+        <!-- Filtro por alumnos -->
+        <div class="mt-4">
+            <h5>Alumnos:</h5>
+            {% for alumno in alumnos %}
+                <div>
+                    <input type="checkbox" name="alumnos" value="{{ alumno.id }}">
+                    {{ alumno }}  <!-- Esto mostrará nombre y RUT -->
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Enviar Aviso</button>
+    </form>
+</div>
+{% endblock %}

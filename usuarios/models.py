@@ -46,6 +46,8 @@ class Alumno(models.Model):
     perfil = models.OneToOneField(Perfil, on_delete=models.CASCADE)
     curso=models.ForeignKey(Curso,on_delete=models.CASCADE)
     apoderado=models.ForeignKey(Apoderado,on_delete=models.CASCADE)
+    def __str__(self):
+        return f"{self.perfil.nombre} ({self.perfil.rut})"
 
 class Profesor(models.Model):
     perfil = models.OneToOneField(Perfil, on_delete=models.CASCADE)
