@@ -19,6 +19,7 @@ class Perfil(models.Model):
     fecha_nacimiento = models.DateField(null=True, blank=True)  # Fecha de nacimiento
     sexo = models.CharField(max_length=1, choices=(('M', 'Masculino'), ('F', 'Femenino')), null=True, blank=True)  # Sexo
     segundo_rol = models.CharField(max_length=20, choices=ROLES, null=True, blank=True, default='')
+    
 
     def __str__(self):
         return f"{self.user.username} - {self.rol}"
