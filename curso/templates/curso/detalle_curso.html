@@ -23,6 +23,10 @@
                 {% endif %}
             {% endif %}
             <hr>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'avisos:crear_aviso' curso_id=curso.id %}" class="btn btn-warning mb-4">Añadir Aviso</a>
+            {% endif %}
+            <hr>
             <h5>Asignaturas</h5>
             {% if asignaturas %}
                 <ul class="list-group">
@@ -93,8 +97,6 @@
                         <p>Nombre: {{ alumno.apoderado.perfil.nombre }}</p>
                         <p>Correo: {{ alumno.apoderado.perfil.user.email }}</p>
                         <p>Teléfono: {{ alumno.apoderado.telefono }}</p>
-                    {% else %}
-                        <p>No tiene apoderado asignado.</p>
                     {% endif %}
                 </li>
                 {% endfor %}

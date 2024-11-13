@@ -8,6 +8,13 @@
     <p class="lead mb-5">Aquí puedes gestionar los alumnos a tu cargo.</p>
 
     <div class="row">
+        <!-- Botón para ver avisos -->
+        <div class="col-md-12 mb-4">
+            <a href="{% url 'avisos:avisos_apoderado' %}" class="btn btn-warning mb-4">
+                Ver Avisos de Alumnos a tu Cargo
+            </a>
+        </div>
+
         <!-- Cards para alumnos -->
         <div class="col-md-12 mb-4">
             <h3>Alumnos a tu cargo</h3>
@@ -30,7 +37,6 @@
                 <p>No tienes alumnos asignados.</p>
             {% endif %}
         </div>
-
     </div>
 </div>
 {% endblock %}

@@ -55,7 +55,7 @@
                             <a class="nav-link" href="{% url 'usuarios:menu_apoderado' %}">Menu Apoderado</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Aviso proximamente</a>
+                            <a class="nav-link" href="{% url 'avisos:avisos_apoderado' %}">Ver Avisos</a>
                         </li>
                         {% elif user.perfil.rol == 'alumno' %}
                         <li class="nav-item">

@@ -1,7 +1,7 @@
 # views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Aviso, AvisoAlumno
-from usuarios.models import Alumno, Perfil
+from usuarios.models import Alumno, Perfil, Apoderado
 from curso.models import Curso
 from django.contrib.auth.decorators import login_required
 from .forms import AvisoForm, AvisoAlumnoForm
@@ -23,16 +23,25 @@ def seleccionar_curso(request):
         return redirect('avisos:crear_aviso')
 # views.py
 @login_required
+@login_required
 def crear_aviso(request, curso_id=None):
-    if request.user.perfil.rol == 'profesor':
-        # El curso del profesor ya está asignado por su jefatura
-        curso_seleccionado = request.user.perfil.jefatura
+    # Asegúrate de que el perfil esté cargado
+    perfil = request.user.perfil
+
+    if perfil.rol == 'profesor':
+        if hasattr(perfil, 'profesor') and perfil.profesor.jefatura:
+            jefatura = perfil.profesor.jefatura
+            if isinstance(jefatura.curso, Curso):  # Verifica que jefatura.curso sea una instancia de Curso
+                curso_seleccionado = jefatura.curso
+        else:
+            curso_seleccionado = None
+
     elif curso_id:
-        curso_seleccionado = Curso.objects.get(id=curso_id)
+        # Si se pasa un curso_id, lo buscamos y lo asignamos
+        curso_seleccionado = get_object_or_404(Curso, id=curso_id)
     else:
         return redirect('avisos:seleccionar_curso')  # Redirigir si no se pasa curso
 
-    cursos = Curso.objects.all()
     alumnos = Alumno.objects.filter(curso=curso_seleccionado)  # Filtrar alumnos por el curso seleccionado
 
     if request.method == 'POST':
@@ -58,10 +67,11 @@ def crear_aviso(request, curso_id=None):
     return render(request, 'avisos/crear_aviso.html', {
         'aviso_form': aviso_form,
         'alumno_form': alumno_form,
-        'cursos': cursos,  # Pasamos los cursos para el filtro
+        'cursos': Curso.objects.all(),  # Pasamos todos los cursos
         'alumnos': alumnos,  # Pasamos los alumnos filtrados por curso
         'curso_seleccionado': curso_seleccionado,  # Pasamos el curso seleccionado a la plantilla
     })
+
 @login_required
 def lista_avisos(request):
     avisos = Aviso.objects.all()  # Obtener todos los avisos
@@ -146,3 +156,22 @@ def editar_aviso(request, aviso_id):
         'aviso_form': aviso_form,
         'alumno_form': alumno_form
     })
+@login_required
+def avisos_apoderado(request):
+    # Obtener la instancia de Apoderado asociada con el perfil del usuario actual
+    perfil = request.user.perfil
+    apoderado = get_object_or_404(Apoderado, perfil=perfil)
+
+    # Obtener todos los alumnos bajo el cuidado de este apoderado
+    alumnos = Alumno.objects.filter(apoderado=apoderado)
+
+    # Obtener las notificaciones relacionadas con cada alumno
+    avisos_por_alumno = {}
+    for alumno in alumnos:
+        avisos = AvisoAlumno.objects.filter(alumno=alumno).select_related('aviso')
+        avisos_por_alumno[alumno] = avisos
+
+    context = {
+        'avisos_por_alumno': avisos_por_alumno
+    }
+    return render(request, 'avisos/avisos_apoderado.html', context)
