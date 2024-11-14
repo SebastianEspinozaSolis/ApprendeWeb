@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load form_tags %}
+
 {% block title %}Editar Asignatura{% endblock %}
 
 {% block content %}
@@ -11,17 +13,17 @@
         <div class="form-group">
             <label for="id_titulo">Nombre:</label>
             {{ form.nombre.errors }}
-            {{ form.nombre }}
+            {{ form.nombre|add_class:"form-control" }}
         </div>
         <div class="form-group">
             <label for="id_curso">Curso:</label>
             {{ form.curso.errors }}
-            {{ form.curso }}
+            {{ form.curso|add_class:"form-control" }}
         </div>
         <div class="form-group">
             <label for="id_profesor">Profesor:</label>
             {{ form.profesor.errors }}
-            {{ form.profesor }}
+            {{ form.profesor|add_class:"form-control" }}
         </div>
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
     </form>

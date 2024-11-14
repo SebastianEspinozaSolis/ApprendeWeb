@@ -1,13 +1,15 @@
 {% extends 'base.html' %}
 
-{% block title %}Evaluacion{% endblock %}
+{% load form_tags %}
+
+{% block title %}Evaluaciones{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Lista de Evaluacion</h2>
+    <h2>Lista de Evaluaciones</h2>
     {% if request.user.is_authenticated %}
         {% if request.user.perfil.rol == 'administrador' %}
-            <a href="{% url 'evaluacion:crear_evaluacion' %}" class="btn btn-success mb-3">Crear Evaluacion </a>
+            <a href="{% url 'evaluacion:crear_evaluacion' %}" class="btn btn-success mb-3">Crear Evaluación</a>
         {% endif %}
     {% endif %}
     {% for evaluacion in evaluaciones %}
@@ -15,14 +17,13 @@
             <div class="card-body">
                 <h5 class="card-title">{{ evaluacion.nombre }}</h5>
                 <p>{{ evaluacion.descripcion }}</p>
-                <p>{{ evaluacion.fecha }}</p>
-                <p>{{ evaluacion.asignatura }}</p>
-                <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary">editar</a>
+                <p><strong>Fecha:</strong> {{ evaluacion.fecha }}</p>
+                <p><strong>Asignatura:</strong> {{ evaluacion.asignatura.nombre }}</p>
+                <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary">Ver Detalles</a>
             </div>
         </div>
     {% empty %}
         <p>No hay evaluaciones disponibles.</p>
     {% endfor %}
-    {{ request.user.perfil.rol }}
 </div>
 {% endblock %}

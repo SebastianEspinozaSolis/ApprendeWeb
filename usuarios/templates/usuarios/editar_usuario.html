@@ -1,16 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Editar Usuario{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Editar Usuario: {{ form.instance.nombre }}</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
+    <h2 class="text-center mb-4">Editar Usuario: {{ form.instance.nombre }}</h2>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="foto">Foto de Perfil:</label>
+                    {% if form.instance.foto %}
+                        <img src="{{ form.instance.foto.url }}" alt="Foto de {{ form.instance.nombre }}" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
+                    {% else %}
+                        <img src="{% static 'path/to/default/image.png' %}" alt="Foto de perfil por defecto" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
+                    {% endif %}
+                    {{ form.foto }}
+                </div>
+                {{ form.as_p|slice:":-1" }}
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}
 

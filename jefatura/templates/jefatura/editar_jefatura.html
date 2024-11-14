@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
+{% load form_tags %}
+
 {% block title %}Editar Jefatura{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Editar Jefatura</h2>
+    <h2 class="mb-4">Editar Jefatura</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
@@ -16,13 +18,13 @@
         <div class="form-group">
             <label for="id_curso">Curso:</label>
             {{ form.curso.errors }}
-            {{ form.curso }}
+            {{ form.curso|add_class:"form-control" }}
         </div>
         
         <div class="form-group">
             <label for="id_profesor">Profesor:</label>
             {{ form.profesor.errors }}
-            {{ form.profesor }}
+            {{ form.profesor|add_class:"form-control" }}
         </div>
         
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>

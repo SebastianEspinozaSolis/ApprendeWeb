@@ -1,29 +1,35 @@
 {% extends 'base.html' %}
 
+{% load form_tags %}
+
 {% block title %}Crear Asignatura{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Crear Nuevo Asignatura</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        <div class="form-group">
-            <label for="id_titulo">Nombre:</label>
-            {{ form.nombre.errors }}
-            {{ form.nombre }}
+    <h2 class="mb-4">Crear Nueva Asignatura</h2>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="form-group">
+                    <label for="id_titulo">Nombre:</label>
+                    {{ form.nombre.errors }}
+                    {{ form.nombre|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label for="id_curso">Curso:</label>
+                    {{ form.curso.errors }}
+                    {{ form.curso|add_class:"form-control" }} 
+                </div>
+                <div class="form-group">
+                    <label for="id_profesor">Profesor:</label>
+                    {{ form.profesor.errors }}
+                    {{ form.profesor|add_class:"form-control" }} 
+                </div>
+                <button type="submit" class="btn btn-primary">Crear</button>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="id_curso">Curso:</label>
-            {{ form.curso.errors }}
-            {{ form.curso }} 
-        </div>
-        <div class="form-group">
-            <label for="id_profesor">Profesor:</label>
-            {{ form.profesor.errors }}
-            {{ form.profesor }} 
-        </div>
-        <button type="submit" class="btn btn-primary">Crear</button>
-    </form>
+    </div>
 </div>
 {% endblock %}

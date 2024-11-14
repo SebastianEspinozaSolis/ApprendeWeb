@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
 
+{% load form_tags %}
+
 {% block title %}Crear Alumno{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Crear Alumno</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Crear Alumno</button>
-    </form>
+    <h2 class="mb-4">Crear Alumno</h2>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p}}
+                <button type="submit" class="btn btn-primary">Crear Alumno</button>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

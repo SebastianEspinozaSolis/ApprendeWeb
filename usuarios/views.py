@@ -13,10 +13,9 @@ from calificacion.models import Calificacion
 from evaluacion.models import Evaluacion
 
 
-
 def registro(request):
     if request.method == 'POST':
-        form = RegistroForm(request.POST)
+        form = RegistroForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save(commit=False)  
             user.set_password(form.cleaned_data['password'])
@@ -27,6 +26,7 @@ def registro(request):
             user.perfil.rut = form.cleaned_data['rut']
             user.perfil.fecha_nacimiento = form.cleaned_data['fecha_nacimiento']
             user.perfil.sexo = form.cleaned_data['sexo']
+            user.perfil.foto = form.cleaned_data['foto']
             user.perfil.save()
 
             if form.cleaned_data['rol'] == 'administrador':

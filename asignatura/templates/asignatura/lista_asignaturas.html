@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 
+{% load form_tags %}
+
 {% block title %}Asignaturas{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Lista de Asignaturas</h2>
+    <h2 class="mb-4">Lista de Asignaturas</h2>
 
     {% if curso %}
         <h4>Asignaturas de {{ curso.nombre }}</h4>
@@ -14,17 +16,21 @@
         <a href="{% url 'asignatura:crear_asignatura' curso.id %}" class="btn btn-success mb-3">Crear Asignatura</a>
     {% endif %}
 
-    {% for asignatura in asignaturas %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">{{ asignatura.nombre }}</h5>
-                <p>Curso: {{ asignatura.curso }}</p>
-                <a href="{% url 'asignatura:detalle_asignatura' asignatura.pk %}" class="btn btn-primary">Ver Detalles</a>
+    <div class="row">
+        {% for asignatura in asignaturas %}
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ asignatura.nombre }}</h5>
+                        <p>Curso: {{ asignatura.curso }}</p>
+                        <a href="{% url 'asignatura:detalle_asignatura' asignatura.pk %}" class="btn btn-primary">Ver Detalles</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    {% empty %}
-        <p>No hay asignaturas disponibles.</p>
-    {% endfor %}
+        {% empty %}
+            <p>No hay asignaturas disponibles.</p>
+        {% endfor %}
+    </div>
     
     <a href="{% url 'curso:detalle_curso' curso.id %}" class="btn btn-secondary mt-3">Volver a Curso</a>
 </div>

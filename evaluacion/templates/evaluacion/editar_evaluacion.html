@@ -1,32 +1,34 @@
 {% extends 'base.html' %}
 
-{% block title %}Editar Evaluacion{% endblock %}
+{% load form_tags %}
+
+{% block title %}Editar Evaluación{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Editar Evaluacion</h2>
+    <h2 class="mb-4">Editar Evaluación</h2>
     <form method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
         <div class="form-group">
             <label for="id_titulo">Nombre:</label>
             {{ form.nombre.errors }}
-            {{ form.nombre }}
+            {{ form.nombre|add_class:"form-control" }}
         </div>
         <div class="form-group">
-            <label for="id_curso">Descripcion:</label>
+            <label for="id_curso">Descripción:</label>
             {{ form.descripcion.errors }}
-            {{ form.descripcion }}
+            {{ form.descripcion|add_class:"form-control" }}
         </div>
         <div class="form-group">
-            <label for="id_titulo">Fecha:</label>
+            <label for="id_fecha">Fecha:</label>
             {{ form.fecha.errors }}
-            {{ form.fecha }}
+            {{ form.fecha|add_class:"form-control" }}
         </div>
         <div class="form-group">
-            <label for="id_curso">Asignatura:</label>
+            <label for="id_asignatura">Asignatura:</label>
             {{ form.asignatura.errors }}
-            {{ form.asignatura }}
+            {{ form.asignatura|add_class:"form-control" }}
         </div>
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
     </form>

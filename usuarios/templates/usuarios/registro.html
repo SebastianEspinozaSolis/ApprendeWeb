@@ -9,7 +9,7 @@
         <div class="col-md-8">
             <div class="card shadow">
                 <div class="card-body">
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
                             {{ form.username.label }}:
@@ -55,6 +55,13 @@
                             {{ form.rol.label }}:
                             {{ form.rol }}
                             {{ form.rol.errors }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.foto.label }}:
+                            {{ form.foto }}
+                            {% for error in form.foto.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
                         </div>
                         <button type="submit" class="btn btn-primary btn-block" style="border-radius: 10px;">Registrarse</button>
                         <a href="{% url 'usuarios:login' %}" class="btn btn-secondary btn-block mt-2" style="border-radius: 10px;">Cancelar</a>
