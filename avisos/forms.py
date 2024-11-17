@@ -12,8 +12,21 @@ class AvisoForm(forms.ModelForm):
         }
 
 class AvisoAlumnoForm(forms.Form):
-    alumnos = forms.ModelMultipleChoiceField(
-        queryset=Alumno.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        label="Selecciona los alumnos destinatarios"
+    seleccionar_todos = forms.BooleanField(
+        required=False,
+        label='Seleccionar todos los alumnos del curso',
+        initial=False
     )
+    alumnos = forms.ModelMultipleChoiceField(
+        queryset=Alumno.objects.none(),  # Esto se actualizará dinámicamente
+        widget=forms.CheckboxSelectMultiple,
+        label="Selecciona los alumnos destinatarios",
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        curso_id = kwargs.pop('curso_id', None)  # Recibimos el curso_id desde la vista
+        super().__init__(*args, **kwargs)
+        if curso_id:
+            # Filtramos los alumnos por el curso especificado
+            self.fields['alumnos'].queryset = Alumno.objects.filter(curso_id=curso_id)

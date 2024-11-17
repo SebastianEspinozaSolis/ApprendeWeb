@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'calificacion',
     'jefatura',
     'avisos',
+    'asistencia', 
 ]
 
 MIDDLEWARE = [

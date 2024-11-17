@@ -13,8 +13,20 @@
         <p><strong>Creado por:</strong> {{ aviso.creador.nombre }}</p>
     </div>
 
+    <div class="mb-4">
+        <h4>Alumnos destinatarios:</h4>
+        <ul>
+            {% for aviso_alumno in aviso.avisos_alumno.all %}
+                <li>{{ aviso_alumno.alumno.perfil.nombre }} (RUT: {{ aviso_alumno.alumno.perfil.rut }})</li>
+            {% empty %}
+                <p>No hay alumnos asignados a este aviso.</p>
+            {% endfor %}
+        </ul>
+    </div>
+
     <a href="{% url 'avisos:editar_aviso' aviso.id %}" class="btn btn-warning">Editar Aviso</a>
 
     <a href="{% url 'avisos:lista_avisos' %}" class="btn btn-secondary mt-3">Volver a la lista de avisos</a>
 </div>
 {% endblock %}
+

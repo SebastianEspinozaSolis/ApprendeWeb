@@ -12,6 +12,17 @@
             <p>Correo del Profesor: {{ asignatura.profesor.perfil.user.email }}</p>
             <hr>
 
+            <!-- Asistencia: Añadir acceso a la página de fechas de asistencia -->
+            <h5>Asistencia</h5>
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' %}
+                <a href="{% url 'asistencia:lista_fechas_asistencia' asignatura_id=asignatura.id %}" class="btn btn-primary">
+                    Ver Asistencia
+                </a>
+            {% elif request.user.is_authenticated and request.user.perfil.rol == 'apoderado' %}
+                <a href="{% url 'asistencia:detalle_asistencia' asignatura_id=asignatura.id alumno_id=alumno.id %}" class="btn btn-primary">Ver detalle de asistencia</a>
+            {% endif %}
+            <hr>
+
             <h5>Evaluaciones</h5>
             {% if evaluaciones %}
                 <ul class="list-group">
@@ -39,7 +50,11 @@
             <hr>
             <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-secondary">Volver a la Lista de Asignaturas del Curso</a>
             {% endif %}
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' %}
+            <a href="{% url 'avisos:crear_aviso' curso_id=asignatura.curso.id %}" class="btn btn-info">Añadir Aviso</a>
+            {% endif %}
         </div>
     </div>
 </div>
 {% endblock %}
+

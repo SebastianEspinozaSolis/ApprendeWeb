@@ -1,4 +1,3 @@
-<!-- crear_aviso.html -->
 {% extends 'base.html' %}
 
 {% block content %}
@@ -21,9 +20,15 @@
         <!-- Filtro por alumnos -->
         <div class="mt-4">
             <h5>Alumnos:</h5>
+
+            <!-- Checkbox para seleccionar todos los alumnos -->
+            <div>
+                <input type="checkbox" id="seleccionar_todos"> Seleccionar todos
+            </div>
+
             {% for alumno in alumnos %}
                 <div>
-                    <input type="checkbox" name="alumnos" value="{{ alumno.id }}">
+                    <input type="checkbox" name="alumnos" value="{{ alumno.id }}" class="alumno_checkbox">
                     {{ alumno }}  <!-- Esto mostrará nombre y RUT -->
                 </div>
             {% endfor %}
@@ -32,4 +37,18 @@
         <button type="submit" class="btn btn-primary mt-3">Enviar Aviso</button>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const seleccionarTodosCheckbox = document.getElementById('seleccionar_todos');
+        const alumnoCheckboxes = document.querySelectorAll('.alumno_checkbox');
+
+        seleccionarTodosCheckbox.addEventListener('change', function() {
+            alumnoCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = seleccionarTodosCheckbox.checked;
+            });
+        });
+    });
+</script>
+
 {% endblock %}

@@ -19,4 +19,18 @@
 
     <a href="{% url 'avisos:detalle_aviso' aviso.id %}" class="btn btn-secondary mt-3">Volver al detalle del aviso</a>
 </div>
+
+<!-- Script para seleccionar/deseleccionar todos los alumnos -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const seleccionarTodosCheckbox = document.getElementById('id_seleccionar_todos');
+        const alumnoCheckboxes = document.querySelectorAll('input[name="alumnos"]');
+
+        seleccionarTodosCheckbox.addEventListener('change', function() {
+            alumnoCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = seleccionarTodosCheckbox.checked;
+            });
+        });
+    });
+</script>
 {% endblock %}

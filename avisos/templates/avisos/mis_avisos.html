@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Avisos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Mis Avisos</h2>
+    
+    {% if request.user.is_authenticated %}
+        <!-- Mostrar botón de creación solo para administradores -->
+        {% if request.user.perfil.rol == 'administrador' %}
+            <a href="{% url 'avisos:seleccionar_curso' %}" class="btn btn-success mb-3">Crear Aviso</a>
+        {% endif %}
+    {% endif %}
+
+    <!-- Mostrar los avisos creados por el usuario -->
+    {% for aviso in avisos %}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title">{{ aviso.titulo }}</h5>
+                <small class="text-muted">Creado por: {{ aviso.creador.nombre }} ({{ aviso.creador.rol }})</small>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ aviso.descripcion|truncatechars:150 }}</p>
+                <p class="card-text"><strong>Fecha de creación:</strong> {{ aviso.fecha_creacion }}</p>
+                
+                <!-- Mostrar el curso asignado, si corresponde -->
+                
+                    <p class="card-text"><strong>Curso:</strong> {{ aviso.curso }}</p>
+                
+                
+                <!-- Enlace para ver detalles del aviso -->
+                <a href="{% url 'avisos:detalle_aviso' aviso.pk %}" class="btn btn-primary">Ver detalles</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No tienes avisos disponibles.</p>
+    {% endfor %}
+</div>
+{% endblock %}

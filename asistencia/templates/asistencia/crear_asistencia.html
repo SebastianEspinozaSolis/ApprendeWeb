@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Registrar Asistencia para la asignatura {{ asignatura.nombre }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Campo para seleccionar la fecha -->
+        <div class="form-group">
+            <label for="fecha">Fecha de Asistencia:</label>
+            <input type="date" name="fecha" id="fecha" class="form-control" value="{{ fecha }}" required>
+        </div>
+
+        <!-- Lista de Alumnos -->
+        <div class="mt-4">
+            <h5>Alumnos:</h5>
+
+            {% for alumno in alumnos %}
+            <div>
+                <input type="checkbox" name="asistio_{{ alumno.id }}" value="on" class="alumno_checkbox">
+                {{ alumno }}  <!-- Esto mostrará nombre y RUT -->
+            </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Registrar Asistencia</button>
+    </form>
+</div>
+{% endblock %}
