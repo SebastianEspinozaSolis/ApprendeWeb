@@ -21,7 +21,19 @@
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'usuarios:login' %}">Apprende</a>
+            {% if user.is_authenticated %}
+                {% if user.perfil.rol == 'administrador' %}
+                    <a class="navbar-brand" href="{% url 'usuarios:menu_administrador' %}">Apprende</a>
+                {% elif user.perfil.rol == 'profesor' %}
+                    <a class="navbar-brand" href="{% url 'usuarios:menu_profesor' %}">Apprende</a>
+                {% elif user.perfil.rol == 'apoderado' %}
+                    <a class="navbar-brand" href="{% url 'usuarios:menu_apoderado' %}">Apprende</a>
+                {% elif user.perfil.rol == 'alumno' %}
+                    <a class="navbar-brand" href="{% url 'usuarios:menu_alumno' %}">Apprende</a>
+                {% endif %}
+            {% else %}
+                <a class="navbar-brand" href="{% url 'usuarios:login' %}">Apprende</a>
+            {% endif %}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContenido" aria-controls="navbarContenido" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -48,7 +60,7 @@
                             <a class="nav-link" href="{% url 'usuarios:menu_apoderado' %}">Menu Apoderado</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Aviso proximamente</a>
+                            <a class="nav-link" href="{% url 'aviso:lista_avisos' %}">Avisos</a>
                         </li>
                         {% elif user.perfil.rol == 'alumno' %}
                         <li class="nav-item">

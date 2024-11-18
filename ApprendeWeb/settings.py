@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'evaluacion',
     'calificacion',
     'jefatura',
+    'avisos',
 ]
 
 MIDDLEWARE = [

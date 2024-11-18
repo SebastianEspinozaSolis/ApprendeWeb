@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-{% load form_tags %}
-
 {% block title %}Editar Jefatura{% endblock %}
 
 {% block content %}
@@ -18,13 +16,13 @@
         <div class="form-group">
             <label for="id_curso">Curso:</label>
             {{ form.curso.errors }}
-            {{ form.curso|add_class:"form-control" }}
+            {{ form.curso }}
         </div>
         
         <div class="form-group">
             <label for="id_profesor">Profesor:</label>
             {{ form.profesor.errors }}
-            {{ form.profesor|add_class:"form-control" }}
+            {{ form.profesor }}
         </div>
         
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>

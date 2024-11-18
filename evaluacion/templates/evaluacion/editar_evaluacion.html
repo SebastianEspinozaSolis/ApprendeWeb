@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-{% load form_tags %}
-
 {% block title %}Editar Evaluación{% endblock %}
 
 {% block content %}
@@ -13,22 +11,22 @@
         <div class="form-group">
             <label for="id_titulo">Nombre:</label>
             {{ form.nombre.errors }}
-            {{ form.nombre|add_class:"form-control" }}
+            {{ form.nombre }}
         </div>
         <div class="form-group">
             <label for="id_curso">Descripción:</label>
             {{ form.descripcion.errors }}
-            {{ form.descripcion|add_class:"form-control" }}
+            {{ form.descripcion }}
         </div>
         <div class="form-group">
             <label for="id_fecha">Fecha:</label>
             {{ form.fecha.errors }}
-            {{ form.fecha|add_class:"form-control" }}
+            {{ form.fecha }}
         </div>
         <div class="form-group">
             <label for="id_asignatura">Asignatura:</label>
             {{ form.asignatura.errors }}
-            {{ form.asignatura|add_class:"form-control" }}
+            {{ form.asignatura }}
         </div>
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
     </form>

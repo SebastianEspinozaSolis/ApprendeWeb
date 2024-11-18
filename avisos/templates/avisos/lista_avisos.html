@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Avisos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Lista de Avisos</h2>
+    {% if request.user.is_authenticated %}
+        {% if request.user.perfil.rol == 'administrador' %}
+            <a href="{% url 'avisos:seleccionar_curso' %}" class="btn btn-success mb-3">Crear Aviso</a>
+        {% endif %}
+    {% endif %}
+
+    {% for aviso in avisos %}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title">{{ aviso.titulo }}</h5>
+                <small class="text-muted">Creado por: {{ aviso.creador.nombre }} ({{ aviso.creador.rol }})</small>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ aviso.descripcion|truncatechars:150 }}</p>
+                <p class="card-text"><strong>Fecha de creación:</strong> {{ aviso.fecha_creacion }}</p>
+                
+                <!-- Mostrar el curso al que se ha enviado el aviso -->
+                {% if aviso.curso %}
+                    <p class="card-text"><strong>Curso:</strong> {{ aviso.curso.nombre }}</p>
+                {% else %}
+                    <p class="card-text"><strong>Curso:</strong> No asignado</p>
+                {% endif %}
+                
+                <a href="{% url 'avisos:detalle_aviso' aviso.pk %}" class="btn btn-primary">Ver detalles</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No hay avisos disponibles.</p>
+    {% endfor %}
+</div>
+{% endblock %}

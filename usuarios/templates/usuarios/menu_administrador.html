@@ -38,6 +38,16 @@
             </div>
         </div>
     </div>
-    <p class="text-center">Próximamente avisos</p>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h5 class="card-title">Gestionar Avisos</h5>
+                <p class="card-text">Administra los avisos de los diferentes cursos y profesores.</p>
+                <a href="{% url 'avisos:lista_avisos' %}" class="btn btn-warning">Ver Avisos</a>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
