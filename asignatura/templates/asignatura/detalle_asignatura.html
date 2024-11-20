@@ -11,6 +11,14 @@
             <p><strong>Profesor:</strong> {{ asignatura.profesor.perfil.nombre }}</p>
             <p><strong>Correo del Profesor:</strong> {{ asignatura.profesor.perfil.user.email }}</p>
             <hr>
+            
+            <h5>Asistencias</h5>
+            
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' %}
+            <a href="{% url 'asistencia:lista_fechas_asistencia' asignatura.id=asignatura.id %}" class="btn btn-primary">Ver Asistencias</a>
+            {% elif request.user.is_authenticated and request.user.perfil.rol == 'apoderado' %}
+            <a href="{% url 'asistencia:detalle_asistencia' asignatura.id=asignatura.id alumno_id=alumno.id %}" class="btn btn-primary">Ver detalles de asistencia</a>
+            {% endif %}
 
             <h5>Evaluaciones</h5>
             {% if evaluaciones %}

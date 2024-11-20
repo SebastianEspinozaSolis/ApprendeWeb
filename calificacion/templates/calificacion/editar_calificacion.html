@@ -9,7 +9,7 @@
         <div class="card-body">
             <form method="post">
                 {% csrf_token %}
-                {{ form.as_p|add_class:"form-control" }}
+                {{ form.as_p }}
                 <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 <a href="{% url 'evaluacion:detalle_evaluacion' calificacion.evaluacion.pk %}" class="btn btn-secondary">Cancelar</a>
             </form>
