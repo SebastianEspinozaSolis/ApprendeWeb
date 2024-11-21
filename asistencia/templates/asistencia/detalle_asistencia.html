@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Detalle de Asistencia de {{ alumno.nombre }} en la asignatura: {{ asignatura.nombre }}</h2>
+
+  <p><strong>Porcentaje de Asistencia:</strong> {{ porcentaje_asistencia|floatformat:2 }}%</p>
+
+  <h3>Detalles de Asistencia:</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Asistencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for asistencia in asistencias %}
+        <tr>
+          <td>{{ asistencia.fecha }}</td>
+          <td>{% if asistencia.asistio %}Presente{% else %}Ausente{% endif %}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}

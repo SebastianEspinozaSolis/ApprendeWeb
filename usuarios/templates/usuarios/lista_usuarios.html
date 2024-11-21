@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Lista de Usuarios{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Lista de Usuarios</h2>
+<div class="container-fluid mt-4">
+    <h2 class="text-center mb-4">Lista de Usuarios</h2>
     
-    <form method="GET" action="{% url 'usuarios:lista_usuarios' %}">
+    <form method="GET" action="{% url 'usuarios:lista_usuarios' %}" class="mb-4">
         <label for="rol">Filtrar por rol:</label>
-        <select name="rol" id="rol" onchange="this.form.submit()">
+        <select name="rol" id="rol" onchange="this.form.submit()" class="form-control d-inline-block w-auto">
             <option value="">Todos</option>
             <option value="administrador" {% if request.GET.rol == 'administrador' %}selected{% endif %}>Administrador</option>
             <option value="profesor" {% if request.GET.rol == 'profesor' %}selected{% endif %}>Profesor</option>
@@ -19,11 +20,16 @@
         <a href="{% url 'usuarios:registro' %}" class="btn btn-success">Crear Nuevo Usuario</a>
     </form>
     
-    <div class="row mt-4">
+    <div class="row">
         {% for usuario in usuarios %}
         <div class="col-md-4 mb-3">
-            <div class="card">
-                <div class="card-body">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    {% if usuario.foto %}
+                        <img src="{{ usuario.foto.url }}" alt="Foto de {{ usuario.nombre }}" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
+                    {% else %}
+                        <img src="{% static 'path/to/default/image.png' %}" alt="Foto de perfil por defecto" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
+                    {% endif %}
                     <h5 class="card-title">{{ usuario.user.username }}</h5>
                     <p class="card-text">
                         <strong>Rol:</strong> {{ usuario.rol }}<br>

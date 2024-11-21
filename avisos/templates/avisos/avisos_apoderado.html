@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Avisos para Apoderado{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Avisos de los Alumnos a tu Cargo</h2>
+
+    {% if avisos_por_alumno %}
+        {% for alumno, avisos in avisos_por_alumno.items %}
+            <h3>{{ alumno.perfil.nombre }} - Curso: {{ alumno.curso.nombre }}</h3>
+            {% if avisos %}
+                <ul class="list-group mb-4">
+                    {% for aviso_alumno in avisos %}
+                        <li class="list-group-item">
+                            <h5>{{ aviso_alumno.aviso.titulo }}</h5>
+                            <p>{{ aviso_alumno.aviso.descripcion }}</p>
+                            <small>Fecha: {{ aviso_alumno.aviso.fecha_creacion }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay avisos para este alumno.</p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>No tienes alumnos asignados con avisos.</p>
+    {% endif %}
+</div>
+{% endblock %}

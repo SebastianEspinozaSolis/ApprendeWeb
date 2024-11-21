@@ -4,8 +4,10 @@ from .forms import CalificacionForm, EditarCalificacionForm
 from django.contrib.auth.decorators import login_required
 from evaluacion.models import Evaluacion
 from usuarios.models import Alumno
+from usuarios.decorators import profesor_admin_required
 
 @login_required
+@profesor_admin_required
 def crear_calificacion(request):
     evaluacion = None
     evaluacion_id = request.GET.get('evaluacion_id')  # Obtener el ID de la evaluación desde los parámetros GET
@@ -33,6 +35,7 @@ def crear_calificacion(request):
     else:
         return redirect('evaluacion:detalle_evaluacion', pk=evaluacion_id)
 @login_required
+@profesor_admin_required
 def editar_calificacion(request, pk):
     calificacion = get_object_or_404(Calificacion, pk=pk)
     if request.method == 'POST':

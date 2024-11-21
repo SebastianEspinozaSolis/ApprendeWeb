@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Editar Asistencia - {{ asignatura.nombre }}</h2>
+    <h4>Fecha: {{ fecha }}</h4>
+
+    <form method="post" class="mb-4">
+        {% csrf_token %}
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Rut</th>
+                            <th>Asistencia</th>
+                            <th>Justificación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for alumno_form in formset %}
+                            {{ alumno_form.id }}
+                            <tr>
+                                <td>{{ alumno_form.instance.alumno.perfil.nombre }}</td>
+                                <td>{{ alumno_form.instance.alumno.perfil.apellido }}</td>
+                                <td>{{ alumno_form.instance.alumno.perfil.rut }}</td>
+                                <td>
+                                    <div class="form-check">
+                                        {{ alumno_form.asistio }}
+                                    </div>
+                                </td>
+                                <td>
+                                    {{ alumno_form.justificacion }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {{ formset.management_form }}
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            <a href="{% url 'asistencia:lista_fechas_asistencia' asignatura.id %}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -7,10 +7,18 @@
     <div class="card">
         <div class="card-body">
             <h2 class="card-title">{{ asignatura.nombre }}</h2>
-            <p>Curso: {{ asignatura.curso.nombre }}</p>
-            <p>Profesor: {{ asignatura.profesor.perfil.nombre }}</p>
-            <p>Correo del Profesor: {{ asignatura.profesor.perfil.user.email }}</p>
+            <p><strong>Curso:</strong> {{ asignatura.curso.nombre }}</p>
+            <p><strong>Profesor:</strong> {{ asignatura.profesor.perfil.nombre }}</p>
+            <p><strong>Correo del Profesor:</strong> {{ asignatura.profesor.perfil.user.email }}</p>
             <hr>
+            
+            <h5>Asistencias</h5>
+            
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
+            <a href="{% url 'asistencia:lista_fechas_asistencia' asignatura.id %}" class="btn btn-primary">Ver Asistencias</a>
+            {% elif request.user.is_authenticated and request.user.perfil.rol == 'apoderado' %}
+            <a href="{% url 'asistencia:detalle_asistencia' asignatura.id alumno.id %}" class="btn btn-primary">Ver detalles de asistencia</a>
+            {% endif %}
 
             <h5>Evaluaciones</h5>
             {% if evaluaciones %}
@@ -18,8 +26,8 @@
                     {% for evaluacion in evaluaciones %}
                         <li class="list-group-item">
                             <h5>{{ evaluacion.nombre }}</h5>
-                            <p>Descripción: {{ evaluacion.descripcion }}</p>
-                            <p>Fecha: {{ evaluacion.fecha }}</p>
+                            <p><strong>Descripción:</strong> {{ evaluacion.descripcion }}</p>
+                            <p><strong>Fecha:</strong> {{ evaluacion.fecha }}</p>
                             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' or request.user.perfil.rol == 'profesor' %}
                             <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary">Ver Detalles</a>
                             {% endif %}

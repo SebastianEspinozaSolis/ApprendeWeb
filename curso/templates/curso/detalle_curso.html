@@ -8,12 +8,12 @@
         <div class="card-body">
             <h2 class="card-title">{{ curso.nombre }}</h2>
             <hr>
-            <p class="card-text">Sala: {{ curso.sala }}</p>
+            <p class="card-text"><strong>Sala:</strong> {{ curso.sala }}</p>
             <hr>
             {% if jefatura %}
                 <h5>Jefatura</h5>
-                <p>Profesor: {{ jefatura.profesor.perfil.nombre }}</p>
-                <p>Correo del profesor: {{ jefatura.profesor.perfil.user.email }}</p>
+                <p><strong>Profesor:</strong> {{ jefatura.profesor.perfil.nombre }}</p>
+                <p><strong>Correo del profesor:</strong> {{ jefatura.profesor.perfil.user.email }}</p>
                 {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
                     <a href="{% url 'jefatura:editar_jefatura' jefatura.pk %}" class="btn btn-secondary">Editar</a>
                 {% endif %}
@@ -39,16 +39,15 @@
             {% endif %}
             <hr>
 
-            <!-- Sección para mostrar evaluaciones cercanas -->
             <h5>Evaluaciones Cercanas</h5>
             {% if evaluaciones %}
                 <ul class="list-group">
                     {% for evaluacion in evaluaciones %}
                         <li class="list-group-item">
                             <h6>{{ evaluacion.nombre }}</h6>
-                            <p>Descripción: {{ evaluacion.descripcion }}</p>
-                            <p>Fecha: {{ evaluacion.fecha }}</p>
-                            <p>Asignatura: {{ evaluacion.asignatura.nombre }}</p>
+                            <p><strong>Descripción:</strong> {{ evaluacion.descripcion }}</p>
+                            <p><strong>Fecha:</strong> {{ evaluacion.fecha }}</p>
+                            <p><strong>Asignatura:</strong> {{ evaluacion.asignatura.nombre }}</p>
                             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' or request.user.perfil.rol == 'profesor' %}
                             <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary">Ver Detalles</a>
                             {% endif %}
@@ -65,8 +64,8 @@
                     {% for profesor in profesores %}
                         <li class="list-group-item">
                             <h6>{{ profesor.perfil.nombre }}</h6>
-                            <p>Correo: {{ profesor.perfil.user.email }}</p>
-                            <p>Especialidad: {{ profesor.especialidad }}</p>
+                            <p><strong>Correo:</strong> {{ profesor.perfil.user.email }}</p>
+                            <p><strong>Especialidad:</strong> {{ profesor.especialidad }}</p>
                         </li>
                     {% endfor %}
                 </ul>
@@ -80,19 +79,17 @@
             {% endif %}
 
             {% if request.user.perfil.rol == 'profesor' %}
-            <!-- Lista de alumnos con datos de apoderado -->
             <h4>Apoderado</h4>
             {% if alumnos %}
             <ul class="list-group">
                 {% for alumno in alumnos %}
                 <li class="list-group-item">
                     <h5>{{ alumno.perfil.nombre }}</h5>
-                    <!-- Datos del apoderado -->
                     {% if alumno.apoderado %}
                         <h6>Apoderado</h6>
-                        <p>Nombre: {{ alumno.apoderado.perfil.nombre }}</p>
-                        <p>Correo: {{ alumno.apoderado.perfil.user.email }}</p>
-                        <p>Teléfono: {{ alumno.apoderado.telefono }}</p>
+                        <p><strong>Nombre:</strong> {{ alumno.apoderado.perfil.nombre }}</p>
+                        <p><strong>Correo:</strong> {{ alumno.apoderado.perfil.user.email }}</p>
+                        <p><strong>Teléfono:</strong> {{ alumno.apoderado.telefono }}</p>
                     {% else %}
                         <p>No tiene apoderado asignado.</p>
                     {% endif %}

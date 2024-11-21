@@ -4,18 +4,19 @@ from .models import Perfil, Apoderado,Administrador,Alumno,Profesor
 from curso.models import Curso
 
 class RegistroForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, label='Contraseña')
-    password_confirmacion = forms.CharField(widget=forms.PasswordInput, label='Confirmar Contraseña')
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su contraseña'}), label='Contraseña')
+    password_confirmacion = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirme su contraseña'}), label='Confirmar Contraseña')
     
     # Campos para el perfil
-    nombre = forms.CharField(max_length=100, required=True, label='Nombre')
-    rut = forms.CharField(max_length=12, required=True, label='RUT')
-    fecha_nacimiento = forms.DateField(required=True, label='Fecha de Nacimiento', widget=forms.widgets.DateInput(attrs={'type': 'date'}))
-    sexo = forms.ChoiceField(choices=[('M', 'Masculino'), ('F', 'Femenino')], required=True, label='Sexo')
-    rol = forms.ChoiceField(choices=Perfil.ROLES, label='Rol')
+    nombre = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su nombre'}), label='Nombre')
+    rut = forms.CharField(max_length=12, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su RUT'}), label='RUT')
+    fecha_nacimiento = forms.DateField(required=True, label='Fecha de Nacimiento', widget=forms.widgets.DateInput(attrs={'type': 'date', 'class': 'form-control'}))
+    sexo = forms.ChoiceField(choices=[('M', 'Masculino'), ('F', 'Femenino')], required=True, label='Sexo', widget=forms.Select(attrs={'class': 'form-control'}))
+    rol = forms.ChoiceField(choices=Perfil.ROLES, label='Rol', widget=forms.Select(attrs={'class': 'form-control'}))
+    foto = forms.ImageField(required=False, label='Foto de Perfil', widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'password_confirmacion']  # Campos del modelo User
+        fields = ['username', 'email', 'password', 'password_confirmacion', 'foto']  # Campos del modelo User
 
     def clean_password_confirmacion(self):
         password = self.cleaned_data.get('password')
@@ -57,3 +58,8 @@ class EditarForm(forms.ModelForm):
     class Meta:
         model = Perfil
         fields = ['nombre','rut','fecha_nacimiento','sexo','rol','segundo_rol']
+
+class EditarPerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['nombre', 'rut', 'fecha_nacimiento', 'sexo', 'foto']  # Asegúrate de incluir 'foto'

@@ -6,10 +6,21 @@ from asignatura.models import Asignatura
 from evaluacion.models import Evaluacion
 from usuarios.models import Profesor, Alumno, Apoderado
 from jefatura.models import Jefatura
+from django.contrib.auth.decorators import user_passes_test
+
+def profesor_admin_required(function):
+    def wrapper(request, *args, **kwargs):
+        if request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador':
+            return function(request, *args, **kwargs)
+        else:
+            return redirect('curso:lista_cursos')
+    return wrapper
+
 @login_required
 def lista_cursos(request):
     cursos = Curso.objects.all().order_by('-nombre')
     return render(request, 'curso/lista_cursos.html', {'cursos': cursos})
+
 @login_required
 def detalle_curso(request, pk):
     curso = get_object_or_404(Curso, pk=pk)
@@ -58,3 +69,15 @@ def editar_curso(request, pk):
         return render(request, 'curso/editar_curso.html', {'form': form})
     else:
         return redirect('curso:lista_cursos')
+
+@profesor_admin_required
+def ver_curso(request, pk):
+    curso = get_object_or_404(Curso, pk=pk)
+    return render(request, 'curso/ver_curso.html', {'curso': curso})
+    
+    
+@profesor_admin_required
+def gestionar_curso(request, pk):
+    curso = get_object_or_404(Curso, pk=pk)
+    return render(request, 'curso/gestionar_curso.html', {'curso': curso})
+        

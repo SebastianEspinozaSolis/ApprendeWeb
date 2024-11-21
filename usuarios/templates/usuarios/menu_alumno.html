@@ -4,13 +4,14 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Bienvenido, {{ usuario.perfil.nombre }} (Alumno)</h2>
+    <h2 class="mb-4 text-center">Bienvenido, {{ usuario.perfil.nombre }} (Alumno)</h2>
 
-    {% if alumno %}
-        <!-- Enlace para ver detalles del propio alumno -->
-        <a href="{% url 'usuarios:detalle_alumno' alumno.id %}" class="btn btn-info">Ver mis detalles</a>
-    {% else %}
-        <p>No se ha encontrado un alumno asociado a este usuario.</p>
-    {% endif %}
+    <div class="text-center mb-4">
+        {% if alumno %}
+            <a href="{% url 'usuarios:detalle_alumno' alumno.id %}" class="btn btn-info btn-lg">Ver mis detalles</a>
+        {% else %}
+            <p>No se ha encontrado un alumno asociado a este usuario.</p>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

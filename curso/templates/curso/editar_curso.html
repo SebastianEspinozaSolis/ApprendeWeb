@@ -4,21 +4,25 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Editar Curso</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
-        <div class="form-group">
-            <label for="id_titulo">Nombre:</label>
-            {{ form.nombre.errors }}
-            {{ form.nombre }}
+    <h2 class="mb-4">Editar Curso</h2>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="form-group">
+                    <label for="id_titulo">Nombre:</label>
+                    {{ form.nombre.errors }}
+                    {{ form.nombre }}
+                </div>
+                <div class="form-group">
+                    <label for="id_contenido">Sala:</label>
+                    {{ form.sala.errors }}
+                    {{ form.sala }}
+                </div>
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="id_contenido">Sala:</label>
-            {{ form.sala.errors }}
-            {{ form.sala }}
-        </div>
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-    </form>
+    </div>
 </div>
 {% endblock %}
