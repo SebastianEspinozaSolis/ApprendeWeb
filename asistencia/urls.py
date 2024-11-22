@@ -10,5 +10,4 @@ urlpatterns = [
     path('detalle/<int:asignatura_id>/<int:alumno_id>/', views.detalle_asistencia, name='detalle_asistencia'),
     path('actualizar/<int:asistencia_id>/', views.actualizar_asistencia, name='actualizar_asistencia'),
     path('lista_cursos/', views.lista_cursos, name='lista_cursos'),
-    path('ver_asistencia/<int:pk>/', views.ver_asistencia, name='ver_asistencia'),
 ]

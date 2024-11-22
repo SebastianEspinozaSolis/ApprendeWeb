@@ -4,9 +4,9 @@
 <div class="container mt-4">
   <h2>Asistencia de la asignatura: {{ asignatura.nombre }}</h2>
 
-  <!-- Gráfica circular de asistencia -->
-  <div class="row mb-4">
-    <div class="col-md-6">
+  <div class="row">
+    <!-- Columna izquierda: Gráfica circular -->
+    <div class="col-md-4">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Porcentaje de Asistencia</h5>
@@ -14,74 +14,77 @@
         </div>
       </div>
     </div>
+
+    <!-- Columna derecha: Tabla de asistencia -->
+    <div class="col-md-8">
+      <!-- Formulario de Filtro por Fecha -->
+      <form method="get" action="{% url 'asistencia:lista_fechas_asistencia' asignatura.id %}" class="mb-3">
+        <label for="fecha">Filtrar por Fecha:</label>
+        <input type="date" id="fecha" name="fecha" value="{{ fecha_filtro }}">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+      </form>
+
+      {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
+        <a href="{% url 'asistencia:crear_asistencia' asignatura.id %}" class="btn btn-success mb-3">Registrar Asistencia</a>
+      {% endif %}
+
+      {% if asistencias_por_fecha %}
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Rut</th>
+                    <th>Estado</th>
+                    <th>Justificación</th>
+                    {% if request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
+                    <th>Acciones</th>
+                    {% endif %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for fecha, asistencias in asistencias_por_fecha.items %}
+                    {% for asistencia in asistencias %}
+                      <tr>
+                        <td>{{ fecha|date:"d/m/Y" }}</td>
+                        <td>{{ asistencia.alumno.perfil.nombre }}</td>
+                        <td>{{ asistencia.alumno.perfil.apellido }}</td>
+                        <td>{{ asistencia.alumno.perfil.rut }}</td>
+                        <td>
+                          <span class="badge {% if asistencia.asistio %}bg-success{% else %}bg-danger{% endif %}">
+                            {% if asistencia.asistio %}Presente{% else %}Ausente{% endif %}
+                          </span>
+                        </td>
+                        <td>{{ asistencia.justificacion|default:"-" }}</td>
+                        {% if request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
+                        <td>
+                          <form method="post" action="{% url 'asistencia:actualizar_asistencia' asistencia.pk %}" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="asistio" value="{% if asistencia.asistio %}false{% else %}true{% endif %}">
+                            <button type="submit" class="btn btn-sm {% if asistencia.asistio %}btn-danger{% else %}btn-success{% endif %}">
+                              {% if asistencia.asistio %}Marcar Ausente{% else %}Marcar Presente{% endif %}
+                            </button>
+                          </form>
+                          <a href="{% url 'asistencia:editar_asistencia' asistencia.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                        </td>
+                        {% endif %}
+                      </tr>
+                    {% endfor %}
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <p>No se han registrado asistencias para esta asignatura.</p>
+      {% endif %}
+    </div>
   </div>
-
-  <!-- Formulario de Filtro por Fecha -->
-  <form method="get" action="{% url 'asistencia:lista_fechas_asistencia' asignatura.id %}" class="mb-3">
-    <label for="fecha">Filtrar por Fecha:</label>
-    <input type="date" id="fecha" name="fecha" value="{{ fecha_filtro }}">
-    <button type="submit" class="btn btn-primary">Filtrar</button>
-  </form>
-
-  {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
-    <a href="{% url 'asistencia:crear_asistencia' asignatura.id %}" class="btn btn-success mb-3">Registrar Asistencia</a>
-  {% endif %}
-
-  {% if asistencias_por_fecha %}
-    {% for fecha, asistencias in asistencias_por_fecha.items %}
-      <div class="card mb-3">
-        <div class="card-header">
-          <h4 class="card-title">Fecha: {{ fecha }}</h4>
-        </div>
-        <div class="card-body">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Rut</th>
-                <th>Estado</th>
-                <th>Justificación</th>
-                {% if request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
-                <th>Acciones</th>
-                {% endif %}
-              </tr>
-            </thead>
-            <tbody>
-              {% for asistencia in asistencias %}
-                <tr>
-                  <td>{{ asistencia.alumno.perfil.nombre }}</td>
-                  <td>{{ asistencia.alumno.perfil.apellido }}</td>
-                  <td>{{ asistencia.alumno.perfil.rut }}</td>
-                  <td>
-                    <span class="badge {% if asistencia.asistio %}bg-success{% else %}bg-danger{% endif %}">
-                      {% if asistencia.asistio %}Presente{% else %}Ausente{% endif %}
-                    </span>
-                  </td>
-                  <td>{{ asistencia.justificacion }}</td>
-
-                  {% if request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
-                  <td>
-                    <form method="post" action="{% url 'asistencia:actualizar_asistencia' asistencia.pk %}" class="d-inline">
-                      {% csrf_token %}
-                      <input type="hidden" name="asistio" value="{% if asistencia.asistio %}false{% else %}true{% endif %}">
-                      <button type="submit" class="btn btn-sm {% if asistencia.asistio %}btn-danger{% else %}btn-success{% endif %}">
-                        {% if asistencia.asistio %}Marcar Ausente{% else %}Marcar Presente{% endif %}
-                      </button>
-                    </form>
-                    <a href="{% url 'asistencia:editar_asistencia' asistencia.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                  </td>
-                  {% endif %}
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    {% endfor %}
-  {% else %}
-    <p>No se han registrado asistencias para esta asignatura.</p>
-  {% endif %}
 </div>
 
 <!-- Script para la gráfica circular -->
@@ -93,10 +96,10 @@ document.addEventListener('DOMContentLoaded', function() {
         data: {
             labels: ['Presentes', 'Ausentes'],
             datasets: [{
-                data: [{{ porcentaje_presentes }}, {{ porcentaje_ausentes }}],
+                data: [{{ total_presentes }}, {{ total_ausentes }}],
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.8)',
-                    'rgba(255, 99, 132, 0.8)'
+                    'rgba(75, 192, 192, 0.8)',  // Verde para presentes
+                    'rgba(255, 99, 132, 0.8)'   // Rojo para ausentes
                 ],
                 borderColor: [
                     'rgba(75, 192, 192, 1)',
@@ -113,7 +116,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 title: {
                     display: true,
-                    text: 'Porcentaje de Asistencia'
+                    text: 'Asistencia'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = {{ total_presentes }} + {{ total_ausentes }};
+                            const porcentaje = ((context.raw / total) * 100).toFixed(1);
+                            return `${context.label}: ${context.raw} (${porcentaje}%)`;
+                        }
+                    }
                 }
             }
         }

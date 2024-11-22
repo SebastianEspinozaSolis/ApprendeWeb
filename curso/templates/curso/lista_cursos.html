@@ -9,10 +9,6 @@
         {% if request.user.perfil.rol == 'administrador' %}
             <a href="{% url 'curso:crear_curso' %}" class="btn btn-success mb-3">Crear Curso</a>
         {% endif %}
-        {% if request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
-            <a href="{% url 'ver_asistencia' curso.id %}" class="btn btn-primary">Ver Asistencia</a>
-        {% endif %}
-
     {% endif %}
     <div class="row">
         {% for curso in cursos %}
@@ -22,6 +18,9 @@
                         <h5 class="card-title">{{ curso.nombre }}</h5>
                         <p class="card-text">{{ curso.sala|truncatechars:100 }}</p>
                         <a href="{% url 'curso:detalle_curso' curso.pk %}" class="btn btn-primary">Ver Detalles</a>
+                        {% if request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
+                            <a href="{% url 'asistencia:lista_fechas_asistencia' curso.id %}" class="btn btn-primary mt-2">Ver Asistencia</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -92,19 +92,20 @@ def lista_fechas_asistencia(request, asignatura_id):
     asignatura = get_object_or_404(Asignatura, id=asignatura_id)
     fecha_filtro = request.GET.get('fecha')
     
-    # Obtener asistencias con datos relacionados
-    asistencias = Asistencia.objects.filter(asignatura_id=asignatura_id)\
-        .select_related('alumno')
-    
+    # Obtener asistencias
+    asistencias = Asistencia.objects.filter(asignatura_id=asignatura_id)
     if fecha_filtro:
         asistencias = asistencias.filter(fecha=fecha_filtro)
     
-    # Calcular estadísticas
-    total_asistencias = asistencias.count()
-    if total_asistencias > 0:
-        presentes = asistencias.filter(asistio=True).count()
-        porcentaje_presentes = (presentes / total_asistencias) * 100
-        porcentaje_ausentes = 100 - porcentaje_presentes
+    # Contar presentes y ausentes (sin duplicar por fecha)
+    total_presentes = asistencias.filter(asistio=True).count()
+    total_ausentes = asistencias.filter(asistio=False).count()
+    total = total_presentes + total_ausentes
+    
+    # Calcular porcentajes
+    if total > 0:
+        porcentaje_presentes = (total_presentes / total) * 100
+        porcentaje_ausentes = (total_ausentes / total) * 100
     else:
         porcentaje_presentes = 0
         porcentaje_ausentes = 0
@@ -123,6 +124,8 @@ def lista_fechas_asistencia(request, asignatura_id):
         'fecha_filtro': fecha_filtro,
         'porcentaje_presentes': porcentaje_presentes,
         'porcentaje_ausentes': porcentaje_ausentes,
+        'total_presentes': total_presentes,
+        'total_ausentes': total_ausentes
     }
     
     return render(request, 'asistencia/lista_fechas_asistencia.html', context)
@@ -130,11 +133,18 @@ def lista_fechas_asistencia(request, asignatura_id):
 @login_required
 @profesor_admin_required
 def actualizar_asistencia(request, asistencia_id):
-    if request.method == 'POST' and request.user.perfil.rol == 'profesor':
-        asistencia = get_object_or_404(Asistencia, pk=asistencia_id)
-        asistencia.asistio = request.POST.get('asistio') == 'true'
+    asistencia = get_object_or_404(Asistencia, pk=asistencia_id)
+    
+    if request.method == 'POST':
+        asistio = request.POST.get('asistio') == 'true'
+        asistencia.asistio = asistio
         asistencia.save()
+        
+        # Obtener la URL de retorno
         return redirect('asistencia:lista_fechas_asistencia', asignatura_id=asistencia.asignatura.id)
+    
+    # Si no es POST, redirigir a la lista de asistencias
+    return redirect('asistencia:lista_fechas_asistencia', asignatura_id=asistencia.asignatura.id)
 
 @login_required
 @profesor_admin_required
@@ -161,19 +171,6 @@ def detalle_asistencia(request, asignatura_id, alumno_id):
         'asistencias': asistencias,
         'porcentaje_asistencia': porcentaje_asistencia,
     })
-
-@login_required
-def ver_asistencia(request, pk):
-    if request.user.perfil.rol in ['profesor', 'administrador']:
-        curso = get_object_or_404(Curso, pk=pk)
-        asistencias = Asistencia.objects.filter(curso=curso)
-        
-        return render(request, 'asistencia/ver_asistencia.html', {
-            'curso': curso,
-            'asistencias': asistencias,
-        })
-    else:
-        return redirect('home')
 
 @login_required
 def lista_cursos(request):  # o el nombre de tu vista actual

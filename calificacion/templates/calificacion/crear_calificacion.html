@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
-{% block title %}Crear Calificaciones{% endblock %}
+{% block title %}Agregar Notas{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Crear Calificaciones para Evaluación: {{ evaluacion.nombre }}</h2>
+    <h2 class="mb-4">Agregar Notas para Evaluación: {{ evaluacion.nombre }}</h2>
     <div class="card shadow-sm">
         <div class="card-body">
             <form method="post">
@@ -13,7 +13,7 @@
                     <thead>
                         <tr>
                             <th>Alumno</th>
-                            <th>Calificación</th>
+                            <th>Nota</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -31,7 +31,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <button type="submit" class="btn btn-primary">Guardar Calificaciones</button>
+                <button type="submit" class="btn btn-primary">Guardar Notas</button>
             </form>
         </div>
     </div>
