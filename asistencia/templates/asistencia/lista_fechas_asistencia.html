@@ -3,20 +3,18 @@
 {% block content %}
 <div class="container mt-4">
   <h2>Asistencia de la asignatura: {{ asignatura.nombre }}</h2>
+  {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
+    <a href="{% url 'asistencia:crear_asistencia' asignatura_id=asignatura.id %}" class="btn btn-success mb-3">Agregar Asistencia</a>
+  {% endif %}
+
   <h3>Fechas de asistencia registradas</h3>
-  
+  {% if asistencias_por_fecha %}
   <!-- Formulario de Filtro por Fecha -->
   <form method="get" action="{% url 'asistencia:lista_fechas_asistencia' asignatura_id=asignatura.id %}" class="mb-3">
     <label for="fecha">Filtrar por Fecha:</label>
     <input type="date" id="fecha" name="fecha" value="{{ fecha_filtro }}">
     <button type="submit" class="btn btn-primary">Filtrar</button>
   </form>
-
-  {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
-    <a href="{% url 'asistencia:crear_asistencia' asignatura_id=asignatura.id %}" class="btn btn-success mb-3">Agregar Asistencia</a>
-  {% endif %}
-
-  {% if asistencias_por_fecha %}
     {% for fecha, asistencias in asistencias_por_fecha.items %}
       <div class="card mb-3">
         <div class="card-header">

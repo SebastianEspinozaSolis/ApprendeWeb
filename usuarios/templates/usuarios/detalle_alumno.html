@@ -11,6 +11,8 @@
 
     <a href="{% url 'curso:detalle_curso' alumno.curso.id %}" class="btn btn-secondary mt-2">Ver detalles del curso</a>
 
+    <a href="{% url 'asistencia:menu_asignaturas_apoderado' alumno.id %}" class="btn btn-primary mt-4">Ver asistencia</a>
+
     <h3 class="mt-4">Calificaciones</h3>
     {% if calificaciones %}
         <table class="table table-striped">

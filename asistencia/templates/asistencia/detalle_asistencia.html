@@ -1,13 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container mt-4">
   <h2>Detalle de Asistencia de {{ alumno.nombre }} en la asignatura: {{ asignatura.nombre }}</h2>
 
-  <p><strong>Porcentaje de Asistencia:</strong> {{ porcentaje_asistencia|floatformat:2 }}%</p>
+  <div class="mb-4">
+    <p><strong>Porcentaje de Asistencia:</strong> {{ porcentaje_asistencia|floatformat:2 }}%</p>
+  </div>
 
   <h3>Detalles de Asistencia:</h3>
-  <table>
-    <thead>
+  <table class="table table-bordered table-striped">
+    <thead class="thead-dark">
       <tr>
         <th>Fecha</th>
         <th>Asistencia</th>
@@ -17,10 +20,11 @@
       {% for asistencia in asistencias %}
         <tr>
           <td>{{ asistencia.fecha }}</td>
-          <td>{% if asistencia.asistio %}Presente{% else %}Ausente{% endif %}</td>
+          <td>{% if asistencia.asistio %}<span class="badge badge-success">Presente</span>{% else %}<span class="badge badge-danger">Ausente</span>{% endif %}</td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
 
+</div>
 {% endblock %}

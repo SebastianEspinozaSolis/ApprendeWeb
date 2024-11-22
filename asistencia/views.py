@@ -4,6 +4,7 @@ from .forms import AsistenciaForm, EditarAsistenciaForm
 from django.contrib.auth.decorators import login_required
 from asignatura.models import Asignatura
 from usuarios.models import Alumno
+from django.db.models import Count, Q
 
 @login_required
 def crear_asistencia(request, asignatura_id):  # Recibe asignatura_id desde la URL
@@ -50,7 +51,7 @@ def editar_asistencia(request, pk):
         if form.is_valid():
             form.save()
             # Redirigir a la vista de detalles de la asignatura después de guardar
-            return redirect('asignatura:detalle_asignatura', pk=asistencia.asignatura.pk)
+            return redirect('asistencia:lista_fechas_asistencia', pk=asistencia.pk)
     else:
         form = EditarAsistenciaForm(instance=asistencia)
     
@@ -91,7 +92,7 @@ def detalle_asistencia(request, asignatura_id, alumno_id):
     asignatura = get_object_or_404(Asignatura, pk=asignatura_id)
     alumno = get_object_or_404(Alumno, pk=alumno_id)
     
-    # Obtener todas las asistencias del alumno en la asignatura
+    # Filtrar las asistencias para ese alumno en esa asignatura específica
     asistencias = Asistencia.objects.filter(alumno=alumno, asignatura=asignatura)
     
     # Contar el total de clases y las veces que asistió
@@ -109,4 +110,32 @@ def detalle_asistencia(request, asignatura_id, alumno_id):
         'alumno': alumno,
         'asistencias': asistencias,
         'porcentaje_asistencia': porcentaje_asistencia,
+    })
+@login_required
+def menu_asignaturas_apoderado(request, alumno_id):
+    alumno = get_object_or_404(Alumno, pk=alumno_id)
+    asignaturas = Asignatura.objects.filter(curso=alumno.curso)
+
+    data_asistencias = asignaturas.annotate(
+        total_clases=Count('asistencia', filter=Q(asistencia__alumno=alumno)),
+        clases_asistidas=Count('asistencia', filter=Q(asistencia__alumno=alumno, asistencia__asistio=True))
+    ).values('id', 'nombre', 'total_clases', 'clases_asistidas')
+
+    # Crear una lista de datos con el nombre y porcentaje de asistencia
+    asignaturas_con_datos = []
+    for asignatura in data_asistencias:
+        total = asignatura['total_clases']
+        asistidas = asignatura['clases_asistidas']
+        porcentaje_asistencia = (asistidas / total) * 100 if total > 0 else 0
+
+        # Añadir el nombre y el porcentaje de asistencia al diccionario
+        asignaturas_con_datos.append({
+            'id': asignatura['id'],
+            'nombre': asignatura['nombre'],
+            'porcentaje_asistencia': porcentaje_asistencia
+        })
+
+    return render(request, 'asistencia/menu_asignaturas_apoderado.html', {
+        'alumno': alumno,
+        'asignaturas_con_datos': asignaturas_con_datos,
     })

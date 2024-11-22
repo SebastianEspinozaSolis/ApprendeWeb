@@ -16,7 +16,7 @@
             <option value="alumno" {% if request.GET.rol == 'alumno' %}selected{% endif %}>Alumno</option>
         </select>
         <button type="submit" class="btn btn-primary">Filtrar</button>
-        <a href="{% url 'usuarios:registro' %}" class="btn btn-success">Crear Nuevo Usuario</a>
+        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#alertModal">Crear Nuevo Usuario</a>
     </form>
     
     <div class="row mt-4">
@@ -47,4 +47,27 @@
         {% endfor %}
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Advertencia de requisitos para crear un Alumno</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Para crear un alumno, necesita asignarle un curso y tener un apoderado creado previamente.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <a href="{% url 'curso:crear_curso' %}" class="btn btn-success">Crear Curso </a>
+          <a href="{% url 'usuarios:registro' %}" class="btn btn-primary">Crear Usuario</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 {% endblock %}
