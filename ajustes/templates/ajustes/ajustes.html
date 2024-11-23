@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Ajustes</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div class="form-group">
+        <label for="{{ form.tema_oscuro.id_for_label }}">Tema Oscuro:</label>
+        {{ form.tema_oscuro }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.idioma.id_for_label }}">Idioma:</label>
+        {{ form.idioma }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.notificaciones_email.id_for_label }}">Notificaciones por email:</label>
+        {{ form.notificaciones_email }}
+    </div>
+
+    <div class="form-group">
+        <label for="{{ form.tamaño_fuente.id_for_label }}">Tamaño de fuente:</label>
+        {{ form.tamaño_fuente }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+
+
+{% endblock %}

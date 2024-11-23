@@ -34,7 +34,9 @@ def validar_rut(value):
     if dv != dv_calculado:
         raise ValidationError('RUT inválido')
 
-# Create your models here.
+def default_profile_image():
+    return 'fotos_perfil/user.png'
+    
 
 class Perfil(models.Model):
     ROLES = (#Definimos una tupla con los roles que puede tener un usuario
@@ -45,7 +47,11 @@ class Perfil(models.Model):
     )
     user=models.OneToOneField(User,on_delete=models.CASCADE)#Relación uno a uno con la tabla User
     rol=models.CharField(max_length=20,choices=ROLES)#Campo para el rol del usuario
-    foto=models.ImageField(upload_to='fotos_perfil',null=True,blank=True)#Campo para la foto del usuario
+    foto = models.ImageField(
+        upload_to='fotos_perfil',
+        null=True,
+        blank=True
+    )
     nombre = models.CharField(max_length=100, null=True, blank=True)  # Nombre del usuario
     rut = models.CharField(
         max_length=12, 

@@ -1,28 +1,56 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Editar Usuario{% endblock %}
+{% block title %}Editar Perfil{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Editar Usuario: {{ form.instance.nombre }}</h2>
+    <h2 class="text-center mb-4">Editar Perfil</h2>
     <div class="card shadow-sm">
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="form-group">
-                    <label for="foto">Foto de Perfil:</label>
-                    {% if form.instance.foto %}
-                        <img src="{{ form.instance.foto.url }}" alt="Foto de {{ form.instance.nombre }}" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
-                    {% else %}
-                        <img src="{% static 'path/to/default/image.png' %}" alt="Foto de perfil por defecto" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
-                    {% endif %}
-                    {{ form.foto }}
+                
+                <!-- Previsualización de la imagen actual -->
+                <div class="text-center mb-4">
+                    <div class="mb-3">
+                        {% if form.instance.foto and form.instance.foto.url %}
+                            <img src="{{ form.instance.foto.url }}" alt="Foto de perfil actual" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'images/default-profile.png' %}" alt="Foto de perfil por defecto" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Campo para cambiar la foto -->
+                    <div class="form-group">
+                        <label for="{{ form.foto.id_for_label }}">Cambiar foto de perfil:</label>
+                        {{ form.foto }}
+                        {% if form.foto.errors %}
+                            <div class="alert alert-danger">
+                                {{ form.foto.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
-                {{ form.as_p|slice:":-1" }}
-                <div class="d-flex justify-content-between">
-                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                    <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-secondary">Cancelar</a>
+
+                <!-- Resto de los campos del formulario -->
+                {% for field in form %}
+                    {% if field.name != 'foto' %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="alert alert-danger">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary mx-2">Guardar Cambios</button>
+                    <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-secondary mx-2">Cancelar</a>
                 </div>
             </form>
         </div>

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'jefatura',
     'avisos',
     'asistencia',
+    'ajustes',
 ]
 
 MIDDLEWARE = [

@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Detalles de Usuario{% endblock %}
+{% block title %}Perfil de Usuario{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Detalles de Usuario: {{ perfil.nombre }}</h2>
+    <h2 class="text-center mb-4">Perfil de {{ perfil.nombre }}</h2>
     
     <div class="card mb-3 shadow-sm">
         <div class="card-header">
             Información del Perfil
         </div>
         <div class="card-body text-center">
-            {% if perfil.foto %}
+            {% if perfil.foto and perfil.foto.url %}
                 <img src="{{ perfil.foto.url }}" alt="Foto de {{ perfil.nombre }}" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
             {% else %}
-                <img src="{% static 'path/to/default/image.png' %}" alt="Foto de perfil por defecto" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
+                <img src="{% static 'images/default-profile.png' %}" alt="Foto de perfil por defecto" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
             {% endif %}
             <p><strong>Nombre:</strong> {{ perfil.nombre }}</p>
             <p><strong>RUT:</strong> {{ perfil.rut }}</p>
@@ -70,7 +70,7 @@
     {% endif %}
 
     <div class="text-center">
-        <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-secondary">Volver a la lista de usuarios</a>
+        <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-secondary">Volver</a>
     </div>
 </div>
 {% endblock %}

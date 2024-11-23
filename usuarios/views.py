@@ -142,10 +142,11 @@ def lista_usuarios(request):
 def editar_usuario(request, user_id):
     perfil = get_object_or_404(Perfil, id=user_id)
     if request.method == 'POST':
-        form = EditarForm(request.POST, instance=perfil)
+        form = EditarForm(request.POST, request.FILES, instance=perfil)
         if form.is_valid():
             form.save()
-            return redirect('usuarios:lista_usuarios') 
+            messages.success(request, 'Perfil actualizado exitosamente.')
+            return redirect('usuarios:lista_usuarios')
     else:
         form = EditarForm(instance=perfil)
     return render(request, 'usuarios/editar_usuario.html', {'form': form})
@@ -227,3 +228,4 @@ def detalle_alumno(request, id):
         'calificaciones': calificaciones,
         'evaluaciones': evaluaciones,
     })
+

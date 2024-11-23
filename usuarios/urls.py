@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 app_name = 'usuarios'
@@ -20,3 +22,6 @@ urlpatterns = [
     path('menu_alumno/', views.menu_alumno, name='menu_alumno'),
     path('alumno/<int:id>/', views.detalle_alumno, name='detalle_alumno'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -55,11 +55,16 @@ class EditarForm(forms.ModelForm):
         initial='',  # Establecer 'Ninguno' como valor predeterminado
         label='Rol Secundario'
     )
+    foto = forms.ImageField(
+        required=False, 
+        label='Foto de Perfil',
+        widget=forms.FileInput(attrs={'class': 'form-control'})
+    )
     class Meta:
         model = Perfil
-        fields = ['nombre','rut','fecha_nacimiento','sexo','rol','segundo_rol']
+        fields = ['nombre', 'rut', 'fecha_nacimiento', 'sexo', 'rol', 'segundo_rol', 'foto']  
 
 class EditarPerfilForm(forms.ModelForm):
     class Meta:
         model = Perfil
-        fields = ['nombre', 'rut', 'fecha_nacimiento', 'sexo', 'foto']  # Asegúrate de incluir 'foto'
+        fields = ['nombre', 'rut', 'fecha_nacimiento', 'sexo', 'foto']  
