@@ -29,6 +29,7 @@ urlpatterns = [
     path('jefatura/', include('jefatura.urls', namespace='jefatura')),
     path('avisos/', include('avisos.urls', namespace='avisos')),
     path('asistencia/', include('asistencia.urls')),
+    path('soporte/', include('soporte.urls')),
 ]
 
 if settings.DEBUG:
