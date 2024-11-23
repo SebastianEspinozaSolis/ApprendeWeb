@@ -18,9 +18,13 @@
                 <img src="{% static 'images/default-profile.png' %}" alt="Foto de perfil por defecto" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
             {% endif %}
             <p><strong>Nombre:</strong> {{ perfil.nombre }}</p>
+            <hr>
             <p><strong>RUT:</strong> {{ perfil.rut }}</p>
+            <hr>
             <p><strong>Fecha de Nacimiento:</strong> {{ perfil.fecha_nacimiento }}</p>
+            <hr>
             <p><strong>Edad:</strong> {{ edad }} años</p>
+            <hr>
             <p><strong>Sexo:</strong> {{ perfil.sexo }}</p>
         </div>
     </div>

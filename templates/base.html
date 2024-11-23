@@ -40,36 +40,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarContenido">
-                <ul class="navbar-nav mr-auto">
-                    {% if user.is_authenticated %}
-                        {% if user.perfil.rol == 'administrador' %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'curso:lista_cursos' %}">Cursos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'jefatura:lista_jefaturas' %}">Jefaturas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:lista_usuarios' %}">Usuarios</a>
-                        </li>
-                        {% elif user.perfil.rol == 'profesor' %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:menu_profesor' %}">Menu Profesor</a>
-                        </li>
-                        {% elif user.perfil.rol == 'apoderado' %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:menu_apoderado' %}">Menu Apoderado</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'avisos:lista_avisos' %}">Avisos</a>
-                        </li>
-                        {% elif user.perfil.rol == 'alumno' %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:menu_alumno' %}">Informacion personal</a>
-                        </li>
-                        {% endif %}
-                    {% endif %}
-                </ul>
+                <ul class="navbar-nav mr-auto"> </ul>
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">

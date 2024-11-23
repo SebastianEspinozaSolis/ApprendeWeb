@@ -8,6 +8,7 @@
     {% if request.user.is_authenticated %}
         {% if request.user.perfil.rol == 'administrador' %}
             <a href="{% url 'curso:crear_curso' %}" class="btn btn-success mb-3">Crear Curso</a>
+            <hr>
         {% endif %}
     {% endif %}
     <div class="row">

@@ -16,8 +16,9 @@
             <option value="apoderado" {% if request.GET.rol == 'apoderado' %}selected{% endif %}>Apoderado</option>
             <option value="alumno" {% if request.GET.rol == 'alumno' %}selected{% endif %}>Alumno</option>
         </select>
-        <button type="submit" class="btn btn-primary">Filtrar</button>
-        <a href="{% url 'usuarios:registro' %}" class="btn btn-success">Crear Nuevo Usuario</a>
+        <a href="{% url 'usuarios:registro' %}" class="btn btn-success">Crear Usuario</a>
+        <hr>
+       
     </form>
 
     <div class="row">
