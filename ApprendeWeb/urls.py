@@ -30,6 +30,7 @@ urlpatterns = [
     path('avisos/', include('avisos.urls', namespace='avisos')),
     path('asistencia/', include('asistencia.urls')),
     path('soporte/', include('soporte.urls')),
+    path('justificativo/', include('justificativo.urls')),
 ]
 
 if settings.DEBUG:

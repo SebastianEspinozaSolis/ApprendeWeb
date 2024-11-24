@@ -6,13 +6,6 @@ from asignatura.models import Asignatura
 from calificacion.models import Calificacion
 
 @login_required
-def lista_evaluaciones(request, asignatura_id=None):
-    evaluaciones = Evaluacion.objects.all().order_by('-fecha')
-    if asignatura_id:
-        evaluaciones = evaluaciones.filter(asignatura__id=asignatura_id)  # Filtrar por asignatura
-    return render(request, 'evaluacion/lista_evaluaciones.html', {'evaluaciones': evaluaciones})
-
-@login_required
 def detalle_evaluacion(request, pk):
     evaluacion = get_object_or_404(Evaluacion, pk=pk)
     asignatura = evaluacion.asignatura  # Obtener la asignatura relacionada
@@ -44,7 +37,10 @@ def crear_evaluacion(request):
             form = EvaluacionForm(initial={'asignatura': asignatura})  # Inicializar el formulario con la asignatura, si está presente
         return render(request, 'evaluacion/crear_evaluacion.html', {'form': form})
     else:
-        return redirect('evaluacion:lista_evaluaciones')
+        if request.user.perfil.rol == "apoderado":
+            return redirect('usuarios:menu_apoderado')
+        else:
+            return redirect('usuarios:menu_alumno')
 
 @login_required
 def editar_evaluacion(request, pk):
@@ -57,6 +53,11 @@ def editar_evaluacion(request, pk):
                 return redirect('evaluacion:detalle_evaluacion', pk=evaluacion.pk)
         else:
             form = EvaluacionForm(instance=evaluacion)
-        return render(request, 'evaluacion/editar_evaluacion.html', {'form': form})
+        return render(request, 'evaluacion/editar_evaluacion.html', {'form': form, 'evaluacion': evaluacion})  # Aseguramos de pasar el objeto evaluacion
     else:
-        return redirect('evaluacion:lista_evaluaciones')
+        if request.user.perfil.rol == "apoderado":
+            return redirect('usuarios:menu_apoderado')
+        elif request.user.perfil.rol == "alumno":
+            return redirect('usuarios:menu_alumno')
+        else:
+            return redirect('usuarios:menu_profesor')

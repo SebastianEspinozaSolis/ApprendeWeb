@@ -4,37 +4,39 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Bienvenido, {{ usuario.perfil.nombre }} (Apoderado)</h2>
+    <h2 class="mb-4">Bienvenido, <strong>{{ usuario.perfil.nombre }}</strong> (Apoderado)</h2>
     <p class="lead mb-5">Aquí puedes gestionar los alumnos a tu cargo.</p>
 
     <div class="row">
         <!-- Botón para ver avisos -->
         <div class="col-md-12 mb-4">
-            <a href="{% url 'avisos:avisos_apoderado' %}" class="btn btn-warning mb-4">
-                Ver Avisos de Alumnos a tu Cargo
+            <a href="{% url 'avisos:avisos_apoderado' %}" class="btn btn-warning btn-lg">
+                <i class="fas fa-bell"></i> Ver Avisos de Alumnos a tu Cargo
             </a>
         </div>
 
         <!-- Cards para alumnos -->
         <div class="col-md-12 mb-4">
-            <h3>Alumnos a tu cargo</h3>
+            <h3 class="mb-4">Alumnos a tu cargo</h3>
             {% if alumnos %}
                 <div class="row">
                     {% for alumno in alumnos %}
                     <div class="col-md-4 mb-4">
-                        <div class="card shadow">
+                        <div class="card shadow-sm border-light">
                             <div class="card-body">
-                                <h5 class="card-title">{{ alumno.perfil.nombre }}</h5>
-                                <p class="card-text">Curso: {{ alumno.curso.nombre }}</p>
-                                <p class="card-text">RUT: {{ alumno.perfil.rut }}</p>
-                                <a href="{% url 'usuarios:detalle_alumno' alumno.id %}" class="btn btn-primary">Ver detalles</a>
+                                <h5 class="card-title text-primary">{{ alumno.perfil.nombre }}</h5>
+                                <p class="card-text"><strong>Curso:</strong> {{ alumno.curso.nombre }}</p>
+                                <p class="card-text"><strong>RUT:</strong> {{ alumno.perfil.rut }}</p>
+                                <a href="{% url 'usuarios:detalle_alumno' alumno.id %}" class="btn btn-info btn-block">Ver detalles</a>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
             {% else %}
-                <p>No tienes alumnos asignados.</p>
+                <div class="alert alert-warning" role="alert">
+                    No tienes alumnos asignados.
+                </div>
             {% endif %}
         </div>
     </div>

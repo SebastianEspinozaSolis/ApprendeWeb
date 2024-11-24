@@ -2,39 +2,46 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Crear Aviso para el curso {{ curso_seleccionado.nombre }}</h2>
-    <form method="post">
+    <h2 class="text-center mb-4">Crear Aviso para el curso {{ curso_seleccionado.nombre }}</h2>
+    <form method="post" class="shadow p-4 rounded border">
         {% csrf_token %}
         
         <!-- Formulario de Aviso -->
-        <div class="form-group">
-            <label for="titulo">Título del Aviso:</label>
+        <div class="form-group mb-4">
+            <label for="titulo" class="h5">Título del Aviso:</label>
             {{ aviso_form.titulo }}  <!-- Muestra el campo de título -->
         </div>
 
-        <div class="form-group">
-            <label for="descripcion">Descripción del Aviso:</label>
+        <div class="form-group mb-4">
+            <label for="descripcion" class="h5">Descripción del Aviso:</label>
             {{ aviso_form.descripcion }}  <!-- Muestra el campo de descripción -->
         </div>
 
         <!-- Filtro por alumnos -->
         <div class="mt-4">
-            <h5>Alumnos:</h5>
+            <h5 class="mb-3">Alumnos:</h5>
 
             <!-- Checkbox para seleccionar todos los alumnos -->
-            <div>
-                <input type="checkbox" id="seleccionar_todos"> Seleccionar todos
+            <div class="mb-3">
+                <input type="checkbox" id="seleccionar_todos" class="form-check-input"> 
+                <label for="seleccionar_todos" class="form-check-label">Seleccionar todos</label>
             </div>
 
+            <!-- Lista de alumnos -->
             {% for alumno in alumnos %}
-                <div>
-                    <input type="checkbox" name="alumnos" value="{{ alumno.id }}" class="alumno_checkbox">
-                    {{ alumno }}  <!-- Esto mostrará nombre y RUT -->
+                <div class="form-check mb-2">
+                    <input type="checkbox" name="alumnos" value="{{ alumno.id }}" class="form-check-input alumno_checkbox">
+                    <label class="form-check-label" for="alumno_{{ alumno.id }}">
+                        {{ alumno }}  <!-- Esto mostrará nombre y RUT -->
+                    </label>
                 </div>
             {% endfor %}
         </div>
 
-        <button type="submit" class="btn btn-primary mt-3">Enviar Aviso</button>
+        <!-- Botón para enviar el aviso -->
+        <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">
+            Enviar Aviso
+        </button>
     </form>
 </div>
 
@@ -43,9 +50,23 @@
         const seleccionarTodosCheckbox = document.getElementById('seleccionar_todos');
         const alumnoCheckboxes = document.querySelectorAll('.alumno_checkbox');
 
+        // Función para actualizar el estado del checkbox "Seleccionar todos"
+        function actualizarSeleccionTodos() {
+            const todosSeleccionados = Array.from(alumnoCheckboxes).every(checkbox => checkbox.checked);
+            seleccionarTodosCheckbox.checked = todosSeleccionados;
+        }
+
+        // Manejar el evento de "Seleccionar todos"
         seleccionarTodosCheckbox.addEventListener('change', function() {
             alumnoCheckboxes.forEach(function(checkbox) {
                 checkbox.checked = seleccionarTodosCheckbox.checked;
+            });
+        });
+
+        // Verificar si "Seleccionar todos" debe activarse/desactivarse
+        alumnoCheckboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                actualizarSeleccionTodos();
             });
         });
     });

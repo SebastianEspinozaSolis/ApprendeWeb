@@ -23,5 +23,9 @@
             {% endfor %}
         </tbody>
     </table>
+    <!-- Botón para ir al detalle del alumno -->
+    <div class="mt-4">
+        <a href="{% url 'usuarios:detalle_alumno' alumno.id %}" class="btn btn-secondary btn-lg w-100">Ver Detalle del Alumno</a>
+    </div>
 </div>
 {% endblock %}

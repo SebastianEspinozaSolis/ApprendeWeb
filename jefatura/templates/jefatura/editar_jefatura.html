@@ -4,29 +4,40 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Editar Jefatura</h2>
-    <form method="post">
+    <h2 class="mb-4">Editar Jefatura</h2>
+    <form method="post" class="bg-light p-4 rounded shadow-sm">
         {% csrf_token %}
-        {{ form.non_field_errors }}
+        
+        <!-- Mostrar errores generales del formulario -->
+        <div class="mb-3">
+            {{ form.non_field_errors }}
+        </div>
 
         {% if form.instance.curso %}
             <input type="hidden" name="curso_id" value="{{ form.instance.curso.id }}">
         {% endif %}
         
-        <div class="form-group">
-            <label for="id_curso">Curso:</label>
+        <!-- Campo para el curso -->
+        <div class="form-group mb-3">
+            <label for="id_curso" class="form-label">Curso:</label>
             {{ form.curso.errors }}
-            {{ form.curso }}
+            <div class="input-group">
+                {{ form.curso }}
+            </div>
         </div>
         
-        <div class="form-group">
-            <label for="id_profesor">Profesor:</label>
+        <!-- Campo para el profesor -->
+        <div class="form-group mb-3">
+            <label for="id_profesor" class="form-label">Profesor:</label>
             {{ form.profesor.errors }}
-            {{ form.profesor }}
+            <div class="input-group">
+                {{ form.profesor }}
+            </div>
         </div>
         
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <!-- Botón de guardar -->
+        <button type="submit" class="btn btn-success btn-lg w-100">Guardar Cambios</button>
+        
     </form>
 </div>
 {% endblock %}
-

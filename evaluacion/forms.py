@@ -11,4 +11,12 @@ class EvaluacionForm(forms.ModelForm):
         widgets = {'fecha': forms.DateInput(attrs={
                 'class': 'form-control',
                 'type': 'date'  # Esto habilita el selector de fecha
-            }),}
+            }),
+            'descripcion': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,  # Controlar la altura del campo de texto
+            }),
+            'nombre': forms.TextInput(attrs={
+                'class': 'form-control',  # Asegurando que todos los campos tengan el mismo estilo
+            }),
+        }

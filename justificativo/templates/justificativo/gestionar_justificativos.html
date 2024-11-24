@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Gestión de Justificativos</h2>
+
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+        <tr>
+          <th>Alumno</th>
+          <th>Fecha</th>
+          <th>Motivo</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for justificativo in justificativos %}
+          <tr>
+            <td>{{ justificativo.alumno.perfil.nombre }}</td>
+            <td>{{ justificativo.fecha }}</td>
+            <td>{{ justificativo.motivo }}</td>
+            <td>
+              {% if justificativo.estado == 'pendiente' %}
+                <span class="badge badge-warning">Pendiente</span>
+              {% elif justificativo.estado == 'aprobado' %}
+                <span class="badge badge-success">Aprobado</span>
+              {% elif justificativo.estado == 'rechazado' %}
+                <span class="badge badge-danger">Rechazado</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if justificativo.estado == 'pendiente' %}
+                <a href="?accion=aprobar&justificativo_id={{ justificativo.id }}" class="btn btn-success">Aprobar</a>
+                <a href="?accion=rechazar&justificativo_id={{ justificativo.id }}" class="btn btn-danger">Rechazar</a>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

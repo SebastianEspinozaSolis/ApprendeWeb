@@ -46,6 +46,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'avisos:lista_avisos' %}">Avisos</a>
                         </li>
+                        <li>
+                            <a class="nav-link" href="{% url 'justificativo:gestionar_justificativos' %}">Justificativos</a>
+                        </li>
                         {% elif user.perfil.rol == 'profesor' %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'usuarios:menu_profesor' %}">Menu Profesor</a>

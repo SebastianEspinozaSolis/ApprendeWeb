@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'avisos',
     'asistencia', 
     'soporte',
+    'justificativo',
 ]
 
 MIDDLEWARE = [

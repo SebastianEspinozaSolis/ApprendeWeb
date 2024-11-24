@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Editar Asistencia para {{ asistencia.alumno }} dia {{ asistencia.fecha }} </h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary mt-3">Guardar Cambios</button>
-  </form>
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Editar Asistencia para <strong>{{ asistencia.alumno }}</strong> - Día: {{ asistencia.fecha }}</h2>
+
+    <form method="post" class="card p-4 shadow-sm">
+        {% csrf_token %}
+        
+        <!-- Formulario de edición de asistencia -->
+        <div class="mb-4">
+            {{ form.as_p }}
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-success btn-lg">
+                <i class="bi bi-save"></i> Guardar Cambios
+            </button>
+        </div>
+    </form>
+</div>
 {% endblock %}

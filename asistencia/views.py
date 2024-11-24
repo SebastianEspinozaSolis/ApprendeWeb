@@ -51,7 +51,7 @@ def editar_asistencia(request, pk):
         if form.is_valid():
             form.save()
             # Redirigir a la vista de detalles de la asignatura después de guardar
-            return redirect('asistencia:lista_fechas_asistencia', pk=asistencia.pk)
+            return redirect('asistencia:lista_fechas_asistencia', asignatura_id=asistencia.asignatura.id)
     else:
         form = EditarAsistenciaForm(instance=asistencia)
     

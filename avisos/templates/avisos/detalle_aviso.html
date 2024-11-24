@@ -3,30 +3,46 @@
 {% block title %}Detalle del Aviso{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Detalle del Aviso</h2>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">{{ aviso.titulo }}</h2>
+                    <small class="d-block">Creado por: {{ aviso.creador.nombre }} ({{ aviso.creador.rol }})</small>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{{ aviso.descripcion }}</p>
+                    <p><strong>Fecha de creación:</strong> {{ aviso.fecha_creacion }}</p>
 
-    <div class="mb-4">
-        <h3>{{ aviso.titulo }}</h3>
-        <p>{{ aviso.descripcion }}</p>
-        <p><strong>Fecha de creación:</strong> {{ aviso.fecha_creacion }}</p>
-        <p><strong>Creado por:</strong> {{ aviso.creador.nombre }}</p>
+                    <!-- Mostrar el curso al que se ha enviado el aviso -->
+                    {% if aviso.curso %}
+                        <p><strong>Curso:</strong> {{ aviso.curso.nombre }}</p>
+                    {% else %}
+                        <p><strong>Curso:</strong> No asignado</p>
+                    {% endif %}
+
+                    <div class="mt-4">
+                        <h5 class="mb-3">Alumnos destinatarios:</h5>
+                        {% if aviso.avisos_alumno.all %}
+                            <ul class="list-group">
+                                {% for aviso_alumno in aviso.avisos_alumno.all %}
+                                    <li class="list-group-item">
+                                        <strong>{{ aviso_alumno.alumno.perfil.nombre }}</strong> (RUT: {{ aviso_alumno.alumno.perfil.rut }})
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">No hay alumnos asignados a este aviso.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'avisos:editar_aviso' aviso.id %}" class="btn btn-warning">Editar Aviso</a>
+                    <a href="{% url 'avisos:lista_avisos' %}" class="btn btn-secondary">Volver a la lista de avisos</a>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="mb-4">
-        <h4>Alumnos destinatarios:</h4>
-        <ul>
-            {% for aviso_alumno in aviso.avisos_alumno.all %}
-                <li>{{ aviso_alumno.alumno.perfil.nombre }} (RUT: {{ aviso_alumno.alumno.perfil.rut }})</li>
-            {% empty %}
-                <p>No hay alumnos asignados a este aviso.</p>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <a href="{% url 'avisos:editar_aviso' aviso.id %}" class="btn btn-warning">Editar Aviso</a>
-
-    <a href="{% url 'avisos:lista_avisos' %}" class="btn btn-secondary mt-3">Volver a la lista de avisos</a>
 </div>
 {% endblock %}
-

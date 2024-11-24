@@ -1,49 +1,78 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-  <h2>Asistencia de la asignatura: {{ asignatura.nombre }}</h2>
-  {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
-    <a href="{% url 'asistencia:crear_asistencia' asignatura_id=asignatura.id %}" class="btn btn-success mb-3">Agregar Asistencia</a>
-  {% endif %}
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Asistencia de la asignatura: {{ asignatura.nombre }}</h2>
 
-  <h3>Fechas de asistencia registradas</h3>
-  {% if asistencias_por_fecha %}
-  <!-- Formulario de Filtro por Fecha -->
-  <form method="get" action="{% url 'asistencia:lista_fechas_asistencia' asignatura_id=asignatura.id %}" class="mb-3">
-    <label for="fecha">Filtrar por Fecha:</label>
-    <input type="date" id="fecha" name="fecha" value="{{ fecha_filtro }}">
-    <button type="submit" class="btn btn-primary">Filtrar</button>
-  </form>
-    {% for fecha, asistencias in asistencias_por_fecha.items %}
-      <div class="card mb-3">
-        <div class="card-header">
-          <h4 class="card-title">Fecha: {{ fecha }}</h4>
+    {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
+        <div class="text-center mb-4">
+            <a href="{% url 'asistencia:crear_asistencia' asignatura_id=asignatura.id %}" class="btn btn-success btn-lg">
+                <i class="bi bi-plus-circle"></i> Agregar Asistencia
+            </a>
         </div>
-        <div class="card-body">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Alumno</th>
-                <th>Asistencia</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for asistencia in asistencias %}
-                <tr>
-                  <td>{{ asistencia.alumno }}</td>
-                  <td>{% if asistencia.asistio %}Presente{% else %}Ausente{% endif %}</td>
-                  <td><a href="{% url 'asistencia:editar_asistencia' pk=asistencia.pk %}" class="btn btn-warning btn-sm">Editar</a></td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    {% endfor %}
-  {% else %}
-    <p>No se han registrado asistencias para esta asignatura.</p>
-  {% endif %}
+    {% endif %}
+
+    <!-- Botón de Regreso a Detalle Asignatura -->
+    <div class="text-center mb-4">
+      <a href="{% url 'asignatura:detalle_asignatura' pk=asignatura.id %}" class="btn btn-info btn-lg">
+        <i class="bi bi-arrow-left-circle"></i> Regresar a Detalle de la Asignatura
+    </a>
+        
+    </div>
+
+    <h3 class="text-info mb-3">Fechas de asistencia registradas</h3>
+
+    {% if asistencias_por_fecha %}
+        <!-- Formulario de Filtro por Fecha -->
+        <form method="get" action="{% url 'asistencia:lista_fechas_asistencia' asignatura_id=asignatura.id %}" class="mb-4 d-flex justify-content-center">
+            <div class="input-group w-50">
+                <span class="input-group-text">Filtrar por Fecha</span>
+                <input type="date" id="fecha" name="fecha" value="{{ fecha_filtro }}" class="form-control">
+                <button type="submit" class="btn btn-primary ml-2">
+                    <i class="bi bi-filter"></i> Filtrar
+                </button>
+            </div>
+        </form>
+
+        {% for fecha, asistencias in asistencias_por_fecha.items %}
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="card-title mb-0">Fecha: {{ fecha }}</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Alumno</th>
+                                <th>Asistencia</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for asistencia in asistencias %}
+                                <tr>
+                                    <td>{{ asistencia.alumno }}</td>
+                                    <td>
+                                        {% if asistencia.asistio %}
+                                            <span class="badge bg-success">Presente</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Ausente</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'asistencia:editar_asistencia' pk=asistencia.pk %}" class="btn btn-warning btn-sm">
+                                            <i class="bi bi-pencil-square"></i> Editar
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-center text-muted">No se han registrado asistencias para esta asignatura.</p>
+    {% endif %}
 </div>
 {% endblock %}

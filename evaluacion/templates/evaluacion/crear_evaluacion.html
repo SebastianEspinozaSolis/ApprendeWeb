@@ -3,32 +3,59 @@
 {% block title %}Crear Evaluación{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Crear Nueva Evaluación</h2>
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Crear Nueva Evaluación</h2>
+
     <form method="post">
         {% csrf_token %}
-        {{ form.non_field_errors }}
-        <div class="form-group">
-            <label for="id_nombre">Nombre:</label>
+        
+        <!-- Nombre -->
+        <div class="mb-4">
+            <label for="id_nombre" class="form-label">Nombre:</label>
             {{ form.nombre.errors }}
-            {{ form.nombre }}
+            <div class="input-group">
+                {{ form.nombre }}
+            </div>
         </div>
-        <div class="form-group">
-            <label for="id_descripcion">Descripción:</label>
+
+        <!-- Descripción -->
+        <div class="mb-4">
+            <label for="id_descripcion" class="form-label">Descripción:</label>
             {{ form.descripcion.errors }}
-            {{ form.descripcion }}
+            <div class="input-group">
+                {{ form.descripcion }}
+            </div>
         </div>
-        <div class="form-group">
-            <label for="id_fecha">Fecha:</label>
+
+        <!-- Fecha -->
+        <div class="mb-4">
+            <label for="id_fecha" class="form-label">Fecha:</label>
             {{ form.fecha.errors }}
-            {{ form.fecha }}
+            <div class="input-group">
+                {{ form.fecha }}
+            </div>
         </div>
-        <div class="form-group">
-            <label for="id_asignatura">Asignatura:</label>
+
+        <!-- Asignatura -->
+        <div class="mb-4">
+            <label for="id_asignatura" class="form-label">Asignatura:</label>
             {{ form.asignatura.errors }}
-            {{ form.asignatura }} 
+            <div class="input-group">
+                {{ form.asignatura }}
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Crear</button>
+
+        <!-- Botón de Enviar -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-success btn-lg mt-4">Crear Evaluación</button>
+        </div>
     </form>
+
+    <!-- Botón para Volver a Asignatura -->
+    <div class="text-center mt-4">
+        <a href="{% url 'asignatura:detalle_asignatura' pk=form.asignatura.value %}" class="btn btn-secondary btn-lg">
+            Volver a Asignatura
+        </a>
+    </div>
 </div>
 {% endblock %}

@@ -4,37 +4,42 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Crear Nuevo Reporte</h2>
-    <form method="post">
-        {% csrf_token %}
+    <h2 class="text-center mb-4">Crear Nuevo Reporte</h2>
 
-        <!-- Campo Título -->
-        <div class="form-group">
-            <label for="id_titulo">Título:</label>
-            {{ form.titulo.errors }}
-            <input type="text" name="titulo" id="id_titulo" class="form-control" value="{{ form.titulo.value|default:'' }}" />
-        </div>
+    <div class="card shadow-sm p-4 rounded">
+        <form method="post">
+            {% csrf_token %}
 
-        <!-- Campo Descripción -->
-        <div class="form-group">
-            <label for="id_descripcion">Descripción:</label>
-            {{ form.descripcion.errors }}
-            <textarea name="descripcion" id="id_descripcion" class="form-control">{{ form.descripcion.value|default:'' }}</textarea>
-        </div>
+            <!-- Campo Título -->
+            <div class="form-group mb-4">
+                <label for="id_titulo" class="h5">Título:</label>
+                {{ form.titulo.errors }}
+                <input type="text" name="titulo" id="id_titulo" class="form-control" value="{{ form.titulo.value|default:'' }}" placeholder="Ingrese el título del reporte" />
+            </div>
 
-        <!-- Campo Tipo -->
-        <div class="form-group">
-            <label for="id_tipo">Tipo de Reporte:</label>
-            {{ form.tipo.errors }}
-            <select name="tipo" id="id_tipo" class="form-control">
-                {% for option in form.tipo.field.choices %}
-                    <option value="{{ option.0 }}" {% if option.0 == form.tipo.value|default:'' %} selected {% endif %}>{{ option.1 }}</option>
-                {% endfor %}
-            </select>
-        </div>
+            <!-- Campo Descripción -->
+            <div class="form-group mb-4">
+                <label for="id_descripcion" class="h5">Descripción:</label>
+                {{ form.descripcion.errors }}
+                <textarea name="descripcion" id="id_descripcion" class="form-control" placeholder="Describa el reporte">{{ form.descripcion.value|default:'' }}</textarea>
+            </div>
 
-        <!-- Botón de Enviar -->
-        <button type="submit" class="btn btn-primary">Enviar Reporte</button>
-    </form>
+            <!-- Campo Tipo -->
+            <div class="form-group mb-4">
+                <label for="id_tipo" class="h5">Tipo de Reporte:</label>
+                {{ form.tipo.errors }}
+                <select name="tipo" id="id_tipo" class="form-control">
+                    {% for option in form.tipo.field.choices %}
+                        <option value="{{ option.0 }}" {% if option.0 == form.tipo.value|default:'' %} selected {% endif %}>{{ option.1 }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Botón de Enviar -->
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary btn-lg">Enviar Reporte</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

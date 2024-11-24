@@ -1,34 +1,61 @@
 {% extends 'base.html' %}
 
-{% block title %}Editar Evaluacion{% endblock %}
+{% block title %}Editar Evaluación{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Editar Evaluacion</h2>
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Editar Evaluación</h2>
+
     <form method="post">
         {% csrf_token %}
+        
+        <!-- Mostrar errores no relacionados a campos específicos -->
         {{ form.non_field_errors }}
-        <div class="form-group">
-            <label for="id_titulo">Nombre:</label>
-            {{ form.nombre.errors }}
-            {{ form.nombre }}
+        
+        <!-- Nombre -->
+        <div class="form-group mb-4">
+            <label for="id_nombre" class="form-label">Nombre:</label>
+            <div class="input-group">
+                {{ form.nombre.errors }}
+                {{ form.nombre }}
+            </div>
         </div>
-        <div class="form-group">
-            <label for="id_curso">Descripcion:</label>
-            {{ form.descripcion.errors }}
-            {{ form.descripcion }}
+
+        <!-- Descripción -->
+        <div class="form-group mb-4">
+            <label for="id_descripcion" class="form-label">Descripción:</label>
+            <div class="input-group">
+                {{ form.descripcion.errors }}
+                {{ form.descripcion }}
+            </div>
         </div>
-        <div class="form-group">
-            <label for="id_titulo">Fecha:</label>
-            {{ form.fecha.errors }}
-            {{ form.fecha }}
+
+        <!-- Fecha -->
+        <div class="form-group mb-4">
+            <label for="id_fecha" class="form-label">Fecha:</label>
+            <div class="input-group">
+                {{ form.fecha.errors }}
+                {{ form.fecha }}
+            </div>
         </div>
-        <div class="form-group">
-            <label for="id_curso">Asignatura:</label>
-            {{ form.asignatura.errors }}
-            {{ form.asignatura }}
+
+        <!-- Asignatura -->
+        <div class="form-group mb-4">
+            <label for="id_asignatura" class="form-label">Asignatura:</label>
+            <div class="input-group">
+                {{ form.asignatura.errors }}
+                {{ form.asignatura }}
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+
+        <!-- Botón de guardar cambios -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-success btn-lg mt-4">Guardar Cambios</button>
+        </div>
     </form>
+
+    <div class="text-center mt-3">
+        <a href="{% url 'evaluacion:detalle_evaluacion' pk=evaluacion.pk %}" class="btn btn-secondary">Volver a Evaluación</a>
+    </div>
 </div>
 {% endblock %}
