@@ -77,10 +77,7 @@
                                 {{ user.username }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                {% if user.perfil.rol == 'administrador' %}
-                                    <a class="dropdown-item" href="{% url 'usuarios:login' %}">Panel de Administración</a>
-                                {% endif %}
-                                <a class="dropdown-item" href="#">Perfil</a>
+                                <a class="dropdown-item" href="{% url 'usuarios:editar_perfil' %}">Perfil</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'soporte:crear_reporte' %}">Soporte</a>
                                 <div class="dropdown-divider"></div>

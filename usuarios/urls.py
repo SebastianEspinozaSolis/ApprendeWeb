@@ -19,4 +19,9 @@ urlpatterns = [
     path('menu_apoderado/', views.menu_apoderado, name='menu_apoderado'),
     path('menu_alumno/', views.menu_alumno, name='menu_alumno'),
     path('alumno/<int:id>/', views.detalle_alumno, name='detalle_alumno'),
+    path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
+    path('editar-foto/', views.editar_foto, name='editar_foto'),
+    path('editar-correo/', views.editar_correo, name='editar_correo'),
+    path('cambiar-contraseña/', views.cambiar_contraseña, name='cambiar_contraseña'),
+
 ]

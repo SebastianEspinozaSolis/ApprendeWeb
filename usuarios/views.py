@@ -2,8 +2,8 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
-from .forms import RegistroForm,ApoderadoForm, AdministradorForm, AlumnoForm, ProfesorForm, EditarForm
+from django.contrib.auth import login, authenticate, logout,update_session_auth_hash
+from .forms import RegistroForm,ApoderadoForm, AdministradorForm, AlumnoForm, ProfesorForm, EditarForm, EditarFotoPerfilForm, EditarCorreoForm, CambiarContraseñaForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Perfil, Administrador,Alumno,Apoderado,Profesor
@@ -227,3 +227,84 @@ def detalle_alumno(request, id):
         'calificaciones': calificaciones,
         'evaluaciones': evaluaciones,
     })
+@login_required
+def editar_perfil(request):
+    user = request.user
+    perfil = user.perfil
+
+    # Formulario para editar foto de perfil
+    foto_form = EditarFotoPerfilForm(instance=perfil)
+    # Formulario para editar correo
+    correo_form = EditarCorreoForm(instance=user)
+    # Formulario para cambiar contraseña
+    contraseña_form = CambiarContraseñaForm()
+
+    if request.method == "POST":
+        if "editar_foto" in request.POST:
+            # Redirigir a editar foto
+            return redirect('usuarios:editar_foto')
+        elif "editar_correo" in request.POST:
+            # Redirigir a editar correo
+            return redirect('usuarios:editar_correo')
+        elif "cambiar_contraseña" in request.POST:
+            # Redirigir a cambiar contraseña
+            return redirect('usuarios:cambiar_contraseña')
+
+    context = {
+        'foto_form': foto_form,
+        'correo_form': correo_form,
+        'contraseña_form': contraseña_form,
+    }
+    return render(request, 'usuarios/editar_perfil.html', context)
+@login_required
+def editar_foto(request):
+    user = request.user
+    perfil = user.perfil
+    if request.method == "POST":
+        foto_form = EditarFotoPerfilForm(request.POST, request.FILES, instance=perfil)
+        if foto_form.is_valid():
+            foto_form.save()
+            messages.success(request, "Foto de perfil actualizada.")
+            return redirect('usuarios:editar_perfil')
+    else:
+        foto_form = EditarFotoPerfilForm(instance=perfil)
+    
+    return render(request, 'usuarios/editar_foto.html', {'foto_form': foto_form})
+@login_required
+def editar_correo(request):
+    user = request.user
+    if request.method == "POST":
+        correo_form = EditarCorreoForm(request.POST, instance=user)
+        if correo_form.is_valid():
+            correo_form.save()
+            messages.success(request, "Correo electrónico actualizado.")
+            return redirect('usuarios:editar_perfil')
+    else:
+        correo_form = EditarCorreoForm(instance=user)
+    
+    return render(request, 'usuarios/editar_correo.html', {'correo_form': correo_form})
+@login_required
+def cambiar_contraseña(request):
+    user = request.user
+    if request.method == "POST":
+        contraseña_form = CambiarContraseñaForm(request.POST)
+        if contraseña_form.is_valid():
+            password_actual = contraseña_form.cleaned_data['password_actual']
+            nueva_password = contraseña_form.cleaned_data['nueva_password']
+            confirmar_password = contraseña_form.cleaned_data['confirmar_password']
+            
+            if nueva_password == confirmar_password:
+                if user.check_password(password_actual):
+                    user.set_password(nueva_password)
+                    user.save()
+                    update_session_auth_hash(request, user)  # Mantiene la sesión activa después de cambiar la contraseña
+                    messages.success(request, "Contraseña actualizada con éxito.")
+                    return redirect('usuarios:editar_perfil')
+                else:
+                    messages.error(request, "La contraseña actual no es correcta.")
+            else:
+                messages.error(request, "Las nuevas contraseñas no coinciden.")
+    else:
+        contraseña_form = CambiarContraseñaForm()
+
+    return render(request, 'usuarios/cambiar_contraseña.html', {'contraseña_form': contraseña_form})

@@ -46,14 +46,44 @@ class EditarForm(forms.ModelForm):
     # Campos para el perfil
     nombre = forms.CharField(max_length=100, required=True, label='Nombre')
     rut = forms.CharField(max_length=12, required=True, label='RUT')
-    fecha_nacimiento = forms.DateField(required=True, label='Fecha de Nacimiento', widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+    fecha_nacimiento = forms.DateField(required=True, label='Fecha de Nacimiento', widget=forms.widgets.DateInput(attrs={'type': 'date', 'placeholder': 'dd-mm-aaaa'}))
     sexo = forms.ChoiceField(choices=[('M', 'Masculino'), ('F', 'Femenino')], required=True, label='Sexo')
     rol = forms.ChoiceField(choices=Perfil.ROLES, label='Rol')
-    segundo_rol = forms.ChoiceField(
-        choices=[('', 'Ninguno')] + list(Perfil.ROLES),  # Añadir 'Ninguno' a las opciones
-        initial='',  # Establecer 'Ninguno' como valor predeterminado
-        label='Rol Secundario'
-    )
+    
     class Meta:
         model = Perfil
-        fields = ['nombre','rut','fecha_nacimiento','sexo','rol','segundo_rol']
+        fields = ['nombre','rut','fecha_nacimiento','sexo','rol']
+class EditarFotoPerfilForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['foto']
+        widgets = {'foto': forms.FileInput(attrs={'class': 'form-control'}),}
+class EditarCorreoForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['email']
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
+class CambiarContraseñaForm(forms.Form):
+    password_actual = forms.CharField(
+        label="Contraseña actual",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+    )
+    nueva_password = forms.CharField(
+        label="Nueva contraseña",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+    )
+    confirmar_password = forms.CharField(
+        label="Confirmar nueva contraseña",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        nueva_password = cleaned_data.get('nueva_password')
+        confirmar_password = cleaned_data.get('confirmar_password')
+
+        if nueva_password != confirmar_password:
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+        return cleaned_data
