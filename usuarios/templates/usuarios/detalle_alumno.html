@@ -56,6 +56,36 @@
             {% endif %}
         </div>
     </div>
+<!-- Promedios por Asignatura -->
+<div class="card mb-4">
+    <div class="card-header bg-warning text-white">
+        <h5 class="mb-0">Promedios por Asignatura</h5>
+    </div>
+    <div class="card-body">
+        {% if promedios %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Asignatura</th>
+                        <th>Promedio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for asignatura, data in promedios.items %}
+                    <tr>
+                        <td>{{ asignatura.nombre }}</td>
+                        <td>{{ data.promedio|floatformat:1 }}</td> 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-circle"></i> No hay calificaciones para mostrar.
+            </div>
+        {% endif %}
+    </div>
+</div>
 
     <!-- Evaluaciones -->
     <div class="card mb-4">

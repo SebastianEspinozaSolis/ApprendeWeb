@@ -42,6 +42,16 @@ def registro(request):
     return render(request, 'usuarios/registro.html', {'form': form})
 
 def login_view(request):
+    if request.user.is_authenticated:
+        perfil = Perfil.objects.get(user=request.user)
+        if perfil.rol == 'administrador':
+            return redirect('usuarios:menu_administrador')
+        elif perfil.rol == 'profesor':
+            return redirect('usuarios:menu_profesor')
+        elif perfil.rol == 'apoderado':
+            return redirect('usuarios:menu_apoderado')
+        else:
+            return redirect('usuarios:menu_alumno')
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -216,16 +226,36 @@ def detalle_alumno(request, id):
     # Obtener el alumno correspondiente
     alumno = get_object_or_404(Alumno, id=id)
 
-    # Obtener las calificaciones del alumno en las evaluaciones disponibles
+    # Obtener todas las calificaciones del alumno
     calificaciones = Calificacion.objects.filter(alumno=alumno)
 
-    # Si quieres mostrar las evaluaciones, puedes filtrarlas también
+    # Obtener las evaluaciones asociadas al curso del alumno
     evaluaciones = Evaluacion.objects.filter(asignatura__curso=alumno.curso)
 
+    # Calcular el promedio por asignatura
+    promedios = {}
+
+    # Agrupar las calificaciones por asignatura y calcular el promedio
+    for calificacion in calificaciones:
+        asignatura = calificacion.evaluacion.asignatura
+        if asignatura not in promedios:
+            promedios[asignatura] = {
+                'total_calificaciones': 0,
+                'cantidad': 0
+            }
+        promedios[asignatura]['total_calificaciones'] += calificacion.calificacion
+        promedios[asignatura]['cantidad'] += 1
+    
+    # Calcular el promedio final para cada asignatura
+    for asignatura, data in promedios.items():
+        data['promedio'] = data['total_calificaciones'] / data['cantidad']
+
+    # Pasar los datos al template
     return render(request, 'usuarios/detalle_alumno.html', {
         'alumno': alumno,
         'calificaciones': calificaciones,
         'evaluaciones': evaluaciones,
+        'promedios': promedios,
     })
 @login_required
 def editar_perfil(request):

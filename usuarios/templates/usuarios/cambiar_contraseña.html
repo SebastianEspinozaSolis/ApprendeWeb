@@ -6,15 +6,6 @@
 <div class="container mt-4">
     <h2>Cambiar Contraseña</h2>
 
-    <!-- Mostrar mensajes de éxito y error -->
-    {% if messages %}
-        <div class="alert alert-info">
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        </div>
-    {% endif %}
-
     <form method="post">
         {% csrf_token %}
         
