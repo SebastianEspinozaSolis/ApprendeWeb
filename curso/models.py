@@ -17,3 +17,12 @@ class Curso(models.Model):
 
     def __str__(self):
         return self.nombre
+
+class Asignatura(models.Model):
+    nombre = models.CharField(max_length=100)
+    curso = models.ForeignKey(Curso, on_delete=models.CASCADE, related_name='asignaturas')
+    profesor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='asignaturas')
+
+    def __str__(self):
+        return self.nombre + ' - ' + self.curso.nombre + ' - ' + self.profesor.username
+    

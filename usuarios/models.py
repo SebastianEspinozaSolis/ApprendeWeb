@@ -5,6 +5,7 @@ from datetime import date
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 import re
+from django.utils import timezone
 
 def validar_rut(value):
     # Limpia el RUT de puntos y guión
@@ -106,3 +107,48 @@ class Profesor(models.Model):
     especialidad = models.CharField(max_length=100, null=True, blank=True)  # Ejemplo de campo específico
     def __str__(self):
         return f"nombre: {self.perfil.nombre} - rut: {self.perfil.rut} - especialidad: {self.especialidad}"
+
+class Clase(models.Model):
+    asignatura = models.CharField(max_length=100)
+    hora = models.TimeField()
+    sala = models.CharField(max_length=50)
+    fecha = models.DateField()
+    alumno = models.ForeignKey('Perfil', on_delete=models.CASCADE, related_name='clases')
+
+    class Meta:
+        ordering = ['fecha', 'hora']
+
+class Evaluacion(models.Model):
+    TIPOS = (
+        ('prueba', 'Prueba'),
+        ('trabajo', 'Trabajo'),
+        ('proyecto', 'Proyecto'),
+    )
+    asignatura = models.CharField(max_length=100)
+    fecha = models.DateField()
+    tipo = models.CharField(max_length=20, choices=TIPOS)
+    alumno = models.ForeignKey('Perfil', on_delete=models.CASCADE, related_name='evaluaciones')
+
+    class Meta:
+        ordering = ['fecha']
+
+class Asignatura(models.Model):
+    nombre = models.CharField(max_length=100)
+    alumno = models.ForeignKey('Perfil', on_delete=models.CASCADE, related_name='asignaturas')
+    promedio = models.DecimalField(max_digits=3, decimal_places=1, default=0.0)
+    asistencia = models.IntegerField(default=0)  # porcentaje de asistencia
+
+    def calcular_estado(self):
+        return 'Aprobado' if self.promedio >= 4.0 and self.asistencia >= 75 else 'En riesgo'
+
+class Calificacion(models.Model):
+    alumno = models.ForeignKey('Perfil', on_delete=models.CASCADE, related_name='calificaciones')
+    evaluacion = models.ForeignKey(Evaluacion, on_delete=models.CASCADE)
+    nota = models.DecimalField(max_digits=3, decimal_places=1)
+    fecha = models.DateField(default=timezone.now)
+
+    class Meta:
+        ordering = ['fecha']
+
+    def __str__(self):
+        return f"{self.alumno.nombre} - {self.evaluacion.asignatura} - {self.nota}"

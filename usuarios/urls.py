@@ -21,6 +21,8 @@ urlpatterns = [
     path('menu_apoderado/', views.menu_apoderado, name='menu_apoderado'),
     path('menu_alumno/', views.menu_alumno, name='menu_alumno'),
     path('alumno/<int:id>/', views.detalle_alumno, name='detalle_alumno'),
+    path('pomodoro/', views.pomodoro_view, name='pomodoro'),
+    path('actualizar-datos-alumno/<int:alumno_id>/', views.actualizar_datos_alumno, name='actualizar_datos_alumno'),
 ]
 
 if settings.DEBUG:

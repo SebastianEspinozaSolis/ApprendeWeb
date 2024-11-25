@@ -6,12 +6,191 @@
 <div class="container mt-4">
     <h2 class="mb-4 text-center">Bienvenido, {{ usuario.perfil.nombre }} (Alumno)</h2>
 
-    <div class="text-center mb-4">
-        {% if alumno %}
-            <a href="{% url 'usuarios:detalle_alumno' alumno.id %}" class="btn btn-info btn-lg">Ver mis detalles</a>
-        {% else %}
-            <p>No se ha encontrado un alumno asociado a este usuario.</p>
-        {% endif %}
+    <!-- Tarjetas de Información -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-calendar"></i> Próxima Clase</h5>
+                </div>
+                <div class="card-body">
+                    {% if proxima_clase %}
+                        <h6>{{ proxima_clase.asignatura }}</h6>
+                        <p class="mb-1"><i class="far fa-clock"></i> {{ proxima_clase.hora }}</p>
+                        <p class="mb-0"><i class="fas fa-chalkboard"></i> {{ proxima_clase.sala }}</p>
+                    {% else %}
+                        <p class="mb-0 text-muted">No hay clases programadas próximamente</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="fas fa-exclamation-circle"></i> Próxima Evaluación</h5>
+                </div>
+                <div class="card-body">
+                    {% if proxima_evaluacion %}
+                        <h6>{{ proxima_evaluacion.asignatura }}</h6>
+                        <p class="mb-1"><i class="far fa-calendar"></i> {{ proxima_evaluacion.fecha }}</p>
+                        <p class="mb-0"><i class="fas fa-info-circle"></i> {{ proxima_evaluacion.tipo }}</p>
+                    {% else %}
+                        <p class="mb-0 text-muted">No hay evaluaciones programadas próximamente</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de Acceso Rápido -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-4 mb-3">
+            {% if alumno %}
+                <a href="{% url 'usuarios:detalle_alumno' alumno.id %}" class="btn btn-info btn-lg btn-block">
+                    <i class="fas fa-user-circle"></i> Ver mis detalles
+                </a>
+            {% else %}
+                <p>No se ha encontrado un alumno asociado a este usuario.</p>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <a href="{% url 'usuarios:pomodoro' %}" class="btn btn-danger btn-lg btn-block">
+                <i class="fas fa-clock"></i> Técnica Pomodoro
+            </a>
+        </div>
+    </div>
+
+    <!-- Tabla de Estadísticas -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Mis Estadísticas</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Asignatura</th>
+                            <th>Promedio</th>
+                            <th>Asistencia</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for asignatura in estadisticas_asignaturas %}
+                        <tr>
+                            <td>{{ asignatura.nombre }}</td>
+                            <td>
+                                <span class="badge {% if asignatura.promedio >= 4.0 %}badge-success{% else %}badge-danger{% endif %}">
+                                    {{ asignatura.promedio }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar {% if asignatura.asistencia >= 75 %}bg-success{% else %}bg-warning{% endif %}" 
+                                         role="progressbar" 
+                                         style="width: {{ asignatura.asistencia }}%"
+                                         aria-valuenow="{{ asignatura.asistencia }}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                        {{ asignatura.asistencia }}%
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if asignatura.promedio >= 4.0 and asignatura.asistencia >= 75 %}
+                                    <span class="badge badge-success">Aprobado</span>
+                                {% else %}
+                                    <span class="badge badge-danger">En riesgo</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">No hay datos disponibles</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+.badge {
+    font-size: 100%;
+    padding: 0.5em 1em;
+}
+.progress {
+    margin-bottom: 0;
+}
+.card {
+    transition: transform 0.2s;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+</style>
+
+<script>
+function actualizarDatos() {
+    fetch('{% url "usuarios:actualizar_datos_alumno" alumno_id=alumno.id %}')
+        .then(response => response.json())
+        .then(data => {
+            // Actualizar próxima clase
+            if (data.proxima_clase) {
+                document.querySelector('.proxima-clase').innerHTML = `
+                    <h6>${data.proxima_clase.asignatura}</h6>
+                    <p class="mb-1"><i class="far fa-clock"></i> ${data.proxima_clase.hora}</p>
+                    <p class="mb-0"><i class="fas fa-chalkboard"></i> ${data.proxima_clase.sala}</p>
+                `;
+            }
+
+            // Actualizar próxima evaluación
+            if (data.proxima_evaluacion) {
+                document.querySelector('.proxima-evaluacion').innerHTML = `
+                    <h6>${data.proxima_evaluacion.asignatura}</h6>
+                    <p class="mb-1"><i class="far fa-calendar"></i> ${data.proxima_evaluacion.fecha}</p>
+                    <p class="mb-0"><i class="fas fa-info-circle"></i> ${data.proxima_evaluacion.tipo}</p>
+                `;
+            }
+
+            // Actualizar estadísticas
+            const tbody = document.querySelector('.table tbody');
+            tbody.innerHTML = data.estadisticas_asignaturas.map(asignatura => `
+                <tr>
+                    <td>${asignatura.nombre}</td>
+                    <td>
+                        <span class="badge ${asignatura.promedio >= 4.0 ? 'badge-success' : 'badge-danger'}">
+                            ${asignatura.promedio}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar ${asignatura.asistencia >= 75 ? 'bg-success' : 'bg-warning'}"
+                                 role="progressbar"
+                                 style="width: ${asignatura.asistencia}%"
+                                 aria-valuenow="${asignatura.asistencia}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                                ${asignatura.asistencia}%
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge ${asignatura.promedio >= 4.0 && asignatura.asistencia >= 75 ? 'badge-success' : 'badge-danger'}">
+                            ${asignatura.promedio >= 4.0 && asignatura.asistencia >= 75 ? 'Aprobado' : 'En riesgo'}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        });
+}
+
+// Actualizar datos cada 5 minutos
+setInterval(actualizarDatos, 300000);
+</script>
 {% endblock %}

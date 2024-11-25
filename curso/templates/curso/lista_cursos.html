@@ -3,31 +3,87 @@
 {% block title %}Cursos{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Lista de Cursos</h2>
-    {% if request.user.is_authenticated %}
-        {% if request.user.perfil.rol == 'administrador' %}
-            <a href="{% url 'curso:crear_curso' %}" class="btn btn-success mb-3">Crear Curso</a>
-            <hr>
+<div class="container mt-5">
+    <div class="row mb-4 align-items-center">
+        <div class="col">
+            <h2 class="display-4" style="font-weight: bold; color: black;">Gestión de Cursos</h2>
+            <p class="text-muted lead">Administra y visualiza todos los cursos del establecimiento</p>
+        </div>
+        {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+        <div class="col-auto">
+            <a href="{% url 'curso:crear_curso' %}" class="btn btn-success btn-lg">
+                <i class="fas fa-plus-circle me-2"></i>Crear Curso
+            </a>
+        </div>
         {% endif %}
-    {% endif %}
-    <div class="row">
+    </div>
+
+    <div class="row g-4">
         {% for curso in cursos %}
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ curso.nombre }}</h5>
-                        <p class="card-text">{{ curso.sala|truncatechars:100 }}</p>
-                        <a href="{% url 'curso:detalle_curso' curso.pk %}" class="btn btn-primary">Ver Detalles</a>
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm hover-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="card-title h4 text-primary mb-0 ">{{ curso.nombre }}</h3>
+                        <span class="badge bg-info">Sala {{ curso.sala }}</span>
+                    </div>
+                    
+                    <div class="card-stats mb-3">
+                        <div class="row text-center">
+                            <div class="col">
+                                <h6 class="text-muted mb-1">Alumnos</h6>
+                                <h5>{{ curso.alumno_set.count }}</h5>
+                            </div>
+                            <div class="col">
+                                <h6 class="text-muted mb-1">Asignaturas</h6>
+                                <h5>{{ curso.asignatura_set.count }}</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'curso:detalle_curso' curso.pk %}" class="btn btn-outline-primary">
+                            <i class="fas fa-info-circle me-2"></i>Ver Detalles
+                        </a>
                         {% if request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
-                            <a href="{% url 'asistencia:lista_fechas_asistencia' curso.id %}" class="btn btn-primary mt-2">Ver Asistencia</a>
+                        <a href="{% url 'asistencia:lista_fechas_asistencia' curso.id %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-clipboard-list me-2"></i>Control de Asistencia
+                        </a>
                         {% endif %}
                     </div>
                 </div>
             </div>
+        </div>
         {% empty %}
-            <p>No hay cursos disponibles.</p>
+        <div class="col-12">
+            <div class="alert alert-info text-center p-5" role="alert">
+                <i class="fas fa-info-circle fa-3x mb-3"></i>
+                <h4>No hay cursos disponibles</h4>
+                <p class="mb-0">Actualmente no hay cursos registrados en el sistema.</p>
+            </div>
+        </div>
         {% endfor %}
     </div>
 </div>
+
+<style>
+.hover-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-stats {
+    background-color: rgba(0,0,0,0.03);
+    padding: 1rem;
+    border-radius: 0.5rem;
+}
+
+.badge {
+    padding: 0.5em 1em;
+}
+</style>
 {% endblock %}

@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.utils import timezone
 
 # Create your views here.
 from django.shortcuts import render, redirect
@@ -6,11 +7,8 @@ from django.contrib.auth import login, authenticate, logout
 from .forms import RegistroForm,ApoderadoForm, AdministradorForm, AlumnoForm, ProfesorForm, EditarForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Perfil, Administrador,Alumno,Apoderado,Profesor
+from .models import Perfil, Administrador,Alumno,Apoderado,Profesor, Clase, Evaluacion, Asignatura, Calificacion
 from django.shortcuts import get_object_or_404
-from asignatura.models import Asignatura
-from calificacion.models import Calificacion
-from evaluacion.models import Evaluacion
 
 
 def registro(request):
@@ -202,15 +200,40 @@ def menu_apoderado(request):
 @login_required
 def menu_alumno(request):
     usuario = request.user
-    try:
-        alumno = Alumno.objects.get(perfil=usuario.perfil)  # Obtener el alumno asociado al perfil del usuario
-    except Alumno.DoesNotExist:
-        alumno = None  # Si no existe el alumno para el usuario
+    alumno = usuario.perfil if hasattr(usuario, 'perfil') else None
+    
+    if alumno:
+        # Obtener próxima clase
+        proxima_clase = Clase.objects.filter(
+            alumno=alumno,
+            fecha__gte=timezone.now().date()
+        ).first()
 
-    return render(request, 'usuarios/menu_alumno.html', {
-        'usuario': usuario,
-        'alumno': alumno,  # Pasamos el objeto alumno a la plantilla
-    })
+        # Obtener próxima evaluación
+        proxima_evaluacion = Evaluacion.objects.filter(
+            alumno=alumno,
+            fecha__gte=timezone.now().date()
+        ).first()
+
+        # Obtener estadísticas de asignaturas
+        estadisticas_asignaturas = Asignatura.objects.filter(
+            alumno=alumno
+        ).all()
+
+        context = {
+            'usuario': usuario,
+            'alumno': alumno,
+            'proxima_clase': proxima_clase,
+            'proxima_evaluacion': proxima_evaluacion,
+            'estadisticas_asignaturas': estadisticas_asignaturas,
+        }
+    else:
+        context = {
+            'usuario': usuario,
+            'alumno': None,
+        }
+    
+    return render(request, 'usuarios/menu_alumno.html', context)
 
 @login_required
 def detalle_alumno(request, id):
@@ -228,4 +251,15 @@ def detalle_alumno(request, id):
         'calificaciones': calificaciones,
         'evaluaciones': evaluaciones,
     })
+
+@login_required
+def pomodoro_view(request):
+    if request.user.perfil.rol != 'alumno':
+        return redirect('usuarios:login')
+    return render(request, 'usuarios/pomodoro.html')
+
+def actualizar_datos_alumno(request, alumno_id):
+    alumno = get_object_or_404(Alumno, id=alumno_id)
+    # Lógica de la vista aquí
+    return render(request, 'usuarios/menu_alumno.html', {'alumno': alumno})
 

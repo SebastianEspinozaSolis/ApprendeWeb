@@ -57,6 +57,8 @@
             {% else %}
                 <p>No hay evaluaciones cercanas para este curso.</p>
             {% endif %}
+            
+            <hr>
 
             <h5>Profesores</h5>
             {% if profesores %}
@@ -74,9 +76,6 @@
             {% endif %}
 
             <hr>
-            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
-                <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-info mt-3">Modificar Asignaturas de este Curso</a>
-            {% endif %}
 
             {% if request.user.perfil.rol == 'profesor' %}
             <h4>Apoderado</h4>
@@ -101,18 +100,47 @@
             {% endif %}
             {% endif %}
 
-            <hr>
-            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
-                <a href="{% url 'curso:editar_curso' curso.pk %}" class="btn btn-secondary">Editar Curso</a>
+           
+            <h5>Alumnos del Curso</h5>
+            {% if alumnos %}
+                <ul class="list-group">
+                    {% for alumno in alumnos %}
+                        <li class="list-group-item">
+                            <h6>{{ alumno.perfil.nombre }}</h6>
+                            <p><strong>Correo:</strong> {{ alumno.perfil.user.email }}</p>
+                            {% if alumno.apoderado %}
+                                <p><strong>Apoderado:</strong> {{ alumno.apoderado.perfil.nombre }}</p>
+                            {% else %}
+                                <p><strong>Apoderado:</strong> No asignado</p>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay alumnos registrados en este curso.</p>
             {% endif %}
+            
+            <hr>
+            
+            <div class="d-flex justify-content-start mb-4">
+                {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+                    <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-primary mt-3" style="margin-right: 20px;">Modificar Asignatura</a>
+                {% endif %}
+
+                {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+                    <a href="{% url 'curso:editar_curso' curso.pk %}" class="btn btn-secondary mt-3" style="margin-right: 20px;">Editar Curso</a>
+                {% endif %}
+                    
+                {% if request.user.is_authenticated %}
+                    {% if request.user.perfil.rol == 'administrador' %}
+                        <a href="{% url 'curso:lista_cursos' %}" class="btn btn-tertiary mt-3">Volver</a>
+                    {% endif %}
+                {% endif %}
+            </div>
         </div>
     </div>
 
-    {% if request.user.is_authenticated %}
-        {% if request.user.perfil.rol == 'administrador' %}
-            <a href="{% url 'curso:lista_cursos' %}" class="btn btn-link mt-3">Volver a la Lista de Cursos</a>
-        {% endif %}
-    {% endif %}
+    
     
 </div>
 {% endblock %}

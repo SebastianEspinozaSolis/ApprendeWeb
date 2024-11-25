@@ -24,21 +24,22 @@ def lista_cursos(request):
 @login_required
 def detalle_curso(request, pk):
     curso = get_object_or_404(Curso, pk=pk)
-    asignaturas = Asignatura.objects.filter(curso=curso).select_related('curso')
-    evaluaciones = Evaluacion.objects.filter(asignatura__curso=curso).order_by('fecha') 
-    profesores = Profesor.objects.filter(asignatura__curso=curso).order_by('especialidad')
-    jefatura = Jefatura.objects.filter(curso=curso).first() 
+    jefatura = Jefatura.objects.filter(curso=curso).first()
+    asignaturas = curso.asignaturas.all()
+    evaluaciones = Evaluacion.objects.filter(asignatura__curso=curso)
+    profesores = Profesor.objects.filter(asignatura__curso=curso).distinct()
     alumnos = Alumno.objects.filter(curso=curso)
     apoderados = Apoderado.objects.filter(alumno__in=alumnos)
     return render(request, 'curso/detalle_curso.html', {
         'curso': curso,
-        'asignaturas': asignaturas,
-        'evaluaciones': evaluaciones,  
-        'profesores': profesores,
         'jefatura': jefatura,
+        'asignaturas': asignaturas,
+        'evaluaciones': evaluaciones,
+        'profesores': profesores,
         'alumnos': alumnos,
         'apoderados': apoderados,
-    })
+    }
+    )
 
 @login_required
 def crear_curso(request):

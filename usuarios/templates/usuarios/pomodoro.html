@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="pomodoro-container">
+    <!-- Navegación del temporizador -->
+    <div class="timer-nav">
+        <button class="timer-btn {% if timer_type == 'pomodoro' %}active{% endif %}" data-time="1500">Pomodoro</button>
+        <button class="timer-btn {% if timer_type == 'short' %}active{% endif %}" data-time="300">Short Break</button>
+        <button class="timer-btn {% if timer_type == 'long' %}active{% endif %}" data-time="900">Long Break</button>
+    </div>
+
+    <!-- Temporizador -->
+    <div class="timer-display">
+        <h1 id="time-left">25:00</h1>
+        <button id="start-stop" class="timer-control-btn">START</button>
+    </div>
+
+    <!-- Sección de tareas -->
+    <div class="tasks-section">
+        <h3>Tareas</h3>
+        <div class="tasks-list" id="tasks-container">
+            <!-- Las tareas se agregarán aquí dinámicamente -->
+        </div>
+        <button class="add-task-btn" id="add-task">
+            <i class="fas fa-plus"></i> Agregar Tarea
+        </button>
+    </div>
+</div>
+
+<style>
+.pomodoro-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ba4949;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+}
+
+.timer-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.timer-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.timer-btn.active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.timer-display {
+    margin: 2rem 0;
+}
+
+.timer-display h1 {
+    font-size: 6rem;
+    margin: 1rem 0;
+}
+
+.timer-control-btn {
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    background: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #ba4949;
+    font-weight: bold;
+}
+
+.tasks-section {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 2rem;
+    text-align: left;
+}
+
+.add-task-btn {
+    width: 100%;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let timeLeft = 1500; // 25 minutos en segundos
+    let timerId = null;
+    let isRunning = false;
+
+    const timeLeftDisplay = document.getElementById('time-left');
+    const startStopButton = document.getElementById('start-stop');
+    const timerButtons = document.querySelectorAll('.timer-btn');
+
+    function updateDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timeLeftDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+        if (!isRunning) {
+            isRunning = true;
+            startStopButton.textContent = 'STOP';
+            timerId = setInterval(() => {
+                timeLeft--;
+                updateDisplay();
+                if (timeLeft === 0) {
+                    clearInterval(timerId);
+                    alert('¡Tiempo completado!');
+                    isRunning = false;
+                    startStopButton.textContent = 'START';
+                }
+            }, 1000);
+        } else {
+            clearInterval(timerId);
+            isRunning = false;
+            startStopButton.textContent = 'START';
+        }
+    }
+
+    startStopButton.addEventListener('click', startTimer);
+
+    timerButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            if (isRunning) {
+                clearInterval(timerId);
+                isRunning = false;
+                startStopButton.textContent = 'START';
+            }
+            timeLeft = parseInt(e.target.dataset.time);
+            updateDisplay();
+            
+            // Actualizar botón activo
+            timerButtons.forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+        });
+    });
+});
+</script>
+{% endblock %} 
