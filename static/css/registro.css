@@ -1,0 +1,157 @@
+.registro-container {
+    background: linear-gradient(135deg, #f6f9fc 0%, #f1f4f8 100%);
+    padding: 3rem 0;
+    min-height: 100vh;
+}
+
+.registro-card {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.registro-header {
+    margin-bottom: 3rem;
+}
+
+.registro-header h1 {
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4ECDC4 0%, #2E8B57 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-card {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 2rem;
+    height: 100%;
+}
+
+.form-section-title {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-floating {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-floating > input,
+.form-floating > select {
+    height: 3.5rem;
+    padding: 1rem 0.75rem;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    width: 100%;
+    background: white;
+}
+
+.form-floating > label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 1rem 0.75rem;
+    pointer-events: none;
+    border: 1px solid transparent;
+    transform-origin: 0 0;
+    transition: opacity .1s ease-in-out,transform .1s ease-in-out;
+    color: #6c757d;
+    text-align: center;
+}
+
+.form-floating > input:focus,
+.form-floating > select:focus {
+    border-color: #4ECDC4;
+    box-shadow: 0 0 0 0.2rem rgba(78,205,196,0.25);
+    outline: none;
+}
+
+.custom-file-upload {
+    display: block;
+    padding: 1rem;
+    background: white;
+    border: 2px dashed #4ECDC4;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    color: #4ECDC4;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.custom-file-upload:hover {
+    background: rgba(78,205,196,0.1);
+}
+
+.custom-file-upload input[type="file"] {
+    display: none;
+}
+
+.btn {
+    padding: 0.8rem 2rem;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4ECDC4 0%, #2E8B57 100%);
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(78,205,196,0.3);
+}
+
+.btn-outline-secondary {
+    border: 2px solid #dee2e6;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background: #f8f9fa;
+    border-color: #4ECDC4;
+    color: #4ECDC4;
+}
+
+@media (max-width: 768px) {
+    .registro-card {
+        padding: 1.5rem;
+    }
+    
+    .form-card {
+        margin-bottom: 1.5rem;
+    }
+} 

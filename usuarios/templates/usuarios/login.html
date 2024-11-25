@@ -1,28 +1,79 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}Iniciar Sesión{% endblock %}
 
-{% block content %}
+{% block css %}
+<!-- Archivo CSS de login -->
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Inicio de Sesión</h2>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg" style="border-radius: 15px;">
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="username">Nombre de usuario:</label>
-                            <input type="text" id="username" name="username" class="form-control" required>
+{% block content %}
+<div class="login-container">
+    <div class="container">
+        <div class="row justify-content-center align-items-center min-vh-100">
+            <div class="col-md-8">
+                <div class="login-wrapper">
+                   
+                    <div class="login-left">
+                        <div class="brand-wrapper">
+                            <h1 class="brand-name">Apprende</h1>
+                            <p class="brand-subtitle">Sistema de Gestión Educacional</p>
                         </div>
-                        <div class="form-group">
-                            <label for="password">Contraseña:</label>
-                            <input type="password" id="password" name="password" class="form-control" required>
+                        <div class="illustration-wrapper">
+                            <img src="https://cdni.iconscout.com/illustration/premium/thumb/online-education-3784136-3163671.png" 
+                                 alt="login" class="img-fluid">
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block" style="border-radius: 10px;">Iniciar Sesión</button>
-                        <a href="{% url 'usuarios:registro' %}" class="btn btn-secondary btn-block mt-2" style="border-radius: 10px;">¿No tienes una cuenta? Regístrate aquí</a>
-                    </form>
+                    </div>
+
+                    <div class="login-right">
+                        <div class="login-header">
+                            <h2>Iniciar Sesión</h2>
+                            <p>Bienvenido de vuelta</p>
+                        </div>
+
+                        <form method="post" class="login-form">
+                            {% csrf_token %}
+                            
+                            <div class="form-group">
+                                <label for="username" class="form-label">Usuario</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input type="text" 
+                                           id="username" 
+                                           name="username" 
+                                           class="form-control" 
+                                           required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password" class="form-label">Contraseña</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" 
+                                           id="password" 
+                                           name="password" 
+                                           class="form-control" 
+                                           required>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    Iniciar Sesión
+                                </button>
+                                <a href="{% url 'usuarios:registro' %}" class="btn btn-outline-secondary btn-block">
+                                    Registrarse
+                                </a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

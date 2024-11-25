@@ -4,6 +4,8 @@ from .models import Perfil, Apoderado,Administrador,Alumno,Profesor
 from curso.models import Curso
 
 class RegistroForm(forms.ModelForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su nombre de usuario'}), label='Usuario')
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su correo electrónico'}), label='Correo Electrónico')
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su contraseña'}), label='Contraseña')
     password_confirmacion = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirme su contraseña'}), label='Confirmar Contraseña')
     
