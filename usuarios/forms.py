@@ -48,11 +48,10 @@ class EditarForm(forms.ModelForm):
     rut = forms.CharField(max_length=12, required=True, label='RUT')
     fecha_nacimiento = forms.DateField(required=True, label='Fecha de Nacimiento', widget=forms.widgets.DateInput(attrs={'type': 'date', 'placeholder': 'dd-mm-aaaa'}))
     sexo = forms.ChoiceField(choices=[('M', 'Masculino'), ('F', 'Femenino')], required=True, label='Sexo')
-    rol = forms.ChoiceField(choices=Perfil.ROLES, label='Rol')
     
     class Meta:
         model = Perfil
-        fields = ['nombre','rut','fecha_nacimiento','sexo','rol']
+        fields = ['nombre','rut','fecha_nacimiento','sexo']
 class EditarFotoPerfilForm(forms.ModelForm):
     class Meta:
         model = Perfil
@@ -87,3 +86,5 @@ class CambiarContraseñaForm(forms.Form):
         if nueva_password != confirmar_password:
             raise forms.ValidationError("Las contraseñas no coinciden.")
         return cleaned_data
+class CambiarApoderado(forms.Form):
+    apoderado = forms.ModelChoiceField(queryset=Apoderado.objects.all(), label='Apoderado')

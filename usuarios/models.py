@@ -53,7 +53,6 @@ class Perfil(models.Model):
     rut = models.CharField(max_length=12,null=False,blank=False,validators=[RegexValidator(regex=r'^[0-9]{7,8}-[0-9Kk]$',message='Formato de RUT inválido. Debe ser como 12345678-9',code='invalid_rut'),validar_rut])
     fecha_nacimiento = models.DateField(null=True, blank=True)  # Fecha de nacimiento
     sexo = models.CharField(max_length=1, choices=(('M', 'Masculino'), ('F', 'Femenino')), null=False, blank=False)  # Sexo
-    segundo_rol = models.CharField(max_length=20, choices=ROLES, null=False, blank=False, default='')
 
     def __str__(self):
         return f"{self.user.username} - {self.rol}"

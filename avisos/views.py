@@ -193,3 +193,13 @@ def mis_avisos(request):
 
         aviso.curso = curso  # Agregar el curso al aviso para usarlo en la plantilla
     return render(request, 'avisos/mis_avisos.html', {'avisos': avisos})
+@login_required
+def eliminar_aviso(request, aviso_id):
+    aviso = get_object_or_404(Aviso, id=aviso_id)
+    
+    # Verificar si el usuario es el creador del aviso o un administrador
+    if aviso.creador == request.user or request.user.perfil.rol == 'administrador':
+        aviso.delete()
+    else:
+        return redirect('avisos:lista_avisos')
+    return redirect('avisos:lista_avisos')

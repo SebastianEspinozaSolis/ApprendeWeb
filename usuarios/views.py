@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout,update_session_auth_hash
-from .forms import RegistroForm,ApoderadoForm, AdministradorForm, AlumnoForm, ProfesorForm, EditarForm, EditarFotoPerfilForm, EditarCorreoForm, CambiarContraseñaForm
+from .forms import RegistroForm,ApoderadoForm, AdministradorForm, AlumnoForm, ProfesorForm, EditarForm, EditarFotoPerfilForm, EditarCorreoForm, CambiarContraseñaForm, CambiarApoderado
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Perfil, Administrador,Alumno,Apoderado,Profesor
@@ -11,9 +11,9 @@ from django.shortcuts import get_object_or_404
 from asignatura.models import Asignatura
 from calificacion.models import Calificacion
 from evaluacion.models import Evaluacion
+from django.urls import reverse
 
-
-
+@login_required
 def registro(request):
     if request.method == 'POST':
         form = RegistroForm(request.POST)
@@ -75,7 +75,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('usuarios:login')
-
+@login_required
 def crear_administrador(request, user_id):
     perfil = Perfil.objects.get(id=user_id)
 
@@ -86,12 +86,12 @@ def crear_administrador(request, user_id):
             administrador.perfil = perfil 
             administrador.save()
             messages.success(request, 'Administrador creado exitosamente.')
-            return redirect('usuarios:login')  
+            return redirect('usuarios:lista_usuarios')  
     else:
         form = AdministradorForm()
 
     return render(request, 'usuarios/crear_administrador.html', {'form': form})
-
+@login_required
 def crear_profesor(request, user_id):
     perfil = Perfil.objects.get(id=user_id) 
 
@@ -107,7 +107,7 @@ def crear_profesor(request, user_id):
         form = ProfesorForm()
 
     return render(request, 'usuarios/crear_profesor.html', {'form': form})
-
+@login_required
 def crear_apoderado(request, user_id):
     perfil = Perfil.objects.get(id=user_id)
 
@@ -123,7 +123,7 @@ def crear_apoderado(request, user_id):
         form = ApoderadoForm()
 
     return render(request, 'usuarios/crear_apoderado.html', {'form': form})
-
+@login_required
 def crear_alumno(request, user_id):
     perfil = Perfil.objects.get(id=user_id)
 
@@ -139,15 +139,17 @@ def crear_alumno(request, user_id):
         form = AlumnoForm()
 
     return render(request, 'usuarios/crear_alumno.html', {'form': form})
-
+@login_required
 def lista_usuarios(request):
     rol_filtrado = request.GET.get('rol', None)  # Obtener el rol filtrado de la URL
+
     if rol_filtrado:
-        usuarios = Perfil.objects.filter(rol=rol_filtrado)  # Filtrar usuarios por rol
+        usuarios = Perfil.objects.filter(rol=rol_filtrado, user__is_superuser=False)  # Filtrar por rol y excluir superusuarios
     else:
-        usuarios = Perfil.objects.all()  # Obtener todos los usuarios si no se filtra
+        usuarios = Perfil.objects.filter(user__is_superuser=False)  # Excluir superusuarios si no se filtra
 
     return render(request, 'usuarios/lista_usuarios.html', {'usuarios': usuarios})
+
 @login_required
 def editar_usuario(request, user_id):
     perfil = get_object_or_404(Perfil, id=user_id)
@@ -338,3 +340,65 @@ def cambiar_contraseña(request):
         contraseña_form = CambiarContraseñaForm()
 
     return render(request, 'usuarios/cambiar_contraseña.html', {'contraseña_form': contraseña_form})
+@login_required
+def editar_administrador(request, user_id):
+    administrador = get_object_or_404(Administrador, perfil_id=user_id)
+    if request.method == 'POST':
+        form = AdministradorForm(request.POST, instance=administrador)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Administrador actualizado exitosamente.')
+            return redirect(reverse('usuarios:detalle_usuario', args=[user_id]))
+    else:
+        form = AdministradorForm(instance=administrador)
+    return render(request, 'usuarios/editar_administrador.html', {'form': form})
+
+@login_required
+def editar_profesor(request, user_id):
+    profesor = get_object_or_404(Profesor, perfil_id=user_id)
+    if request.method == 'POST':
+        form = ProfesorForm(request.POST, instance=profesor)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profesor actualizado exitosamente.')
+            return redirect(reverse('usuarios:detalle_usuario', args=[user_id]))
+    else:
+        form = ProfesorForm(instance=profesor)
+    return render(request, 'usuarios/editar_profesor.html', {'form': form})
+
+@login_required
+def editar_apoderado(request, user_id):
+    apoderado = get_object_or_404(Apoderado, perfil_id=user_id)
+    if request.method == 'POST':
+        form = ApoderadoForm(request.POST, instance=apoderado)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Apoderado actualizado exitosamente.')
+            return redirect(reverse('usuarios:detalle_usuario', args=[user_id]))
+    else:
+        form = ApoderadoForm(instance=apoderado)
+    return render(request, 'usuarios/editar_apoderado.html', {'form': form})
+
+@login_required
+def editar_alumno(request, user_id):
+    alumno = get_object_or_404(Alumno, perfil_id=user_id)
+    
+    if request.method == 'POST':
+        form = CambiarApoderado(request.POST)
+        if form.is_valid():
+            alumno.apoderado = form.cleaned_data['apoderado']
+            alumno.save()
+            return redirect(reverse('usuarios:detalle_usuario', args=[user_id]))
+    else:
+        form = CambiarApoderado(initial={'apoderado': alumno.apoderado})
+
+    return render(request, 'usuarios/editar_alumno.html', {'form': form})
+@login_required
+def borrar_usuario(request, user_id):
+    perfil = get_object_or_404(Perfil, id=user_id)
+    if request.method == 'POST':
+        # Borra el usuario y su perfil asociado
+        perfil.user.delete()
+        perfil.delete()
+        return redirect('usuarios:lista_usuarios')
+    return render(request, 'usuarios/borrar_usuario_confirmacion.html', {'perfil': perfil})
