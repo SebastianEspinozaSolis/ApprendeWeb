@@ -1,12 +1,34 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block title %}Gestión de Jefaturas{% endblock %}
 
-{% block title %}Lista de Jefaturas{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/botonTransparente.css' %}">
+<link rel="stylesheet" href="{% static 'css/jefaturas.css' %}">
+<link rel="stylesheet" href="{% static 'css/animacion.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">Lista de Jefaturas</h2>
-    <a href="{% url 'jefatura:crear_jefatura' %}" class="btn btn-primary mb-3">Crear Nueva Jefatura</a>
-    <div class="table-responsive">
+<div class="container mt-4 jefaturas-container">
+    <div class="mb-4">
+        <a href="{% url 'usuarios:menu_administrador' %}" class="btn btn-transparent">
+            <i class="fas fa-arrow-left me-2" style="margin-right: 5px;"></i>Volver
+        </a>
+    </div>
+    <div class="row mb-4 jefaturas-header">
+        <div class="col">
+            <h2 class="display-4" style="font-weight: bold; color: black;">Gestión de Jefaturas</h2>
+            <p class="text-muted lead">Administra y visualiza todas las jefaturas del establecimiento</p>
+        </div>
+    </div>
+
+    {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+    <a href="{% url 'jefatura:crear_jefatura' %}" class="btn btn-success mb-3">
+        <i class="fas fa-plus-circle me-2" style="margin-right: 5px;"></i>Crear Jefatura
+    </a>
+    {% endif %}
+
+    <div class="table-responsive jefaturas-table">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -21,7 +43,7 @@
                     <td>{{ jefatura.curso.nombre }}</td>
                     <td>{{ jefatura.profesor.perfil.nombre }}</td>  
                     <td>
-                        <a href="{% url 'jefatura:editar_jefatura' jefatura.pk %}" class="btn btn-secondary">Editar</a>
+                        <a href="{% url 'jefatura:editar_jefatura' jefatura.pk %}" class="btn btn-editar">Editar</a>
                     </td>
                 </tr>
                 {% empty %}

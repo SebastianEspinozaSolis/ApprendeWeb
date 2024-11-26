@@ -4,7 +4,7 @@ from django.utils import timezone
 # Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from .forms import RegistroForm,ApoderadoForm, AdministradorForm, AlumnoForm, ProfesorForm, EditarForm
+from .forms import RegistroForm,ApoderadoForm, AdministradorForm, AlumnoForm, ProfesorForm, EditarForm, UsuarioForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Perfil, Administrador,Alumno,Apoderado,Profesor, Clase, Evaluacion, Asignatura, Calificacion
@@ -127,6 +127,34 @@ def crear_alumno(request, user_id):
         form = AlumnoForm()
 
     return render(request, 'usuarios/crear_alumno.html', {'form': form})
+
+def crear_usuario(request):
+    if request.method == 'POST':
+        form = RegistroForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = form.save(commit=False)  
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            # Asignamos datos al perfil
+            user.perfil.rol = form.cleaned_data['rol']
+            user.perfil.nombre = form.cleaned_data['nombre']
+            user.perfil.rut = form.cleaned_data['rut']
+            user.perfil.fecha_nacimiento = form.cleaned_data['fecha_nacimiento']
+            user.perfil.sexo = form.cleaned_data['sexo']
+            user.perfil.foto = form.cleaned_data['foto']
+            user.perfil.save()
+
+            if form.cleaned_data['rol'] == 'administrador':
+                return redirect('usuarios:crear_administrador', user_id=user.perfil.id)
+            elif form.cleaned_data['rol'] == 'apoderado':
+                return redirect('usuarios:crear_apoderado', user_id=user.perfil.id)
+            elif form.cleaned_data['rol'] == 'profesor':
+                return redirect('usuarios:crear_profesor', user_id=user.perfil.id)
+            elif form.cleaned_data['rol'] == 'alumno':
+                return redirect('usuarios:crear_alumno', user_id=user.perfil.id)
+    else:
+        form = RegistroForm()
+    return render(request, 'usuarios/crear_usuario.html', {'form': form})
 
 def lista_usuarios(request):
     rol_filtrado = request.GET.get('rol', None)  # Obtener el rol filtrado de la URL

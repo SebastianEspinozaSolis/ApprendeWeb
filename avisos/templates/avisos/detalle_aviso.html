@@ -1,32 +1,63 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Detalle del Aviso{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/botonTransparente.css' %}">
+<link rel="stylesheet" href="{% static 'css/animacion.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Detalle del Aviso</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="mb-4">
+                <a href="{% url 'avisos:lista_avisos' %}" class="btn btn-transparent">
+                    <i class="fas fa-arrow-left me-2" style="margin-right: 5px;"></i>Volver
+                </a>
+            </div>
 
-    <div class="mb-4">
-        <h3>{{ aviso.titulo }}</h3>
-        <p>{{ aviso.descripcion }}</p>
-        <p><strong>Fecha de creación:</strong> {{ aviso.fecha_creacion }}</p>
-        <p><strong>Creado por:</strong> {{ aviso.creador.nombre }}</p>
+            <div class="card shadow">
+                <div class="card-header bg-white border-0">
+                    <h2 class="text-center mb-0" style="font-weight: bold; color: black;">{{ aviso.titulo }}</h2>
+                    <p class="text-muted text-center mb-0">
+                        <small>Creado por {{ aviso.creador.nombre }} - {{ aviso.fecha_creacion|date:"d/m/Y H:i" }}</small>
+                    </p>
+                </div>
+
+                <div class="card-body">
+                    <div class="mb-4" style="animation: fadeIn 1s ease-in-out;">
+                        <h5 class="card-subtitle mb-2 text-muted">Descripción:</h5>
+                        <p class="card-text">{{ aviso.descripcion }}</p>
+                    </div>
+
+                    <div class="mb-4" style="animation: fadeIn 1s ease-in-out;">
+                        <h5 class="card-subtitle mb-3 text-muted">Alumnos destinatarios:</h5>
+                        {% if aviso.avisos_alumno.all %}
+                            <div class="list-group">
+                                {% for aviso_alumno in aviso.avisos_alumno.all %}
+                                    <div class="list-group-item">
+                                        <i class="fas fa-user me-2"></i>
+                                        {{ aviso_alumno.alumno.perfil.nombre }}
+                                        <small class="text-muted">(RUT: {{ aviso_alumno.alumno.perfil.rut }})</small>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-muted">No hay alumnos asignados a este aviso.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2" style="animation: fadeIn 1s ease-in-out;">
+                        <a href="{% url 'avisos:editar_aviso' aviso.id %}" class="btn btn-warning">
+                            <i class="fas fa-edit me-2"></i>Editar Aviso
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="mb-4">
-        <h4>Alumnos destinatarios:</h4>
-        <ul>
-            {% for aviso_alumno in aviso.avisos_alumno.all %}
-                <li>{{ aviso_alumno.alumno.perfil.nombre }} (RUT: {{ aviso_alumno.alumno.perfil.rut }})</li>
-            {% empty %}
-                <p>No hay alumnos asignados a este aviso.</p>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <a href="{% url 'avisos:editar_aviso' aviso.id %}" class="btn btn-warning">Editar Aviso</a>
-
-    <a href="{% url 'avisos:lista_avisos' %}" class="btn btn-secondary mt-3">Volver a la lista de avisos</a>
 </div>
 {% endblock %}
 

@@ -1,0 +1,19 @@
+.btn-transparent {
+    background: transparent;
+    border: none;
+    color: #666;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-transparent:hover {
+    color: #4ECDC4;
+    transform: translateX(-5px);
+}
+
+.btn-transparent i {
+    font-size: 1.1rem;
+}

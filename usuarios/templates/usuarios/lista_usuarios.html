@@ -1,57 +1,109 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Perfiles de Usuarios{% endblock %}
+{% block title %}Gestión de Usuarios{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/usuarios.css' %}">
+<link rel="stylesheet" href="{% static 'css/botonTransparente.css' %}">
+<link rel="stylesheet" href="{% static 'css/animacion.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-4">
-    <h2 class="text-center mb-4">Perfiles de Usuarios</h2>
-    
-    <form method="GET" action="{% url 'usuarios:lista_usuarios' %}" class="mb-4">
-        <label for="rol">Filtrar por rol:</label>
-        <select name="rol" id="rol" onchange="this.form.submit()" class="form-control d-inline-block w-auto">
-            <option value="">Todos</option>
-            <option value="administrador" {% if request.GET.rol == 'administrador' %}selected{% endif %}>Administrador</option>
-            <option value="profesor" {% if request.GET.rol == 'profesor' %}selected{% endif %}>Profesor</option>
-            <option value="apoderado" {% if request.GET.rol == 'apoderado' %}selected{% endif %}>Apoderado</option>
-            <option value="alumno" {% if request.GET.rol == 'alumno' %}selected{% endif %}>Alumno</option>
-        </select>
-        <a href="{% url 'usuarios:registro' %}" class="btn btn-success">Crear Usuario</a>
-        <hr>
-       
-    </form>
+<div class="container mt-5">
+    <div class="mb-4">
+        <a href="{% url 'usuarios:menu_administrador' %}" class="btn btn-transparent">
+            <i class="fas fa-arrow-left me-2" style="margin-right: 5px;"></i>Volver
+        </a>
+    </div>
 
-    <div class="row">
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="display-4" style="font-weight: bold; color: black;">Gestión de Usuarios</h2>
+            <p class="text-muted lead">Administra a todos los usuarios del sistema</p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <label for="rol" class="form-label fw-bold mb-0" style="margin-right: 10px;">Filtrar por rol:</label>
+                </div>
+                <div class="me-3">
+                    <form method="get">
+                        <select name="rol" id="rol" onchange="this.form.submit()" class="form-select" >
+                            <option value="">Todos los roles</option>
+                            <option value="administrador" {% if request.GET.rol == 'administrador' %}selected{% endif %}>Administrador</option>
+                            <option value="profesor" {% if request.GET.rol == 'profesor' %}selected{% endif %}>Profesor</option>
+                            <option value="apoderado" {% if request.GET.rol == 'apoderado' %}selected{% endif %}>Apoderado</option>
+                            <option value="alumno" {% if request.GET.rol == 'alumno' %}selected{% endif %}>Alumno</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="ms-3">
+                    <a href="{% url 'usuarios:crear_usuario' %}" class="btn btn-success" style="margin-left: 15px;">
+                        <i class="fas fa-user-plus me-2" style="margin-right: 5px;"></i>Crear Usuario
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
         {% for usuario in usuarios %}
-        <div class="col-md-4 mb-3">
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    {% if usuario.foto and usuario.foto.url %}
-                        <img src="{{ usuario.foto.url }}" alt="Foto de {{ usuario.nombre }}" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
-                    {% else %}
-                        <img src="{% static 'images/default-profile.png' %}" alt="Foto de perfil por defecto" class="img-fluid rounded-circle mb-3" style="width: 100px; height: 100px;">
-                    {% endif %}
-                    <h5 class="card-title">{{ usuario.user.username }}</h5>
-                    <p class="card-text">
-                        <strong>Rol:</strong> {{ usuario.rol }}<br>
-                        <strong>Nombre Completo:</strong> {{ usuario.nombre }}<br>
-                        <strong>RUT:</strong> {{ usuario.rut }}<br>
-                        <strong>Fecha de Nacimiento:</strong> {{ usuario.fecha_nacimiento }}<br>
-                        <strong>Edad:</strong> {{ usuario.calcular_edad }}<br>
-                        <strong>Sexo:</strong> {{ usuario.sexo }}<br>
-                    </p>
-                    <a href="{% url 'usuarios:editar_usuario' usuario.id %}" class="btn btn-warning">Editar</a>
-                    <a href="{% url 'usuarios:detalle_usuario' usuario.id %}" class="btn btn-info">Ver Perfil</a>
+        <div class="col-md-4">
+            <div class="card hover-card h-100 shadow-sm">
+                <div class="card-body" >
+                    <div class="text-center mb-3">
+                        {% if usuario.foto and usuario.foto.url %}
+                            <img src="{{ usuario.foto.url }}" alt="Foto de {{ usuario.nombre }}" 
+                                 class="rounded-circle mb-3 shadow-sm" 
+                                 style="width: 100px; height: 100px; object-fit: cover;">
+                        {% else %}
+                            <img src="{% static 'images/default-profile.png' %}" 
+                                 alt="Foto de perfil por defecto" 
+                                 class="rounded-circle mb-3 shadow-sm" 
+                                 style="width: 100px; height: 100px; object-fit: cover;">
+                        {% endif %}
+                        <h5 class="card-title mb-0">{{ usuario.nombre }}</h5>
+                        <p class="text-muted small">@{{ usuario.user.username }}</p>
+                    </div>
+
+                    <div class="card-stats p-3 rounded bg-light mb-3">
+                        <div class="row text-center">
+                            <div class="col">
+                                <span class="badge bg-primary" style="color: white;">Rol: {{ usuario.rol|title }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="user-info small" style="text-align: center;">
+                        <p class="mb-2"><i class="fas fa-id-card me-2"></i>RUT: {{ usuario.rut }}</p>
+                        <p class="mb-2"><i class="fas fa-calendar me-2"></i>Edad: {{ usuario.calcular_edad }} años</p>
+                        <p class="mb-2"><i class="fas fa-venus-mars me-2"></i>Sexo: {{ usuario.sexo }}</p>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-3" style="text-align: center;">
+                        <a href="{% url 'usuarios:editar_usuario' usuario.id %}" class="btn btn-outline-warning" style="margin-right: 5px;">
+                            <i class="fas fa-edit me-2" style="margin-right: 5px;"></i>Editar
+                        </a>
+                        <a href="{% url 'usuarios:detalle_usuario' usuario.id %}" class="btn btn-outline-primary">
+                            <i class="fas fa-user me-2" style="margin-right: 5px;"></i>Ver Perfil
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
         {% empty %}
         <div class="col-12">
-            <div class="alert alert-warning" role="alert">
+            <div class="alert alert-warning text-center" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
                 No hay usuarios disponibles.
             </div>
         </div>
         {% endfor %}
     </div>
 </div>
+
 {% endblock %}

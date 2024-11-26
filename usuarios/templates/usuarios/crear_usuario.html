@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Crear Usuario{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/botonTransparente.css' %}">
+<link rel="stylesheet" href="{% static 'css/usuarios.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-white border-0">
+                    <div class="mb-4">
+                        <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-transparent">
+                            <i class="fas fa-arrow-left me-2" style="margin-right: 5px;"></i>Volver
+                        </a>
+                    </div>
+                    <h2 class="text-center mb-0" style="font-weight: bold; color: black;">Crear Usuario</h2>
+                    <p class="text-muted text-center mb-0">Complete el formulario para crear un nuevo usuario</p>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-success" style="margin-right: 5px;">
+                                <i class="fas fa-save me-2" style="margin-right: 5px;"></i>Guardar
+                            </button>
+
+                            <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-secondary">
+                                <i class="fas fa-times me-2" style="margin-right: 5px;"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

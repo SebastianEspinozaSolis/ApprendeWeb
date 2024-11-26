@@ -1,10 +1,24 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}Cursos{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/cursos.css' %}">
+<link rel="stylesheet" href="{% static 'css/botonTransparente.css' %}">
+<link rel="stylesheet" href="{% static 'css/animacion.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <div class="row mb-4 align-items-center">
+    <div class="mb-4">
+        <a href="{% url 'usuarios:menu_administrador' %}" class="btn btn-transparent">
+            <i class="fas fa-arrow-left me-2" style="margin-right: 5px;"></i>Volver
+        </a>
+    </div>
+
+    <div class="row mb-4">
         <div class="col">
             <h2 class="display-4" style="font-weight: bold; color: black;">Gestión de Cursos</h2>
             <p class="text-muted lead">Administra y visualiza todos los cursos del establecimiento</p>
@@ -12,7 +26,7 @@
         {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
         <div class="col-auto">
             <a href="{% url 'curso:crear_curso' %}" class="btn btn-success btn-lg">
-                <i class="fas fa-plus-circle me-2"></i>Crear Curso
+                <i class="fas fa-plus-circle me-2" style="margin-right: 5px;"></i>Crear Curso
             </a>
         </div>
         {% endif %}
@@ -43,11 +57,12 @@
 
                     <div class="d-grid gap-2">
                         <a href="{% url 'curso:detalle_curso' curso.pk %}" class="btn btn-outline-primary">
-                            <i class="fas fa-info-circle me-2"></i>Ver Detalles
+                            <i class="fas fa-info-circle me-2" style="margin-right: 5px;"></i>Ver Detalles
                         </a>
+                        <div class="divider-custom-line" style="margin-top: 10px;"></div>
                         {% if request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
                         <a href="{% url 'asistencia:lista_fechas_asistencia' curso.id %}" class="btn btn-outline-secondary">
-                            <i class="fas fa-clipboard-list me-2"></i>Control de Asistencia
+                            <i class="fas fa-clipboard-list me-2" style="margin-right: 5px;"></i>Control de Asistencia
                         </a>
                         {% endif %}
                     </div>
@@ -66,24 +81,4 @@
     </div>
 </div>
 
-<style>
-.hover-card {
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.hover-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-}
-
-.card-stats {
-    background-color: rgba(0,0,0,0.03);
-    padding: 1rem;
-    border-radius: 0.5rem;
-}
-
-.badge {
-    padding: 0.5em 1em;
-}
-</style>
 {% endblock %}

@@ -1,0 +1,25 @@
+/* Animación de entrada para cards */
+.card,
+.container,
+.table-responsive,
+.form-container {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Animación de entrada para elementos principales */
+.main-content,
+.content-wrapper,
+.page-content {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} 

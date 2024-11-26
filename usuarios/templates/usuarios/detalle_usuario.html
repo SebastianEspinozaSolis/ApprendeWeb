@@ -3,11 +3,23 @@
 
 {% block title %}Perfil de Usuario{% endblock %}
 
+{% block css %} 
+<link rel="stylesheet" href="{% static 'css/botonTransparente.css' %}">
+<link rel="stylesheet" href="{% static 'css/animaciones.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Perfil de {{ perfil.nombre }}</h2>
+
+    <div class="mb-4">
+        <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-transparent">
+            <i class="fas fa-arrow-left me-2" style="margin-right: 5px;"></i>Volver
+        </a>
+    </div>
+
+    <h2 class="text-center mb-4" style="font-weight: bold; color: black;">Perfil de {{ perfil.nombre }}</h2>
     
-    <div class="card mb-3 shadow-sm">
+    <div class="card mb-3 shadow-sm" >
         <div class="card-header">
             Información del Perfil
         </div>
@@ -72,10 +84,6 @@
         </div>
     </div>
     {% endif %}
-
-    <div class="text-center">
-        <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-secondary">Volver</a>
-    </div>
 </div>
 {% endblock %}
 

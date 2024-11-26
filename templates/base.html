@@ -9,7 +9,9 @@
     <!-- Tu archivo de estilos CSS -->
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
     <!-- Bloque para CSS adicional -->
-    {% block css %}{% endblock %}
+    {% block css %}
+    <link rel="stylesheet" href="{% static 'css/animacion.css' %}">
+    {% endblock %}
     <!-- Agregar Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>

@@ -45,6 +45,24 @@ class AlumnoForm(forms.ModelForm):
         model = Alumno
         fields = ['apoderado','curso']
 
+class UsuarioForm(forms.ModelForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su nombre de usuario'}), label='Usuario')
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su correo electrónico'}), label='Correo Electrónico')
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su contraseña'}), label='Contraseña')
+    password_confirmacion = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirme su contraseña'}), label='Confirmar Contraseña')
+    
+    # Campos para el perfil
+    nombre = forms.CharField(max_length=100, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su nombre'}), label='Nombre')
+    rut = forms.CharField(max_length=12, required=True, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su RUT'}), label='RUT')
+    fecha_nacimiento = forms.DateField(required=True, label='Fecha de Nacimiento', widget=forms.widgets.DateInput(attrs={'type': 'date', 'class': 'form-control'}))
+    sexo = forms.ChoiceField(choices=[('M', 'Masculino'), ('F', 'Femenino')], required=True, label='Sexo', widget=forms.Select(attrs={'class': 'form-control'}))
+    rol = forms.ChoiceField(choices=Perfil.ROLES, label='Rol', widget=forms.Select(attrs={'class': 'form-control'}))
+    foto = forms.ImageField(required=False, label='Foto de Perfil', widget=forms.ClearableFileInput(attrs={'class': 'form-control'}))
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'password_confirmacion', 'foto']
+
+
 class EditarForm(forms.ModelForm):
     # Campos para el perfil
     nombre = forms.CharField(max_length=100, required=True, label='Nombre')

@@ -4,6 +4,12 @@
 <div class="container mt-4">
   <h2>Asistencia de la asignatura: {{ asignatura.nombre }}</h2>
 
+  <div class="mb-4">
+    <a href="{% url 'curso:lista_cursos' %}" class="btn btn-transparent">
+        <i class="fas fa-arrow-left me-2" style="margin-right: 5px;"></i>Volver
+    </a>
+  </div>
+
   <div class="row">
     <!-- Columna izquierda: Gráfica circular -->
     <div class="col-md-4">

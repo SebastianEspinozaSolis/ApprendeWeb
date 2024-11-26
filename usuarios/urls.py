@@ -11,6 +11,7 @@ urlpatterns = [
     path('crear_apoderado/<int:user_id>/', views.crear_apoderado, name='crear_apoderado'),
     path('crear_alumno/<int:user_id>/', views.crear_alumno, name='crear_alumno'),
     path('crear_profesor/<int:user_id>/', views.crear_profesor, name='crear_profesor'),
+    path('crear_usuario/', views.crear_usuario, name='crear_usuario'),
     path('', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('lista_usuarios/', views.lista_usuarios, name='lista_usuarios'),
