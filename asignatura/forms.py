@@ -10,3 +10,6 @@ class AsignaturaForm(forms.ModelForm):
     class Meta:
         model = Asignatura
         fields = ['nombre', 'curso','profesor']
+        widgets = {
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+        }

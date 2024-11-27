@@ -6,55 +6,118 @@
 <div class="container mt-4">
     <h2 class="mb-4">Detalles del Alumno: {{ alumno.perfil.nombre }}</h2>
     
-    <p><strong>Curso:</strong> {{ alumno.curso.nombre }}</p>
-    <p><strong>RUT:</strong> {{ alumno.perfil.rut }}</p>
+    <!-- Detalles del Alumno -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Información General</h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Curso:</strong> {{ alumno.curso.nombre }}</p>
+            <p><strong>RUT:</strong> {{ alumno.perfil.rut }}</p>
 
-    <a href="{% url 'curso:detalle_curso' alumno.curso.id %}" class="btn btn-secondary mt-2">Ver detalles del curso</a>
+            <div class="d-flex justify-content-start">
+                <a href="{% url 'curso:detalle_curso' alumno.curso.id %}" class="btn btn-secondary mr-2">
+                    <i class="bi bi-book"></i> Ver detalles del curso
+                </a>
+                <a href="{% url 'asistencia:menu_asignaturas_apoderado' alumno.id %}" class="btn btn-primary">
+                    <i class="bi bi-calendar-check"></i> Ver asistencia
+                </a>
+            </div>
+        </div>
+    </div>
 
-    <h3 class="mt-4">Calificaciones</h3>
-    {% if calificaciones %}
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Evaluación</th>
-                    <th>Calificación</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for calificacion in calificaciones %}
-                <tr>
-                    <td>{{ calificacion.evaluacion.nombre }}</td>
-                    <td>{{ calificacion.calificacion }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No hay calificaciones disponibles para este alumno.</p>
-    {% endif %}
+    <!-- Calificaciones -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Calificaciones</h5>
+        </div>
+        <div class="card-body">
+            {% if calificaciones %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Evaluación</th>
+                            <th>Calificación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for calificacion in calificaciones %}
+                        <tr>
+                            <td>{{ calificacion.evaluacion.nombre }}</td>
+                            <td>{{ calificacion.calificacion }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-circle"></i> No hay calificaciones disponibles para este alumno.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+<!-- Promedios por Asignatura -->
+<div class="card mb-4">
+    <div class="card-header bg-warning text-white">
+        <h5 class="mb-0">Promedios por Asignatura</h5>
+    </div>
+    <div class="card-body">
+        {% if promedios %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Asignatura</th>
+                        <th>Promedio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for asignatura, data in promedios.items %}
+                    <tr>
+                        <td>{{ asignatura.nombre }}</td>
+                        <td>{{ data.promedio|floatformat:1 }}</td> 
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-circle"></i> No hay calificaciones para mostrar.
+            </div>
+        {% endif %}
+    </div>
+</div>
 
-    <h3 class="mt-4">Evaluaciones</h3>
-    {% if evaluaciones %}
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Asignatura</th>
-                    <th>Evaluación</th>
-                    <th>Fecha de Evaluación</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for evaluacion in evaluaciones %}
-                <tr>
-                    <td>{{ evaluacion.asignatura.nombre }}</td>
-                    <td>{{ evaluacion.nombre }}</td>
-                    <td>{{ evaluacion.fecha }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No hay evaluaciones disponibles para este curso.</p>
-    {% endif %}
+    <!-- Evaluaciones -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Evaluaciones</h5>
+        </div>
+        <div class="card-body">
+            {% if evaluaciones %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Asignatura</th>
+                            <th>Evaluación</th>
+                            <th>Fecha de Evaluación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for evaluacion in evaluaciones %}
+                        <tr>
+                            <td>{{ evaluacion.asignatura.nombre }}</td>
+                            <td>{{ evaluacion.nombre }}</td>
+                            <td>{{ evaluacion.fecha }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-circle"></i> No hay evaluaciones disponibles para este curso.
+                </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}

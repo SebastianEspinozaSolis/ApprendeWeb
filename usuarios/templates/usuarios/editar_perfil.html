@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Perfil{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Editar Perfil</h2>
+
+    <p>Selecciona la opción que deseas editar:</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" name="editar_foto" class="btn btn-secondary">Editar Foto de Perfil</button>
+        <button type="submit" name="editar_correo" class="btn btn-secondary">Editar Correo Electrónico</button>
+        <button type="submit" name="cambiar_contraseña" class="btn btn-secondary">Cambiar Contraseña</button>
+    </form>
+
+</div>
+{% endblock %}

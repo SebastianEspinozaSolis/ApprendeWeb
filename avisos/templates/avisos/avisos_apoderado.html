@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Avisos para Apoderado{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Avisos de los Alumnos a tu Cargo</h2>
+    
+    <!-- Botón para volver al menú de apoderado -->
+    <div class="mb-4">
+        <a href="{% url 'usuarios:menu_apoderado' %}" class="btn btn-primary">
+            <i class="bi bi-house-door"></i> Volver al Menú de Apoderado
+        </a>
+    </div>
+
+    {% if avisos_por_alumno %}
+        {% for alumno, avisos in avisos_por_alumno.items %}
+            <h3 class="text-primary">{{ alumno.perfil.nombre }} - Curso: {{ alumno.curso.nombre }}</h3>
+
+            {% if avisos %}
+                <div class="row">
+                    {% for aviso_alumno in avisos %}
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="card-title">{{ aviso_alumno.aviso.titulo }}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{ aviso_alumno.aviso.descripcion }}</p>
+                                    <small class="text-muted">Fecha: {{ aviso_alumno.aviso.fecha_creacion }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- Mensaje cuando no hay avisos -->
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-circle"></i> No hay avisos para este alumno.
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <!-- Mensaje cuando no hay alumnos con avisos -->
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No tienes alumnos asignados con avisos.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

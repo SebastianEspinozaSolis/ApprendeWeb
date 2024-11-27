@@ -4,6 +4,7 @@ from .forms import AsignaturaForm
 from django.contrib.auth.decorators import login_required
 from curso.models import Curso
 from evaluacion.models import Evaluacion
+from usuarios.models import Alumno
 
 @login_required
 def lista_asignaturas(request, curso_id=None):
@@ -21,10 +22,18 @@ def detalle_asignatura(request, pk):
     asignatura = get_object_or_404(Asignatura, pk=pk)
     curso = asignatura.curso  # Obtener el curso de la asignatura
     evaluaciones = Evaluacion.objects.filter(asignatura=asignatura)  # Obtener evaluaciones de la asignatura
+
+    alumno = None
+    # Si el usuario es un apoderado, obtenemos el alumno relacionado
+    if request.user.perfil.rol == 'apoderado':
+        # Buscar el alumno asociado al apoderado (esto depende de cómo hayas definido la relación entre apoderado y alumno)
+        alumno = Alumno.objects.filter(apoderado__perfil__user=request.user).first()  # Cambié 'guardian' por 'apoderado'
+
     return render(request, 'asignatura/detalle_asignatura.html', {
         'asignatura': asignatura,
         'curso': curso,
         'evaluaciones': evaluaciones,
+        'alumno': alumno,  # Pasamos el alumno al contexto
     })
 
 @login_required

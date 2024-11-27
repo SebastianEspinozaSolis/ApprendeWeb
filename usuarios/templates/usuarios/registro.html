@@ -8,7 +8,25 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Registrarse</button>
+        <div id="advertencia" class="alert alert-warning" role="alert" style="display: none;">
+            [Advertencia] Hace falta que el apoderado encargado del alumno este previamente registrado
+        </div>
+        <button type="submit" class="btn btn-primary">Registrar</button>
     </form>
 </div>
+
+<script>
+    // Obtener el campo select del rol y el div de advertencia
+    const rolSelect = document.querySelector('[name="rol"]'); // Ajusta el selector si es necesario
+    const advertencia = document.getElementById('advertencia');
+
+    // Agregar un listener para detectar el cambio en el rol
+    rolSelect.addEventListener('change', function() {
+        if (rolSelect.value === 'alumno') {
+            advertencia.style.display = 'block';  // Mostrar la advertencia si se selecciona "alumno"
+        } else {
+            advertencia.style.display = 'none';   // Ocultar la advertencia si se selecciona otro rol
+        }
+    });
+</script>
 {% endblock %}

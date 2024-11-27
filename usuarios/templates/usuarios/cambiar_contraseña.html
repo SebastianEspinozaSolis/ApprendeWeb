@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Cambiar Contraseña{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Cambiar Contraseña</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="id_password_actual">Contraseña Actual:</label>
+            {{ contraseña_form.password_actual.errors }}
+            {{ contraseña_form.password_actual }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_nueva_password">Nueva Contraseña:</label>
+            {{ contraseña_form.nueva_password.errors }}
+            {{ contraseña_form.nueva_password }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_confirmar_password">Confirmar Nueva Contraseña:</label>
+            {{ contraseña_form.confirmar_password.errors }}
+            {{ contraseña_form.confirmar_password }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <a href="{% url 'usuarios:editar_perfil' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

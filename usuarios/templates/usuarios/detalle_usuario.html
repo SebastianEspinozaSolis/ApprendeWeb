@@ -25,7 +25,7 @@
         </div>
         <div class="card-body">
             <p><strong>Cargo:</strong> {{ administrador.cargo }}</p>
-            <!-- Puedes añadir más campos específicos del Administrador aquí -->
+            <a href="{% url 'usuarios:editar_administrador' perfil.id %}" class="btn btn-primary">Editar Administrador</a>
         </div>
     </div>
     {% endif %}
@@ -37,7 +37,7 @@
         </div>
         <div class="card-body">
             <p><strong>Teléfono:</strong> {{ apoderado.telefono }}</p>
-            <!-- Puedes añadir más campos específicos del Apoderado aquí -->
+            <a href="{% url 'usuarios:editar_apoderado' perfil.id %}" class="btn btn-primary">Editar Apoderado</a>
         </div>
     </div>
     {% endif %}
@@ -49,7 +49,8 @@
         </div>
         <div class="card-body">
             <p><strong>Curso:</strong> {{ alumno.curso }}</p>
-            <!-- Puedes añadir más campos específicos del Alumno aquí -->
+            <p><strong>Apoderado:</strong> {{ alumno.apoderado.perfil.nombre }}</p>
+            <a href="{% url 'usuarios:editar_alumno' perfil.id %}" class="btn btn-primary">Cambiar apoderado</a>
         </div>
     </div>
     {% endif %}
@@ -61,12 +62,12 @@
         </div>
         <div class="card-body">
             <p><strong>Especialidad:</strong> {{ profesor.especialidad }}</p>
-            <!-- Puedes añadir más campos específicos del Profesor aquí -->
+            <a href="{% url 'usuarios:editar_profesor' perfil.id %}" class="btn btn-primary">Editar Profesor</a>
         </div>
     </div>
     {% endif %}
 
     <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-secondary">Volver a la lista de usuarios</a>
+    <a href="{% url 'usuarios:borrar_usuario' perfil.id %}" class="btn btn-danger">Borrar Usuario</a>
 </div>
 {% endblock %}
-

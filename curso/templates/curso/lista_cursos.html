@@ -4,23 +4,34 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Lista de Cursos</h2>
+    <h2 class="mb-4 text-center">Lista de Cursos</h2>
+    
     {% if request.user.is_authenticated %}
         {% if request.user.perfil.rol == 'administrador' %}
-            <a href="{% url 'curso:crear_curso' %}" class="btn btn-success mb-3">Crear Curso </a>
+            <a href="{% url 'curso:crear_curso' %}" class="btn btn-success btn-lg btn-block shadow-lg rounded-pill mb-4" style="background-color: #28a745; border-color: #28a745; transition: all 0.3s ease;">
+                <i class="fas fa-plus-circle"></i> Crear Curso
+            </a>
         {% endif %}
     {% endif %}
-    {% for curso in cursos %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">{{ curso.nombre }}</h5>
-                <p class="card-text">{{ curso.sala|truncatechars:100 }}</p>
-                <a href="{% url 'curso:detalle_curso' curso.pk %}" class="btn btn-primary">ver detalles</a>
-            </div>
+
+    {% if cursos %}
+        <div class="row">
+            {% for curso in cursos %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-lg border-primary">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{ curso.nombre }}</h5>
+                            <p class="card-text">{{ curso.sala|truncatechars:100 }}</p>
+                            <a href="{% url 'curso:detalle_curso' curso.pk %}" class="btn btn-outline-primary w-100">Ver Detalles</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>No hay cursos disponibles.</p>
-    {% endfor %}
-    {{ request.user.perfil.rol }}
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            No hay cursos disponibles.
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Aviso{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Editar Aviso</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <h5>Detalles del Aviso</h5>
+        {{ aviso_form.as_p }}
+
+        <h5>Selecciona los Alumnos Destinatarios</h5>
+        {{ alumno_form.as_p }}
+
+        <button type="submit" class="btn btn-success">Guardar cambios</button>
+    </form>
+
+    <a href="{% url 'avisos:detalle_aviso' aviso.id %}" class="btn btn-secondary mt-3">Volver al detalle del aviso</a>
+</div>
+
+<!-- Script para seleccionar/deseleccionar todos los alumnos -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const seleccionarTodosCheckbox = document.getElementById('id_seleccionar_todos');
+        const alumnoCheckboxes = document.querySelectorAll('input[name="alumnos"]');
+
+        seleccionarTodosCheckbox.addEventListener('change', function() {
+            alumnoCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = seleccionarTodosCheckbox.checked;
+            });
+        });
+    });
+</script>
+{% endblock %}

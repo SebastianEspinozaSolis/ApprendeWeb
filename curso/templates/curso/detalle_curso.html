@@ -4,118 +4,137 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="card">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h2 class="card-title text-center">{{ curso.nombre }}</h2>
+        </div>
         <div class="card-body">
-            <h2 class="card-title">{{ curso.nombre }}</h2>
-            <hr>
-            <p class="card-text">Sala: {{ curso.sala }}</p>
-            <hr>
-            {% if jefatura %}
-                <h5>Jefatura</h5>
-                <p>Profesor: {{ jefatura.profesor.perfil.nombre }}</p>
-                <p>Correo del profesor: {{ jefatura.profesor.perfil.user.email }}</p>
-                {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
-                    <a href="{% url 'jefatura:editar_jefatura' jefatura.pk %}" class="btn btn-secondary">Editar</a>
-                {% endif %}
-            {% else %}
-                {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
-                    <a href="{% url 'jefatura:crear_jefatura' %}?curso_id={{ curso.id }}" class="btn btn-success">Añadir Jefatura</a>
-                {% endif %}
-            {% endif %}
-            <hr>
-            <h5>Asignaturas</h5>
-            {% if asignaturas %}
-                <ul class="list-group">
-                    {% for asignatura in asignaturas %}
-                        <li class="list-group-item">
-                            <h5>{{ asignatura.nombre }}</h5>
-                            <p>Curso: {{ asignatura.curso }}</p>
-                            <a href="{% url 'asignatura:detalle_asignatura' asignatura.pk %}" class="btn btn-primary">Ver Detalles</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No hay asignaturas disponibles para este curso.</p>
-            {% endif %}
-            <hr>
+            <p class="card-text"><strong>Sala:</strong> {{ curso.sala }}</p>
+            <hr class="my-4">
 
-            <!-- Sección para mostrar evaluaciones cercanas -->
-            <h5>Evaluaciones Cercanas</h5>
+            {% if jefatura %}
+                <div class="mb-4">
+                    <h5 class="text-info">Jefatura</h5>
+                    <p><strong>Profesor:</strong> {{ jefatura.profesor.perfil.nombre }}</p>
+                    <p><strong>Correo del profesor:</strong> {{ jefatura.profesor.perfil.user.email }}</p>
+                    {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+                        <a href="{% url 'jefatura:editar_jefatura' jefatura.pk %}" class="btn btn-warning">Editar</a>
+                    {% endif %}
+                </div>
+            {% else %}
+                {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+                    <div class="alert alert-success">
+                        <a href="{% url 'jefatura:crear_jefatura' %}?curso_id={{ curso.id }}" class="btn btn-success">Añadir Jefatura</a>
+                    </div>
+                {% endif %}
+            {% endif %}
+
+            <hr class="my-4">
+            <div class="text-center mb-4">
+                {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' or request.user.perfil.rol == 'profesor' %}
+                    <a href="{% url 'avisos:crear_aviso' curso_id=curso.id %}" class="btn btn-warning">Añadir Aviso</a>
+                {% endif %}
+            </div>
+
+            <hr class="my-4">
+            <h5 class="text-secondary">Asignaturas</h5>
+            <hr class="my-4">
+
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+                <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-info">Modificar Asignaturas de este Curso</a>
+            {% endif %}
+
+            {% if asignaturas %}
+                <div class="row">
+                    {% for asignatura in asignaturas %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ asignatura.nombre }}</h5>
+                                    <p class="card-text"><strong>Curso:</strong> {{ asignatura.curso }}</p>
+                                    <a href="{% url 'asignatura:detalle_asignatura' asignatura.pk %}" class="btn btn-primary">Ver Detalles</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted">No hay asignaturas disponibles para este curso.</p>
+            {% endif %}
+
+            <hr class="my-4">
+            <h5 class="text-secondary">Evaluaciones Cercanas</h5>
             {% if evaluaciones %}
                 <ul class="list-group">
                     {% for evaluacion in evaluaciones %}
-                        <li class="list-group-item">
-                            <h6>{{ evaluacion.nombre }}</h6>
-                            <p>Descripción: {{ evaluacion.descripcion }}</p>
-                            <p>Fecha: {{ evaluacion.fecha }}</p>
-                            <p>Asignatura: {{ evaluacion.asignatura.nombre }}</p>
-                            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' or request.user.perfil.rol == 'profesor' %}
-                            <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary">Ver Detalles</a>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6>{{ evaluacion.nombre }}</h6>
+                                <p><strong>Descripción:</strong> {{ evaluacion.descripcion }}</p>
+                                <p><strong>Fecha:</strong> {{ evaluacion.fecha }}</p>
+                                <p><strong>Asignatura:</strong> {{ evaluacion.asignatura.nombre }}</p>
+                            </div>
+                            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+                                <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary">Ver Detalles</a>
                             {% endif %}
                         </li>
                     {% endfor %}
                 </ul>
             {% else %}
-                <p>No hay evaluaciones cercanas para este curso.</p>
+                <p class="text-muted">No hay evaluaciones cercanas para este curso.</p>
             {% endif %}
 
-            <h5>Profesores</h5>
+            <hr class="my-4">
+            <h5 class="text-secondary">Profesores</h5>
             {% if profesores %}
                 <ul class="list-group">
                     {% for profesor in profesores %}
                         <li class="list-group-item">
                             <h6>{{ profesor.perfil.nombre }}</h6>
-                            <p>Correo: {{ profesor.perfil.user.email }}</p>
-                            <p>Especialidad: {{ profesor.especialidad }}</p>
+                            <p><strong>Correo:</strong> {{ profesor.perfil.user.email }}</p>
+                            <p><strong>Especialidad:</strong> {{ profesor.especialidad }}</p>
                         </li>
                     {% endfor %}
                 </ul>
             {% else %}
-                <p>No hay profesores para este curso.</p>
+                <p class="text-muted">No hay profesores asignados a este curso.</p>
             {% endif %}
 
-            <hr>
-            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
-                <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-info mt-3">Modificar Asignaturas de este Curso</a>
-            {% endif %}
-
+            <hr class="my-4">
             {% if request.user.perfil.rol == 'profesor' %}
-            <!-- Lista de alumnos con datos de apoderado -->
-            <h4>Apoderado</h4>
-            {% if alumnos %}
-            <ul class="list-group">
-                {% for alumno in alumnos %}
-                <li class="list-group-item">
-                    <h5>{{ alumno.perfil.nombre }}</h5>
-                    <!-- Datos del apoderado -->
-                    {% if alumno.apoderado %}
-                        <h6>Apoderado</h6>
-                        <p>Nombre: {{ alumno.apoderado.perfil.nombre }}</p>
-                        <p>Correo: {{ alumno.apoderado.perfil.user.email }}</p>
-                        <p>Teléfono: {{ alumno.apoderado.telefono }}</p>
-                    {% else %}
-                        <p>No tiene apoderado asignado.</p>
-                    {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
-            {% else %}
-                <p>No hay alumnos en este curso.</p>
-            {% endif %}
+                <hr class="my-4">
+                <h4 class="text-success">Apoderados</h4>
+                {% if alumnos %}
+                    <ul class="list-group">
+                        {% for alumno in alumnos %}
+                        <li class="list-group-item">
+                            <h5>{{ alumno.perfil.nombre }}</h5>
+                            {% if alumno.apoderado %}
+                                <div class="alert alert-info">
+                                    <h6>Apoderado</h6>
+                                    <p><strong>Nombre:</strong> {{ alumno.apoderado.perfil.nombre }}</p>
+                                    <p><strong>Correo:</strong> {{ alumno.apoderado.perfil.user.email }}</p>
+                                    <p><strong>Teléfono:</strong> {{ alumno.apoderado.telefono }}</p>
+                                </div>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted">No hay alumnos en este curso.</p>
+                {% endif %}
             {% endif %}
 
-            <hr>
+            <hr class="my-4">
             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
-                <a href="{% url 'curso:editar_curso' curso.pk %}" class="btn btn-secondary">Editar Curso</a>
+                <a href="{% url 'curso:editar_curso' curso.pk %}" class="btn btn-secondary w-100">Editar Curso</a>
             {% endif %}
         </div>
     </div>
 
-    {% if request.user.is_authenticated %}
-        {% if request.user.perfil.rol == 'administrador' %}
-            <a href="{% url 'curso:lista_cursos' %}" class="btn btn-link mt-3">Volver a la Lista de Cursos</a>
-        {% endif %}
+    {% if request.user.perfil.rol == 'apoderado' %}
+        <hr class="my-4">
+        <a href="{% url 'usuarios:menu_apoderado' %}" class="btn btn-outline-primary w-100">Volver al Menú de Apoderado</a>
     {% endif %}
-    
 </div>
 {% endblock %}

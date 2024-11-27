@@ -4,40 +4,76 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="card">
-        <div class="card-body">
+    <div class="card shadow-sm border-light">
+        <div class="card-header bg-info text-white text-center">
             <h2 class="card-title">{{ asignatura.nombre }}</h2>
-            <p>Curso: {{ asignatura.curso.nombre }}</p>
-            <p>Profesor: {{ asignatura.profesor.perfil.nombre }}</p>
-            <p>Correo del Profesor: {{ asignatura.profesor.perfil.user.email }}</p>
+        </div>
+        <div class="card-body">
+            <div class="mb-4">
+                <p class="lead"><strong>Curso:</strong> {{ asignatura.curso.nombre }}</p>
+                <p><strong>Profesor:</strong> {{ asignatura.profesor.perfil.nombre }}</p>
+                <p><strong>Correo del Profesor:</strong> <a href="mailto:{{ asignatura.profesor.perfil.user.email }}" class="text-decoration-none">{{ asignatura.profesor.perfil.user.email }}</a></p>
+            </div>
+
             <hr>
 
-            <h5>Evaluaciones</h5>
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
+                <div class="mb-4">
+                    <h5 class="text-primary">Asistencia</h5>
+                    <a href="{% url 'asistencia:lista_fechas_asistencia' asignatura_id=asignatura.id %}" class="btn btn-outline-primary btn-lg">Ver Asistencia</a>
+                </div>
+            {% endif %}
+
+            <hr>
+
+            <h5 class="text-success">Evaluaciones</h5>
             {% if evaluaciones %}
-                <ul class="list-group">
+                <div class="list-group">
                     {% for evaluacion in evaluaciones %}
-                        <li class="list-group-item">
+                        <div class="list-group-item list-group-item-action">
                             <h5>{{ evaluacion.nombre }}</h5>
-                            <p>Descripción: {{ evaluacion.descripcion }}</p>
-                            <p>Fecha: {{ evaluacion.fecha }}</p>
+                            <p><strong>Descripción:</strong> {{ evaluacion.descripcion }}</p>
+                            <p><strong>Fecha:</strong> {{ evaluacion.fecha }}</p>
                             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' or request.user.perfil.rol == 'profesor' %}
-                            <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary">Ver Detalles</a>
+                                <a href="{% url 'evaluacion:detalle_evaluacion' evaluacion.pk %}" class="btn btn-primary btn-sm">Ver Detalles</a>
                             {% endif %}
-                        </li>
+                        </div>
                     {% endfor %}
-                </ul>
+                </div>
             {% else %}
-                <p>No hay evaluaciones disponibles para esta asignatura.</p>
+                <p class="text-muted">No hay evaluaciones disponibles para esta asignatura.</p>
             {% endif %}
+
             <hr>
+
             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' or request.user.perfil.rol == 'profesor' %}
-            <a href="{% url 'evaluacion:crear_evaluacion' %}?asignatura_id={{ asignatura.id }}" class="btn btn-success">Añadir Evaluación</a>
+                <div class="mb-4">
+                    <a href="{% url 'evaluacion:crear_evaluacion' %}?asignatura_id={{ asignatura.id }}" class="btn btn-success btn-lg w-100">Añadir Evaluación</a>
+                </div>
             {% endif %}
+
             <hr>
+
             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
-            <a href="{% url 'asignatura:editar_asignatura' asignatura.pk %}" class="btn btn-warning">Editar Asignatura</a>
-            <hr>
-            <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-secondary">Volver a la Lista de Asignaturas del Curso</a>
+                <div class="mb-4">
+                    <a href="{% url 'asignatura:editar_asignatura' asignatura.pk %}" class="btn btn-warning btn-lg w-100">Editar Asignatura</a>
+                </div>
+                <hr>
+                <div class="mb-4">
+                    <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-secondary btn-lg w-100">Volver a la Lista de Asignaturas del Curso</a>
+                </div>
+            {% endif %}
+
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' %}
+                <div class="mb-4">
+                    <a href="{% url 'avisos:crear_aviso' curso_id=asignatura.curso.id %}" class="btn btn-info btn-lg w-100">Añadir Aviso</a>
+                </div>
+            {% endif %}
+
+            {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
+            <div class="mt-4">
+                <a href="{% url 'curso:detalle_curso' asignatura.curso.id %}" class="btn btn-outline-secondary btn-lg w-100">Regresar al Curso</a>
+            </div>
             {% endif %}
         </div>
     </div>

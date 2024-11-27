@@ -4,43 +4,64 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">Bienvenido, {{ user.perfil.nombre }} (Administrador)</h2>
-    <p class="lead mb-5">Desde aquí puedes gestionar los cursos, usuarios, y más. Elige una opción a continuación para comenzar.</p>
+    <h2 class="mb-4 text-center">Bienvenido, {{ user.perfil.nombre }} (Administrador)</h2>
+    <p class="lead mb-5 text-center">Desde aquí puedes gestionar cursos, usuarios, y más. Elige una opción a continuación para comenzar.</p>
 
-    <div class="row">
+    <div class="row justify-content-center">
         <!-- Card para gestionar cursos -->
         <div class="col-md-4 mb-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title">Gestionar Cursos</h5>
+            <div class="card shadow-lg border-primary">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary">Gestionar Cursos</h5>
                     <p class="card-text">Aquí puedes crear, editar y ver cursos disponibles para los estudiantes con sus derivados.</p>
-                    <a href="{% url 'curso:lista_cursos' %}" class="btn btn-primary">Ver Cursos</a>
+                    <a href="{% url 'curso:lista_cursos' %}" class="btn btn-outline-primary btn-lg w-100">Ver Cursos</a>
                 </div>
             </div>
         </div>
 
         <!-- Card para gestionar usuarios -->
         <div class="col-md-4 mb-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title">Gestionar Usuarios</h5>
+            <div class="card shadow-lg border-success">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-success">Gestionar Usuarios</h5>
                     <p class="card-text">Administra todos los usuarios, entre los que son alumnos, profesores, apoderados o administradores.</p>
-                    <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-success">Ver Usuarios</a>
+                    <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-outline-success btn-lg w-100">Ver Usuarios</a>
                 </div>
             </div>
         </div>
 
         <!-- Card para gestionar jefaturas -->
         <div class="col-md-4 mb-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h5 class="card-title">Gestionar Jefaturas</h5>
+            <div class="card shadow-lg border-warning">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-warning">Gestionar Jefaturas</h5>
                     <p class="card-text">Administra las jefaturas de los diferentes cursos y profesores.</p>
-                    <a href="{% url 'jefatura:lista_jefaturas' %}" class="btn btn-warning">Ver Jefaturas</a>
+                    <a href="{% url 'jefatura:lista_jefaturas' %}" class="btn btn-outline-warning btn-lg w-100">Ver Jefaturas</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card para gestionar avisos -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-lg border-info">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-info">Gestionar Avisos</h5>
+                    <p class="card-text">Envía notificaciones a los Apoderados por medio de los cursos.</p>
+                    <a href="{% url 'avisos:lista_avisos' %}" class="btn btn-outline-info btn-lg w-100">Ver Avisos</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card para gestionar justificativos -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-lg border-secondary">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-secondary">Gestionar Justificativos</h5>
+                    <p class="card-text">Revisa, aprueba o rechaza los justificativos enviados por los apoderados.</p>
+                    <a href="{% url 'justificativo:gestionar_justificativos' %}" class="btn btn-outline-secondary btn-lg w-100">Ver Justificativos</a>
                 </div>
             </div>
         </div>
     </div>
-    <p>proximamente avisos</p>
 </div>
 {% endblock %}

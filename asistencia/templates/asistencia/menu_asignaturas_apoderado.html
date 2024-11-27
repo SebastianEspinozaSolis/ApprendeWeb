@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Asignaturas de {{ alumno.perfil.nombre }}</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Asignatura</th>
+                <th>Porcentaje de Asistencia</th>
+                <th>Detalles</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in asignaturas_con_datos %}
+            <tr>
+                <td>{{ item.nombre }}</td>  <!-- Ahora accedemos directamente a item.nombre -->
+                <td>{{ item.porcentaje_asistencia|floatformat:2 }}%</td>
+                <td>
+                    <a href="{% url 'asistencia:detalle_asistencia' item.id alumno.id %}" class="btn btn-primary">Ver Detalles</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- Botón para ir al detalle del alumno -->
+    <div class="mt-4">
+        <a href="{% url 'usuarios:detalle_alumno' alumno.id %}" class="btn btn-secondary btn-lg w-100">Ver Detalle del Alumno</a>
+    </div>
+</div>
+{% endblock %}

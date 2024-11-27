@@ -43,16 +43,25 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'usuarios:lista_usuarios' %}">Usuarios</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'avisos:lista_avisos' %}">Avisos</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{% url 'justificativo:gestionar_justificativos' %}">Justificativos</a>
+                        </li>
                         {% elif user.perfil.rol == 'profesor' %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'usuarios:menu_profesor' %}">Menu Profesor</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'avisos:mis_avisos' %}">Mis Avisos</a>
                         </li>
                         {% elif user.perfil.rol == 'apoderado' %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'usuarios:menu_apoderado' %}">Menu Apoderado</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Aviso proximamente</a>
+                            <a class="nav-link" href="{% url 'avisos:avisos_apoderado' %}">Ver Avisos</a>
                         </li>
                         {% elif user.perfil.rol == 'alumno' %}
                         <li class="nav-item">
@@ -68,10 +77,9 @@
                                 {{ user.username }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                {% if user.perfil.rol == 'administrador' %}
-                                    <a class="dropdown-item" href="{% url 'usuarios:login' %}">Panel de Administración</a>
-                                {% endif %}
-                                <a class="dropdown-item" href="#">Perfil</a>
+                                <a class="dropdown-item" href="{% url 'usuarios:editar_perfil' %}">Perfil</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'soporte:crear_reporte' %}">Soporte</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{% url 'usuarios:logout' %}">Cerrar Sesión</a>
                             </div>
@@ -79,9 +87,6 @@
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'usuarios:login' %}">Iniciar Sesión</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:registro' %}">Registrarse</a>
                         </li>
                     {% endif %}
                 </ul>

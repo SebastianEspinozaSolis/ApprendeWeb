@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle del Aviso{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">{{ aviso.titulo }}</h2>
+                    <small class="d-block">Creado por: {{ aviso.creador.nombre }} ({{ aviso.creador.rol }})</small>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{{ aviso.descripcion }}</p>
+                    <p><strong>Fecha de creación:</strong> {{ aviso.fecha_creacion }}</p>
+
+                    <!-- Mostrar el curso al que se ha enviado el aviso -->
+                    {% if aviso.curso %}
+                        <p><strong>Curso:</strong> {{ aviso.curso.nombre }}</p>
+                    {% else %}
+                        <p><strong>Curso:</strong> No asignado</p>
+                    {% endif %}
+
+                    <div class="mt-4">
+                        <h5 class="mb-3">Alumnos destinatarios:</h5>
+                        {% if aviso.avisos_alumno.all %}
+                            <ul class="list-group">
+                                {% for aviso_alumno in aviso.avisos_alumno.all %}
+                                    <li class="list-group-item">
+                                        <strong>{{ aviso_alumno.alumno.perfil.nombre }}</strong> (RUT: {{ aviso_alumno.alumno.perfil.rut }})
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% else %}
+                            <p class="text-muted">No hay alumnos asignados a este aviso.</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'avisos:editar_aviso' aviso.id %}" class="btn btn-warning">Editar Aviso</a>
+                    <a href="{% url 'avisos:lista_avisos' %}" class="btn btn-secondary">Volver a la lista de avisos</a>
+
+                    <!-- Botón para eliminar aviso, visible solo si es creador o administrador -->
+                    {% if aviso.creador == request.user or request.user.perfil.rol == 'administrador' %}
+                        <form method="POST" action="{% url 'avisos:eliminar_aviso' aviso.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Eliminar Aviso</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
