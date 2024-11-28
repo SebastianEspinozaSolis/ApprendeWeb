@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Crear Nuevo Curso</h2>
+    <h2 class="text-center mb-4">Crear Curso</h2>
     <form method="post">
         {% csrf_token %}
         
@@ -26,14 +26,14 @@
         </div>
 
         <!-- Botón de crear -->
-         <div class="text-center mt-4">
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-right: 10px;">Crear</button>
+            <!-- Botón para regresar a la lista de cursos -->
+            <a href="{% url 'curso:lista_cursos' %}" class="btn btn-secondary btn-lg btn-block mt-3">
+            Volver
+            </a>
         </div>
     </form>
 
-    <!-- Botón para regresar a la lista de cursos -->
-    <a href="{% url 'curso:lista_cursos' %}" class="btn btn-secondary btn-lg btn-block mt-3">
-        Volver a la Lista de Cursos
-    </a>
 </div>
 {% endblock %}

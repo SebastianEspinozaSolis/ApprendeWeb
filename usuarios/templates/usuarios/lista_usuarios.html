@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Lista de Usuarios{% endblock %}
 
@@ -15,8 +16,8 @@
             <option value="apoderado" {% if request.GET.rol == 'apoderado' %}selected{% endif %}>Apoderado</option>
             <option value="alumno" {% if request.GET.rol == 'alumno' %}selected{% endif %}>Alumno</option>
         </select>
-        <button type="submit" class="btn btn-primary">Filtrar</button>
-        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#alertModal">Crear Nuevo Usuario</a>
+        
+        <a href="#" class="btn btn-success" data-toggle="modal" data-target="#alertModal">Crear Usuario</a>
     </form>
     
     <div class="row mt-4">

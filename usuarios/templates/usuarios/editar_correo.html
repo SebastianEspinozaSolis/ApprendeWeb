@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Editar Correo Electrónico{% endblock %}
 
 {% block content %}
@@ -8,13 +8,13 @@
     <form method="post">
         {% csrf_token %}
         
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 10px;">
             <label for="id_email">Nuevo Correo Electrónico:</label>
             {{ correo_form.email.errors }}
             {{ correo_form.email }}
         </div>
 
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Guardar Cambios</button>
         <a href="{% url 'usuarios:editar_perfil' %}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>

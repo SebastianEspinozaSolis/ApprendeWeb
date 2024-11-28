@@ -1,22 +1,57 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Iniciar Sesión{% endblock %}
 
 {% block content %}
-
-<div class="container mt-4">
-    <h2>Iniciar Sesión</h2>
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label>Nombre de usuario:</label>
-            <input type="text" name="username" class="form-control" required>
+<div class="container-fluid">
+    <div class="row min-vh-100">
+        <!-- Panel izquierdo con color de fondo -->
+        <div class="col-md-5 bg-primary d-flex align-items-center justify-content-center">
+            <div class="text-white text-center p-5">
+                <h1 class="display-4">Apprende</h1>
+                <p class="lead">Sistema de Gestión Educacional</p>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Contraseña:</label>
-            <input type="password" name="password" class="form-control" required>
+        
+        <!-- Panel derecho con formulario -->
+        <div class="col-md-7 d-flex align-items-center justify-content-center">
+            <div class="card shadow-lg border-0" style="min-width: 400px;">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">Iniciar Sesión</h2>
+                    <p class="text-muted text-center mb-4">Bienvenido de vuelta</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group mb-3">
+                            <label class="form-label">Usuario</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <input type="text" name="username" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                            <label class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" name="password" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 mb-3">
+                            Iniciar Sesión
+                        </button>
+                        
+                        <div class="text-center">
+                            <a href="{% url 'usuarios:registro' %}" class="text-muted">
+                                Registrarse
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-    </form>
+    </div>
 </div>
 {% endblock %}

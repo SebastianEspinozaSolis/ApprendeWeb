@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Lista de Jefaturas{% endblock %}
+
 
 {% block content %}
 <div class="container mt-5">
@@ -9,7 +11,7 @@
     <!-- Botón para crear nueva jefatura -->
     <div class="text-end mb-3">
         <a href="{% url 'jefatura:crear_jefatura' %}" class="btn btn-success btn-lg">
-            Crear Nueva Jefatura
+            Crear Jefatura
         </a>
     </div>
 

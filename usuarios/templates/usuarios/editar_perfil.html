@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load static %}
 {% block title %}Editar Perfil{% endblock %}
 
 {% block content %}
@@ -10,9 +11,9 @@
     
     <form method="post">
         {% csrf_token %}
-        <button type="submit" name="editar_foto" class="btn btn-secondary">Editar Foto de Perfil</button>
-        <button type="submit" name="editar_correo" class="btn btn-secondary">Editar Correo Electrónico</button>
-        <button type="submit" name="cambiar_contraseña" class="btn btn-secondary">Cambiar Contraseña</button>
+        <button type="submit" name="editar_foto" class="btn btn-secondary" style="margin-right: 10px;">Editar Foto de Perfil</button>
+        <button type="submit" name="editar_correo" class="btn btn-secondary" style="margin-right: 10px;">Editar Correo Electrónico</button>
+        <button type="submit" name="cambiar_contraseña" class="btn btn-secondary" style="margin-right: 10px;">Cambiar Contraseña</button>
     </form>
 
 </div>
