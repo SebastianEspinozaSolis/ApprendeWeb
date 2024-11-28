@@ -6,6 +6,7 @@ from asignatura.models import Asignatura
 from evaluacion.models import Evaluacion
 from usuarios.models import Profesor, Alumno, Apoderado
 from jefatura.models import Jefatura
+from django.utils.timezone import now
 @login_required
 def lista_cursos(request):
     cursos = Curso.objects.all().order_by('-nombre')
@@ -14,7 +15,10 @@ def lista_cursos(request):
 def detalle_curso(request, pk):
     curso = get_object_or_404(Curso, pk=pk)
     asignaturas = Asignatura.objects.filter(curso=curso).select_related('curso')
-    evaluaciones = Evaluacion.objects.filter(asignatura__curso=curso).order_by('fecha') 
+    evaluaciones = Evaluacion.objects.filter(
+        asignatura__curso=curso,
+        fecha__gte=now()  # Filtra por fecha mayor o igual a la actual
+    ).order_by('fecha') 
     profesores = Profesor.objects.filter(asignatura__curso=curso).order_by('especialidad')
     jefatura = Jefatura.objects.filter(curso=curso).first() 
     alumnos = Alumno.objects.filter(curso=curso)
