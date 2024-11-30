@@ -7,10 +7,12 @@ from evaluacion.models import Evaluacion
 from usuarios.models import Profesor, Alumno, Apoderado
 from jefatura.models import Jefatura
 from django.utils.timezone import now
+# lista de cursos. Administrador
 @login_required
 def lista_cursos(request):
     cursos = Curso.objects.all().order_by('-nombre')
     return render(request, 'curso/lista_cursos.html', {'cursos': cursos})
+#detalles de un curso. Todos los usuarios, pero difiere segun rol
 @login_required
 def detalle_curso(request, pk):
     curso = get_object_or_404(Curso, pk=pk)
@@ -32,7 +34,7 @@ def detalle_curso(request, pk):
         'alumnos': alumnos,
         'apoderados': apoderados,
     })
-
+# crear curso. Administrador
 @login_required
 def crear_curso(request):
     if request.user.perfil.rol in ['profesor', 'administrador']:
@@ -47,7 +49,7 @@ def crear_curso(request):
         return render(request, 'curso/crear_curso.html', {'form': form})
     else:
         return redirect('curso:lista_cursos')
-
+#editar curso. Administrador
 @login_required
 def editar_curso(request, pk):
     curso = get_object_or_404(Curso, pk=pk)

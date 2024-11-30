@@ -5,6 +5,7 @@
 {% block content %}
 <div class="container mt-4">
     <div class="card shadow-sm border-light">
+        <!-- datos de asignatura --> 
         <div class="card-header bg-info text-white text-center">
             <h2 class="card-title">{{ asignatura.nombre }}</h2>
         </div>
@@ -16,7 +17,7 @@
             </div>
 
             <hr>
-
+            <!-- comprobar que sea administrador o profesor para ver asistencia de la asignatura --> 
             {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' or request.user.perfil.rol == 'administrador' %}
                 <div class="mb-4">
                     <h5 class="text-primary">Asistencia</h5>
@@ -25,7 +26,7 @@
             {% endif %}
 
             <hr>
-
+            <!-- mostrar evaluaciones si las hay --> 
             <h5 class="text-success">Evaluaciones</h5>
             {% if evaluaciones %}
                 <div class="list-group">
@@ -45,7 +46,7 @@
             {% endif %}
 
             <hr>
-
+            <!-- profesor o administrador puede agregar evaluaciones --> 
             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' or request.user.perfil.rol == 'profesor' %}
                 <div class="mb-4">
                     <a href="{% url 'evaluacion:crear_evaluacion' %}?asignatura_id={{ asignatura.id }}" class="btn btn-success btn-lg w-100">Añadir Evaluación</a>
@@ -53,7 +54,7 @@
             {% endif %}
 
             <hr>
-
+            <!-- el administrador puede editar --> 
             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
                 <div class="mb-4">
                     <a href="{% url 'asignatura:editar_asignatura' asignatura.pk %}" class="btn btn-warning btn-lg w-100">Editar Asignatura</a>
@@ -63,13 +64,13 @@
                     <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-secondary btn-lg w-100">Volver a la Lista de Asignaturas del Curso</a>
                 </div>
             {% endif %}
-
+            <!-- puede añadir aviso si es profesor --> 
             {% if request.user.is_authenticated and request.user.perfil.rol == 'profesor' %}
                 <div class="mb-4">
                     <a href="{% url 'avisos:crear_aviso' curso_id=asignatura.curso.id %}" class="btn btn-info btn-lg w-100">Añadir Aviso</a>
                 </div>
             {% endif %}
-
+             
             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
             <div class="mt-4">
                 <a href="{% url 'curso:detalle_curso' asignatura.curso.id %}" class="btn btn-outline-secondary btn-lg w-100">Regresar al Curso</a>

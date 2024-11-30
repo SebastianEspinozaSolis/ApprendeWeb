@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Reporte
 
-# Registrar el modelo Reporte en el admin
+# Registrar el modelo Reporte en el admin, para desde /admin ver el listado de reportes
 @admin.register(Reporte)
 class ReporteAdmin(admin.ModelAdmin):
     list_display = ('titulo', 'descripcion', 'tipo', 'fecha_creacion', 'usuario')

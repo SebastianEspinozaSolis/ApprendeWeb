@@ -15,8 +15,9 @@
 
     {% if avisos_por_alumno %}
         {% for alumno, avisos in avisos_por_alumno.items %}
+            <!-- por cada alumno si lo hay, mostrara el nombre y curso de este -->
             <h3 class="text-primary">{{ alumno.perfil.nombre }} - Curso: {{ alumno.curso.nombre }}</h3>
-
+            <!-- y en caso de que tenga avisos los mostrara en cards -->
             {% if avisos %}
                 <div class="row">
                     {% for aviso_alumno in avisos %}

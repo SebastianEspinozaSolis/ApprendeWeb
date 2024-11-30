@@ -5,13 +5,14 @@
 {% block content %}
 <div class="container mt-4">
     <div class="card shadow-lg">
+        <!-- datos de curso -->
         <div class="card-header bg-primary text-white">
             <h2 class="card-title text-center">{{ curso.nombre }}</h2>
         </div>
         <div class="card-body">
             <p class="card-text"><strong>Sala:</strong> {{ curso.sala }}</p>
             <hr class="my-4">
-
+            <!-- si el curso tiene jefatura mostrara esto -->
             {% if jefatura %}
                 <div class="mb-4">
                     <h5 class="text-info">Jefatura</h5>
@@ -22,6 +23,7 @@
                     {% endif %}
                 </div>
             {% else %}
+                <!-- de lo contrario, un administrador podra crearlo -->
                 {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
                     <div class="alert alert-success">
                         <a href="{% url 'jefatura:crear_jefatura' %}?curso_id={{ curso.id }}" class="btn btn-success">Añadir Jefatura</a>
@@ -31,15 +33,17 @@
 
             <hr class="my-4">
             <div class="text-center mb-4">
+                <!-- profesor o administrador podra crear aviso -->
                 {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' or request.user.perfil.rol == 'profesor' %}
                     <a href="{% url 'avisos:crear_aviso' curso_id=curso.id %}" class="btn btn-warning">Añadir Aviso</a>
                 {% endif %}
             </div>
 
+            <!-- asignaturas -->
             <hr class="my-4">
             <h5 class="text-secondary">Asignaturas</h5>
             <hr class="my-4">
-
+            <!-- administrador podra crear o modificar asignaturas -->
             {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
                 <a href="{% url 'asignatura:lista_asignaturas_curso' curso.id %}" class="btn btn-info">Modificar Asignaturas de este Curso</a>
             {% endif %}
@@ -52,7 +56,9 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ asignatura.nombre }}</h5>
                                     <p class="card-text"><strong>Curso:</strong> {{ asignatura.curso }}</p>
+                                    {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
                                     <a href="{% url 'asignatura:detalle_asignatura' asignatura.pk %}" class="btn btn-primary">Ver Detalles</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -100,6 +106,7 @@
                 <p class="text-muted">No hay profesores asignados a este curso.</p>
             {% endif %}
 
+            <!-- si es profesor podra ver los alumnos con sus apoderados -->
             <hr class="my-4">
             {% if request.user.perfil.rol == 'profesor' %}
                 <hr class="my-4">

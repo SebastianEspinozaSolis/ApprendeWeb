@@ -4,17 +4,15 @@ from .forms import CalificacionForm, EditarCalificacionForm
 from django.contrib.auth.decorators import login_required
 from evaluacion.models import Evaluacion
 from usuarios.models import Alumno
-
+# añadir calificaciones a una evaluacion. Profesor Administrador
 @login_required
 def crear_calificacion(request):
     evaluacion = None
-    evaluacion_id = request.GET.get('evaluacion_id')  # Obtener el ID de la evaluación desde los parámetros GET
+    evaluacion_id = request.GET.get('evaluacion_id')  
     if evaluacion_id:
         evaluacion = get_object_or_404(Evaluacion, pk=evaluacion_id)  # Obtener la evaluación específica
-    
     if request.user.perfil.rol in ['profesor', 'administrador']:
         alumnos = Alumno.objects.filter(curso=evaluacion.asignatura.curso) if evaluacion else []
-
         if request.method == 'POST':
             for alumno in alumnos:
                 calificacion_value = request.POST.get(f'calificacion_{alumno.id}')
@@ -25,13 +23,13 @@ def crear_calificacion(request):
                         evaluacion=evaluacion
                     )
             return redirect('evaluacion:detalle_evaluacion', pk=evaluacion_id)
-
         return render(request, 'calificacion/crear_calificacion.html', {
             'evaluacion': evaluacion,
             'alumnos': alumnos,
         })
     else:
         return redirect('evaluacion:detalle_evaluacion', pk=evaluacion_id)
+# editar calificacion. profesor administrador
 @login_required
 def editar_calificacion(request, pk):
     calificacion = get_object_or_404(Calificacion, pk=pk)
@@ -39,11 +37,9 @@ def editar_calificacion(request, pk):
         form = EditarCalificacionForm(request.POST, instance=calificacion)
         if form.is_valid():
             form.save()
-            # Redirect to the evaluation detail view after saving the grade
             return redirect('evaluacion:detalle_evaluacion', pk=calificacion.evaluacion.pk)
     else:
         form = EditarCalificacionForm(instance=calificacion)
-    
     return render(request, 'calificacion/editar_calificacion.html', {
         'form': form,
         'calificacion': calificacion

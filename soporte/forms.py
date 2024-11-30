@@ -1,6 +1,6 @@
 from django import forms
 from .models import Reporte
-
+#formulario de reporte
 class ReporteForm(forms.ModelForm):
     class Meta:
         model = Reporte

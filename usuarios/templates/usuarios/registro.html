@@ -1,19 +1,141 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Registro{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Registro</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <div id="advertencia" class="alert alert-warning" role="alert" style="display: none;">
-            [Advertencia] Hace falta que el apoderado encargado del alumno este previamente registrado
+<div class="container-fluid">
+    <div class="row min-vh-100">
+        <!-- Panel izquierdo con color de fondo -->
+        <div class="col-md-5 bg-primary d-flex align-items-center justify-content-center">
+            <div class="text-white text-center p-5">
+                <h1 class="display-4">Aprende</h1>
+                <p class="lead">Sistema de Gestión Educacional</p>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Registrar</button>
-    </form>
+
+        <!-- Panel derecho con formulario -->
+        <div class="col-md-7 d-flex align-items-center justify-content-center">
+            <div class="card shadow-lg border-0" style="min-width: 500px;">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">Crear Cuenta</h2>
+                    <p class="text-muted text-center mb-4">Complete los datos del nuevo usuario</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Información de Cuenta -->
+                        <h5 class="mb-3">Información de Cuenta</h5>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Usuario</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                {{ form.username }}
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label">Correo Electrónico</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                {{ form.email }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Contraseña</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        {{ form.password }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Confirmar Contraseña</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        {{ form.password_confirmacion }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información Personal -->
+                        <h5 class="mt-4 mb-3">Información Personal</h5>
+                        <div class="form-group mb-3">
+                            <label class="form-label">Nombre Completo</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                {{ form.nombre }}
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label">RUT</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+                                {{ form.rut }}
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label class="form-label">Fecha de Nacimiento</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                {{ form.fecha_nacimiento }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Sexo</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
+                                        {{ form.sexo }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">Rol</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
+                                        {{ form.rol }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Advertencia para alumnos -->
+                        <div id="advertencia" class="alert alert-warning" role="alert" style="display: none;">
+                            [Advertencia] Hace falta que el apoderado encargado del alumno este previamente registrado
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 py-2 mt-3">
+                            Crear Cuenta
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    .form-control {
+        padding: 0.75rem 1rem;
+    }
+    .input-group-text {
+        background-color: transparent;
+    }
+    .card {
+        margin: 2rem;
+    }
+</style>
 
 <script>
     // Obtener el campo select del rol y el div de advertencia

@@ -6,6 +6,7 @@
 <div class="container mt-5">
     <div class="card shadow-lg">
         <div class="card-body">
+            <!-- datos de la evaluacion -->
             <h2 class="card-title text-center text-primary mb-4">{{ evaluacion.nombre }}</h2>
             <p class="lead"><strong>Descripción:</strong> {{ evaluacion.descripcion }}</p>
             <p class="lead"><strong>Fecha:</strong> {{ evaluacion.fecha }}</p>
@@ -14,29 +15,29 @@
             <!-- Mostrar calificaciones asociadas a la evaluación -->
             <h3 class="mt-5 mb-3 text-success">Calificaciones</h3>
             {% if calificaciones %}
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Alumno</th>
-                        <th>Calificación</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Alumno</th>
+                            <th>Calificación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                     {% for calificacion in calificaciones %}
-                    <tr>
-                        <td>{{ calificacion.alumno.perfil.nombre }}</td>
-                        <td>{{ calificacion.calificacion }}</td>
-                        <td>
-                            <a href="{% url 'calificacion:editar_calificacion' calificacion.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td>{{ calificacion.alumno.perfil.nombre }}</td>
+                            <td>{{ calificacion.calificacion }}</td>
+                            <td>
+                                <a href="{% url 'calificacion:editar_calificacion' calificacion.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                            </td>
+                        </tr>
                     {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-        <a href="{% url 'calificacion:crear_calificacion' %}?evaluacion_id={{ evaluacion.id }}" class="btn btn-success btn-lg">Crear Calificaciones</a>
-        {% endif %}
+                    </tbody>
+                </table>
+            {% else %}
+                <a href="{% url 'calificacion:crear_calificacion' %}?evaluacion_id={{ evaluacion.id }}" class="btn btn-success btn-lg">Crear Calificaciones</a>
+            {% endif %}
             <hr class="my-4">
             
             <!-- Botones de navegación -->
@@ -44,7 +45,7 @@
                 <a href="{% url 'asignatura:detalle_asignatura' evaluacion.asignatura.pk %}" class="btn btn-secondary btn-lg">Volver a Asignatura</a>
                 <a href="{% url 'evaluacion:editar_evaluacion' evaluacion.pk %}" class="btn btn-warning btn-lg">Editar Evaluación</a>
                 {% if request.user.is_authenticated and request.user.perfil.rol == 'administrador' %}
-                <a href="{% url 'curso:detalle_curso' evaluacion.asignatura.curso.id %}" class="btn btn-secondary btn-lg">Volver al Curso</a>
+                    <a href="{% url 'curso:detalle_curso' evaluacion.asignatura.curso.id %}" class="btn btn-secondary btn-lg">Volver al Curso</a>
                 {% endif %}
             </div>
         </div>

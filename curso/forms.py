@@ -1,6 +1,6 @@
 from django import forms
 from .models import Curso
-
+# formulario curso
 class CursoForm(forms.ModelForm):
     class Meta:
         model = Curso
