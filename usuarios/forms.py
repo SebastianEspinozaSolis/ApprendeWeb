@@ -1,14 +1,19 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Perfil, Apoderado,Administrador,Alumno,Profesor
+from .models import Perfil, Apoderado,Administrador,Alumno,Profesor, validar_rut
 from curso.models import Curso
-
+from django.core.validators import RegexValidator
 class RegistroForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label='Contraseña')
     password_confirmacion = forms.CharField(widget=forms.PasswordInput, label='Confirmar Contraseña')
     # Campos para el perfil
     nombre = forms.CharField(max_length=100, required=True, label='Nombre')
-    rut = forms.CharField(max_length=12, required=True, label='RUT')
+    rut = forms.CharField(
+        max_length=12,
+        required=True,
+        label='RUT',
+        validators=[RegexValidator(regex=r'^[0-9]{7,8}-[0-9Kk]$',message='Formato de RUT inválido. Debe ser como 12345678-9',code='invalid_rut'),validar_rut]
+    )
     fecha_nacimiento = forms.DateField(required=True, label='Fecha de Nacimiento', widget=forms.widgets.DateInput(attrs={'type': 'date'}))
     sexo = forms.ChoiceField(choices=[('M', 'Masculino'), ('F', 'Femenino')], required=True, label='Sexo')
     rol = forms.ChoiceField(choices=Perfil.ROLES, label='Rol')
