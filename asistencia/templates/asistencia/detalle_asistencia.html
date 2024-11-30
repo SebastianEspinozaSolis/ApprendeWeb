@@ -4,12 +4,14 @@
 <div class="container mt-4">
   <h2>Detalle de Asistencia de {{ alumno.nombre }} en la asignatura: {{ asignatura.nombre }}</h2>
 
+  <!-- Porcentaje -->
   <div class="mb-4">
     <p><strong>Porcentaje de Asistencia:</strong> {{ porcentaje_asistencia|floatformat:2 }}%</p>
   </div>
   <div class="mt-4">
     <a href="{% url 'asistencia:menu_asignaturas_apoderado' alumno.id %}" class="btn btn-secondary btn-lg w-100">Regresar al Menú de Asignaturas</a>
   </div>
+  <!-- tabla mostrando fechas y el estado -->
   <h3>Detalles de Asistencia:</h3>
   <table class="table table-bordered table-striped">
     <thead class="thead-dark">

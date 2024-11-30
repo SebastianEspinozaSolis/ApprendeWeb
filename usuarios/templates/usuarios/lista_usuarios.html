@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Lista de Usuarios</h2>
-    
+    <!-- filtro para roles -->
     <form method="GET" action="{% url 'usuarios:lista_usuarios' %}">
         <label for="rol">Filtrar por rol:</label>
         <select name="rol" id="rol" onchange="this.form.submit()">
@@ -16,9 +16,10 @@
             <option value="alumno" {% if request.GET.rol == 'alumno' %}selected{% endif %}>Alumno</option>
         </select>
         <button type="submit" class="btn btn-primary">Filtrar</button>
+        <!-- boton para ir a crear usuario -->
         <a href="#" class="btn btn-success" data-toggle="modal" data-target="#alertModal">Crear Nuevo Usuario</a>
     </form>
-    
+    <!-- mostrar los usuarios segun el filtro o no -->
     <div class="row mt-4">
         {% for usuario in usuarios %}
         <div class="col-md-4 mb-3">
@@ -48,7 +49,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- advertencia para la creacion de alumno -->
 <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">

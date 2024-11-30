@@ -17,7 +17,7 @@
             <p><strong>Sexo:</strong> {{ perfil.sexo }}</p>
         </div>
     </div>
-
+    <!-- si es administrador muestra esto  -->
     {% if administrador %}
     <div class="card mb-3">
         <div class="card-header">
@@ -29,7 +29,7 @@
         </div>
     </div>
     {% endif %}
-
+    <!-- si es apoderado muestra esto -->
     {% if apoderado %}
     <div class="card mb-3">
         <div class="card-header">
@@ -41,7 +41,7 @@
         </div>
     </div>
     {% endif %}
-
+    <!-- si es alumno muestra esto -->
     {% if alumno %}
     <div class="card mb-3">
         <div class="card-header">
@@ -54,7 +54,7 @@
         </div>
     </div>
     {% endif %}
-
+    <!-- si es profesor muestra esto -->
     {% if profesor %}
     <div class="card mb-3">
         <div class="card-header">

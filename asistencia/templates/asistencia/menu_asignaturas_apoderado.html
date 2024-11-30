@@ -3,6 +3,7 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Asignaturas de {{ alumno.perfil.nombre }}</h2>
+    <!-- tabla con asignaturas y su porcentaje -->
     <table class="table table-striped">
         <thead>
             <tr>
@@ -17,6 +18,7 @@
                 <td>{{ item.nombre }}</td>  <!-- Ahora accedemos directamente a item.nombre -->
                 <td>{{ item.porcentaje_asistencia|floatformat:2 }}%</td>
                 <td>
+                    <!-- ver detalles de una especificar -->
                     <a href="{% url 'asistencia:detalle_asistencia' item.id alumno.id %}" class="btn btn-primary">Ver Detalles</a>
                 </td>
             </tr>

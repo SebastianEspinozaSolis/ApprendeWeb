@@ -8,11 +8,16 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Tu archivo de estilos CSS -->
     <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <div class="wrapper">
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
+            <!-- al tocar Apprende redirecciona al menu segun rol -->
             {% if user.is_authenticated %}
                 {% if user.perfil.rol == 'administrador' %}
                     <a class="navbar-brand" href="{% url 'usuarios:menu_administrador' %}">Apprende</a>
@@ -24,12 +29,13 @@
                     <a class="navbar-brand" href="{% url 'usuarios:menu_alumno' %}">Apprende</a>
                 {% endif %}
             {% else %}
+                <!-- sin estar logeado lo llevara a iniciar sesion -->
                 <a class="navbar-brand" href="{% url 'usuarios:login' %}">Apprende</a>
             {% endif %}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContenido" aria-controls="navbarContenido" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+            <!-- submenus para cada rol -->
             <div class="collapse navbar-collapse" id="navbarContenido">
                 <ul class="navbar-nav mr-auto">
                     {% if user.is_authenticated %}
@@ -71,17 +77,21 @@
                     {% endif %}
                 </ul>
                 <ul class="navbar-nav">
+                    <!-- en caso de estar autenticado dara opciones extra independiente del perfil -->
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ user.username }}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{% url 'usuarios:editar_perfil' %}">Perfil</a>
+                                <!-- editar perfil -->
+                                <a class="dropdown-item" href="{% url 'usuarios:editar_perfil' %}"><i class="fas fa-user-edit me-2"></i>Perfil</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{% url 'soporte:crear_reporte' %}">Soporte</a>
+                                <!-- crear reporte -->
+                                <a class="dropdown-item" href="{% url 'soporte:crear_reporte' %}"><i class="fas fa-headset me-2"></i>Soporte</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{% url 'usuarios:logout' %}">Cerrar Sesión</a>
+                                <!-- cerrar sesion -->
+                                <a class="dropdown-item" href="{% url 'usuarios:logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a>
                             </div>
                         </li>
                     {% else %}
@@ -106,7 +116,7 @@
             &copy; 2024 Mi Sitio Completo. Todos los derechos reservados.
         </div>
     </footer>
-
+</div>
     <!-- JavaScript de Bootstrap desde CDN -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script

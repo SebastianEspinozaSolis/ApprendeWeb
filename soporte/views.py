@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import ReporteForm
 from django.contrib.auth.decorators import login_required
-
+# creacion de reporte de bug, sugerencia. todo usuario autentificado
 @login_required
 def crear_reporte(request):
     if request.method == 'POST':

@@ -1,6 +1,6 @@
 from django import forms
 from .models import Justificativo
-
+#formulario de justificativo
 class JustificativoForm(forms.ModelForm):
     class Meta:
         model = Justificativo

@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from curso.models import Curso
 from evaluacion.models import Evaluacion
 from usuarios.models import Alumno
-
+# lista de asignaturas por un curso. Todos los usuarios
 @login_required
 def lista_asignaturas(request, curso_id=None):
     asignaturas = Asignatura.objects.all().order_by('-nombre')
@@ -17,31 +17,25 @@ def lista_asignaturas(request, curso_id=None):
         'asignaturas': asignaturas,
         'curso': curso,
     })
+# detalle de una de las asignatura. Administrador y profesor que realiza la asignatura
 @login_required
 def detalle_asignatura(request, pk):
     asignatura = get_object_or_404(Asignatura, pk=pk)
     curso = asignatura.curso  # Obtener el curso de la asignatura
     evaluaciones = Evaluacion.objects.filter(asignatura=asignatura)  # Obtener evaluaciones de la asignatura
-
     alumno = None
-    # Si el usuario es un apoderado, obtenemos el alumno relacionado
-    if request.user.perfil.rol == 'apoderado':
-        # Buscar el alumno asociado al apoderado (esto depende de cómo hayas definido la relación entre apoderado y alumno)
-        alumno = Alumno.objects.filter(apoderado__perfil__user=request.user).first()  # Cambié 'guardian' por 'apoderado'
-
     return render(request, 'asignatura/detalle_asignatura.html', {
         'asignatura': asignatura,
         'curso': curso,
         'evaluaciones': evaluaciones,
         'alumno': alumno,  # Pasamos el alumno al contexto
     })
-
+# crear asignatura. Administrador
 @login_required
 def crear_asignatura(request, curso_id=None):
     curso = None
     if curso_id:
         curso = get_object_or_404(Curso, pk=curso_id)
-
     if request.user.perfil.rol in ['profesor', 'administrador']:
         if request.method == 'POST':
             form = AsignaturaForm(request.POST)
@@ -56,6 +50,7 @@ def crear_asignatura(request, curso_id=None):
         return render(request, 'asignatura/crear_asignatura.html', {'form': form, 'curso': curso})
     else:
         return redirect('asignatura:lista_asignaturas')
+#editar asignatura. Administrador
 @login_required
 def editar_asignatura(request, pk):
     asignatura = get_object_or_404(Asignatura, pk=pk)
