@@ -23,7 +23,21 @@
 
                     <form method="post">
                         {% csrf_token %}
-                        
+
+                        <!-- Mostrar errores generales del formulario -->
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <strong>¡Por favor corrige los errores siguientes!</strong>
+                                <ul>
+                                    {% for field in form %}
+                                        {% for error in field.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
                         <!-- Información de Cuenta -->
                         <h5 class="mb-3">Información de Cuenta</h5>
                         <div class="form-group mb-3">
@@ -32,6 +46,13 @@
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                                 {{ form.username }}
                             </div>
+                            {% if form.username.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.username.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
 
                         <div class="form-group mb-3">
@@ -40,6 +61,13 @@
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 {{ form.email }}
                             </div>
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.email.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
 
                         <div class="row">
@@ -50,6 +78,13 @@
                                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                         {{ form.password }}
                                     </div>
+                                    {% if form.password.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.password.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -59,6 +94,13 @@
                                         <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                         {{ form.password_confirmacion }}
                                     </div>
+                                    {% if form.password_confirmacion.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.password_confirmacion.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -71,6 +113,13 @@
                                 <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                                 {{ form.nombre }}
                             </div>
+                            {% if form.nombre.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.nombre.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
 
                         <div class="form-group mb-3">
@@ -79,6 +128,13 @@
                                 <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
                                 {{ form.rut }}
                             </div>
+                            {% if form.rut.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.rut.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
 
                         <div class="form-group mb-3">
@@ -87,6 +143,13 @@
                                 <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                                 {{ form.fecha_nacimiento }}
                             </div>
+                            {% if form.fecha_nacimiento.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {% for error in form.fecha_nacimiento.errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </div>
 
                         <div class="row mb-4">
@@ -97,6 +160,13 @@
                                         <span class="input-group-text"><i class="fas fa-venus-mars"></i></span>
                                         {{ form.sexo }}
                                     </div>
+                                    {% if form.sexo.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.sexo.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -106,13 +176,20 @@
                                         <span class="input-group-text"><i class="fas fa-user-tag"></i></span>
                                         {{ form.rol }}
                                     </div>
+                                    {% if form.rol.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {% for error in form.rol.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
 
                         <!-- Advertencia para alumnos -->
                         <div id="advertencia" class="alert alert-warning" role="alert" style="display: none;">
-                            [Advertencia] Hace falta que el apoderado encargado del alumno este previamente registrado
+                            [Advertencia] Hace falta que el apoderado encargado del alumno esté previamente registrado
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 py-2 mt-3">
