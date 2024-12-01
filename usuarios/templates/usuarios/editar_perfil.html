@@ -3,17 +3,26 @@
 {% block title %}Editar Perfil{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Editar Perfil</h2>
+  <div class="container mt-5">
+    <div class="text-center mb-4">
+      <h2 class="display-4">Editar Perfil</h2>
+      <p class="lead">Selecciona la opción que deseas editar:</p>
+    </div>
 
-    <p>Selecciona la opción que deseas editar:</p>
-    
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" name="editar_foto" class="btn btn-secondary">Editar Foto de Perfil</button>
-        <button type="submit" name="editar_correo" class="btn btn-secondary">Editar Correo Electrónico</button>
-        <button type="submit" name="cambiar_contraseña" class="btn btn-secondary">Cambiar Contraseña</button>
-    </form>
-
-</div>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          
+          <!-- Botones de acción -->
+          <div class="form-group text-center">
+            <button type="submit" name="editar_foto" class="btn btn-primary btn-lg btn-block mb-3">Editar Foto de Perfil</button>
+            <button type="submit" name="editar_correo" class="btn btn-primary btn-lg btn-block mb-3">Editar Correo Electrónico</button>
+            <button type="submit" name="cambiar_contraseña" class="btn btn-primary btn-lg btn-block mb-3">Cambiar Contraseña</button>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock %}

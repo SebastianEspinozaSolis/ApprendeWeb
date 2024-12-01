@@ -3,19 +3,41 @@
 {% block title %}Editar Correo Electrónico{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Editar Correo Electrónico</h2>
-    <form method="post">
-        {% csrf_token %}
-        
-        <div class="form-group">
-            <label for="id_email">Nuevo Correo Electrónico:</label>
-            {{ correo_form.email.errors }}
-            {{ correo_form.email }}
-        </div>
+  <div class="container mt-5">
+    <div class="text-center mb-4">
+      <h2 class="display-4">Editar Correo Electrónico</h2>
+      <p class="lead">Por favor, ingresa tu nuevo correo electrónico para actualizarlo.</p>
+    </div>
 
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        <a href="{% url 'usuarios:editar_perfil' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
-</div>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          
+          <!-- Campo de correo electrónico -->
+          <div class="form-group">
+            <label for="id_email" class="h5">Nuevo Correo Electrónico:</label>
+            {% if correo_form.email.errors %}
+              <div class="alert alert-danger">
+                {% for error in correo_form.email.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+            {{ correo_form.email }}
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Guardar Cambios</button>
+          </div>
+
+          <!-- Botón de cancelar -->
+          <div class="form-group text-center">
+            <a href="{% url 'usuarios:editar_perfil' %}" class="btn btn-secondary btn-lg">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock %}

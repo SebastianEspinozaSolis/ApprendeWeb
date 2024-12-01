@@ -3,28 +3,41 @@
 {% block title %}Editar Foto de Perfil{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>Editar Foto de Perfil</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        
-        <div class="form-group">
+  <div class="container mt-5">
+    <div class="text-center mb-4">
+      <h2 class="display-4">Editar Foto de Perfil</h2>
+      <p class="lead">Actualiza tu foto de perfil fácilmente.</p>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+          <!-- Imagen Actual -->
+          <div class="form-group text-center">
             <label for="id_foto">Imagen Actual:</label><br>
             {% if foto_form.instance.foto %}
-                <img src="{{ foto_form.instance.foto.url }}" class="img-thumbnail mb-2" width="200" alt="Foto de perfil">
+              <img src="{{ foto_form.instance.foto.url }}" class="img-thumbnail mb-3" width="200" alt="Foto de perfil">
             {% else %}
-                <p>No tienes una foto de perfil.</p>
+              <p>No tienes una foto de perfil.</p>
             {% endif %}
-        </div>
-        
-        <div class="form-group">
+          </div>
+
+          <!-- Cambiar Foto de Perfil -->
+          <div class="form-group">
             <label for="id_foto">Cambiar Foto de Perfil (opcional):</label>
             {{ foto_form.foto.errors }}
-            {{ foto_form.foto }}
-        </div>
+            {{ foto_form.foto}}
+          </div>
 
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        <a href="{% url 'usuarios:editar_perfil' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
-</div>
+          <!-- Botones -->
+          <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary btn-lg btn-block mb-3">Guardar Cambios</button>
+            <a href="{% url 'usuarios:editar_perfil' %}" class="btn btn-secondary btn-lg btn-block">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock %}

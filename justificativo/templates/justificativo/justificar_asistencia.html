@@ -1,14 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <div class="container mt-4">
-    <!-- dira de justificar al alumno en la fecha -->
-    <h2>Justificar Asistencia de {{ asistencia.alumno.perfil.nombre }} en la fecha: {{ asistencia.fecha }}</h2>
+  <div class="container mt-5">
+    <!-- Título principal de la página -->
+    <div class="text-center mb-4">
+      <h2 class="display-4">Justificar Asistencia</h2>
+      <!-- dira el nombre y fecha en que justificara -->
+      <p class="lead">Justifique la asistencia del alumno {{ asistencia.alumno.perfil.nombre }} en la fecha: {{ asistencia.fecha }}</p>
+    </div>
 
-    <form method="POST">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="btn btn-primary mt-2">Justificar</button>
-    </form>
+    <!-- Formulario de justificación de asistencia -->
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            {{ form.as_p }}
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">Justificar Asistencia</button>
+        </form>
+      </div>
+    </div>
   </div>
 {% endblock %}
+
