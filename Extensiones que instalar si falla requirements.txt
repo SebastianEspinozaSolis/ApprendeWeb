@@ -1,0 +1,5 @@
+pip install django
+pip install pillow
+pip install cryptography
+pip install pymysql
+pip install python-decouple

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Mi Sitio Completo{% endblock %}</title>
+    <title>{% block title %}Apprende{% endblock %}</title>
     {% load static %}
     <!-- CSS de Bootstrap desde CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -105,15 +105,16 @@
     </nav>
 
     <!-- Contenido principal -->
-    <div class="container mt-4">
-        {% block content %}
-        {% endblock %}
-    </div>
-
+     <main>
+        <div class="container mt-4">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
     <!-- Pie de página -->
     <footer class="bg-dark text-white mt-4">
         <div class="container text-center py-3">
-            &copy; 2024 Mi Sitio Completo. Todos los derechos reservados.
+            &copy; 2024 Apprende. Todos los derechos reservados.
         </div>
     </footer>
 </div>
